@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-
+<p id="weird"></p>
 <button id="resetButton">reset</button>
 
 
@@ -101,6 +101,7 @@
         document.getElementById("runCode").addEventListener("click", async function () {
             const userCode = editor.getValue(); // Get the code from CodeMirror
             const outputDiv = document.getElementById("output");
+            const weird = document.getElementById("weird");
 
             // Send code to backend for execution
             try {
@@ -111,13 +112,17 @@
                 });
 
                 const result = await response.json();
+                
+                
 
-                // Display the result or error
-                if (response.ok) {
-                    outputDiv.textContent = result.output || "No output";
-                } else {
-                    outputDiv.textContent = result.error || "An error occurred";
+                if(!result.error.length==0){
+                    outputDiv.textContent = result.error
                 }
+
+                else {
+                    outputDiv.textContent = result.output || "No output";
+
+                } 
             } catch (error) {
                 outputDiv.textContent = "Failed to connect to the server.";
             }
@@ -141,11 +146,14 @@
                 const result = await response.json();
 
                 // Display the result or error
-                if (response.ok) {
-                    outputDiv.textContent = "Code Successfully Submitted";
-                } else {
-                    outputDiv.textContent = result.error || "An error occurred";
+                if(!result.error.length==0){
+                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.error
                 }
+
+                else {
+                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.output || "Code Successfully Submitted<br>"+"No output";
+
+                } 
             } catch (error) {
                 outputDiv.textContent = "Failed to connect to the server.";
             }
