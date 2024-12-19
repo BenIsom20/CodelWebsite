@@ -18,10 +18,196 @@
         <div class="col">
           <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
         </div>
+<<<<<<< Updated upstream
         <!--<div class="col">
           <!textarea type="text" class="form-control"  aria-label="Last name"></textarea>
         </div>-->
       </div>
+=======
+
+        <div>
+            <p id="Question">Placeholder for questions</p>
+        </div>
+    
+
+<!-- WORDLE LIKE GRID CODE-->
+<h1 style="text-align: center;">CODEL</h1>
+<div class="codel-grid">
+    <!-- Squares for the grid -->
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+</div>
+
+<!--Code for input output and buttons-->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <textarea id="editor" class="form-control" ></textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <button id="runCode" class="btn btn-primary" >Run Code</button>
+                <button id="submitCode" class="btn btn-primary" style="position: absolute; margin-left: 10%; ">Submit Code</button>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <div id="output" class="bg-dark text-light p-3"  style="height: 200px; overflow-y: auto; width: 90%;">Console output</div>
+            </div>
+        </div>
+    </div>
+<p id="weird"></p>
+<button id="resetButton">reset</button>
+
+
+
+    <!--SCRIPT FOR CODE INPUT OUTPUT-->
+    <script>
+        // Initialize CodeMirror editor
+        var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+            mode: "text/x-python",
+            theme: "midnight",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+        });
+        editor.setSize("90%", 300);
+
+        // Event listener for "Run Code" button
+        document.getElementById("runCode").addEventListener("click", async function () {
+            const userCode = editor.getValue(); // Get the code from CodeMirror
+            const outputDiv = document.getElementById("output");
+            const weird = document.getElementById("weird");
+
+            // Send code to backend for execution
+            try {
+                const response = await fetch("http://127.0.0.1:5000/test", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code: userCode }),
+                });
+
+                const result = await response.json();
+                
+
+                if(result.error && result.error.length > 0){
+                    outputDiv.textContent = result.error
+                }
+                else {
+                    outputDiv.textContent = result.output || "No output";
+                } 
+            } catch (error) {
+                outputDiv.textContent = "Failed to connect to the server.";
+            }
+        });
+
+
+
+        // Event listener for "Submit Code" button
+        document.getElementById("submitCode").addEventListener("click", async function () {
+            const userCode = editor.getValue(); // Get the code from CodeMirror
+            const outputDiv = document.getElementById("output");
+
+            // Send code to backend for execution
+            try {
+                const response = await fetch("http://127.0.0.1:5000/run", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code: userCode }),
+                });
+
+                const result = await response.json();
+
+                // Display the result or error
+                if(!result.error.length==0){
+                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.error
+                }
+
+                else {
+                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.output || "Code Successfully Submitted<br>"+"No output";
+
+                } 
+            } catch (error) {
+                outputDiv.textContent = "Failed to connect to the server.";
+            }
+        });
+    </script>
+
+
+
+
+
+    <!--SCRIPT FOR CODEL GRID-->
+    <script>
+        // Initialize the row counter
+        let currentRow = 0;
+    
+        // JavaScript to handle button click
+        document.getElementById('submitCode').addEventListener('click', () => {
+            if (currentRow < 6) { // Ensure we don't exceed 6 rows
+                // Select all squares in the grid
+                const gridSquares = document.querySelectorAll('.grid-square');
+                const columns = 5; // Number of columns in the grid
+    
+                // Calculate the start and end indices of the current row
+                const startIndex = currentRow * columns;
+                const endIndex = (currentRow + 1) * columns;
+    
+                // Loop through the squares in the current row and add the green-row class
+                for (let i = startIndex; i < endIndex; i++) {
+                    gridSquares[i].classList.add('green-row');
+                }
+    
+                // Increment the row counter
+                currentRow++;
+            } else {
+                //alert('All rows have been colored!');
+            }
+        });
+    
+    
+        // JavaScript to handle the "Reset Grid" button click
+        document.getElementById('resetButton').addEventListener('click', () => {
+            // Remove the green color from all squares
+            const gridSquares = document.querySelectorAll('.grid-square');
+            gridSquares.forEach(square => {
+                square.classList.remove('green-row');
+            });
+    
+            // Reset the row counter
+            currentRow = 0;
+        });
+
+    </script>
+>>>>>>> Stashed changes
 </body>
 <script>
 var editor=CodeMirror.fromTextArea(document.getElementById("editor"),{
