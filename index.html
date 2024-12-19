@@ -11,17 +11,62 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/python/python.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/theme/midnight.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to Codel</h1>
-    <div>
-        <p id="Question">Placeholder for questions</p>
-    </div>
     
+    <div class="headers">
+        <h6 ><a href="Developers.html">MEET THE DEVELOPERS</a></h6>
+        <h6 ><a href="How.html">HOW TO PLAY THE GAME</a></h6>
+        
+        </div>
+
+        <div>
+            <p id="Question">Placeholder for questions</p>
+        </div>
+    
+
+<!-- WORDLE LIKE GRID CODE-->
+<h1 style="text-align: center;">CODEL</h1>
+<div class="codel-grid">
+    <!-- Squares for the grid -->
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+    <div class="grid-square"></div>
+</div>
+
+<!--Code for input output and buttons-->
     <div class="container mt-4">
         <div class="row">
             <div class="col">
-                <textarea id="editor" class="form-control"></textarea>
+                <textarea id="editor" class="form-control" ></textarea>
             </div>
         </div>
         <div class="row mt-3">
@@ -32,15 +77,16 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <div id="output" class="bg-dark text-light p-3"  style="height: 200px; overflow-y: auto; width: 90%;"></div>
+                <div id="output" class="bg-dark text-light p-3"  style="height: 200px; overflow-y: auto; width: 90%;">Console output</div>
             </div>
         </div>
-        <div>
-            <h6 style="position: fixed; top:2%; right: 5%;"><a href="Developers.html">MEET THE DEVELOPERS</h6>
-            <h6 style="position: fixed; top:2%; right: 30%; "><a href="How.html">HOW TO PLAY THE GAME</h6>
-            </div>
     </div>
 
+<button id="resetButton">reset</button>
+
+
+
+    <!--SCRIPT FOR CODE INPUT OUTPUT-->
     <script>
         // Initialize CodeMirror editor
         var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
@@ -104,6 +150,53 @@
                 outputDiv.textContent = "Failed to connect to the server.";
             }
         });
+    </script>
+
+
+
+
+
+    <!--SCRIPT FOR CODEL GRID-->
+    <script>
+        // Initialize the row counter
+        let currentRow = 0;
+    
+        // JavaScript to handle button click
+        document.getElementById('submitCode').addEventListener('click', () => {
+            if (currentRow < 6) { // Ensure we don't exceed 6 rows
+                // Select all squares in the grid
+                const gridSquares = document.querySelectorAll('.grid-square');
+                const columns = 5; // Number of columns in the grid
+    
+                // Calculate the start and end indices of the current row
+                const startIndex = currentRow * columns;
+                const endIndex = (currentRow + 1) * columns;
+    
+                // Loop through the squares in the current row and add the green-row class
+                for (let i = startIndex; i < endIndex; i++) {
+                    gridSquares[i].classList.add('green-row');
+                }
+    
+                // Increment the row counter
+                currentRow++;
+            } else {
+                //alert('All rows have been colored!');
+            }
+        });
+    
+    
+        // JavaScript to handle the "Reset Grid" button click
+        document.getElementById('resetButton').addEventListener('click', () => {
+            // Remove the green color from all squares
+            const gridSquares = document.querySelectorAll('.grid-square');
+            gridSquares.forEach(square => {
+                square.classList.remove('green-row');
+            });
+    
+            // Reset the row counter
+            currentRow = 0;
+        });
+
     </script>
 </body>
 </html>
