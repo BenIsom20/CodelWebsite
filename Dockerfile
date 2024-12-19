@@ -27,3 +27,4 @@ EXPOSE 5000
 
 # Run the Flask app when the container starts
 CMD ["python3", "app.py"]
+

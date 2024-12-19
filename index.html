@@ -18,8 +18,7 @@
     <div class="headers">
         <h6 ><a href="Developers.html">MEET THE DEVELOPERS</a></h6>
         <h6 ><a href="How.html">HOW TO PLAY THE GAME</a></h6>
-        
-        </div>
+    </div>
 
         <div>
             <p id="Question">Placeholder for questions</p>
@@ -81,7 +80,7 @@
             </div>
         </div>
     </div>
-
+<p id="weird"></p>
 <button id="resetButton">reset</button>
 
 
@@ -105,23 +104,19 @@
 
             // Send code to backend for execution
             try {
-                const response = await fetch("http://127.0.0.1:5000/run", {
+                const response = await fetch("http://127.0.0.1:5000/test", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ code: userCode }),
                 });
 
                 const result = await response.json();
-                
-                
 
-                if(!result.error.length==0){
+                if(result.error && result.error.length > 0){
                     outputDiv.textContent = result.error
                 }
-
                 else {
                     outputDiv.textContent = result.output || "No output";
-
                 } 
             } catch (error) {
                 outputDiv.textContent = "Failed to connect to the server.";
@@ -151,8 +146,7 @@
                 }
 
                 else {
-                    outputDiv.innerHTML= "Code Successfully Submitted<br>"
-                    outputDiv.innerHTML += result.output || "No output";
+                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.output || "Code Successfully Submitted<br>"+"No output";
 
                 } 
             } catch (error) {
