@@ -13,6 +13,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
 </head>
 <body>
+    <h1>Welcome to Codel</h1>
+    <div>
+        <p id="Question">Placeholder for questions</p>
+    </div>
+    
     <div class="container mt-4">
         <div class="row">
             <div class="col">
@@ -21,14 +26,19 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <button id="runCode" class="btn btn-primary">Run Code</button>
+                <button id="runCode" class="btn btn-primary" >Run Code</button>
+                <button id="submitCode" class="btn btn-primary" style="position: absolute; margin-left: 10%; ">Submit Code</button>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col">
-                <div id="output" class="bg-dark text-light p-3" style="height: 200px; overflow-y: auto;"></div>
+                <div id="output" class="bg-dark text-light p-3"  style="height: 200px; overflow-y: auto; width: 90%;"></div>
             </div>
         </div>
+        <div>
+            <h6 style="position: fixed; top:2%; right: 5%;"><a href="Developers.html">MEET THE DEVELOPERS</h6>
+            <h6 style="position: fixed; top:2%; right: 30%; "><a href="How.html">HOW TO PLAY THE GAME</h6>
+            </div>
     </div>
 
     <script>
@@ -39,7 +49,7 @@
             lineNumbers: true,
             autoCloseBrackets: true,
         });
-        editor.setSize("100%", "400px");
+        editor.setSize("90%", 300);
 
         // Event listener for "Run Code" button
         document.getElementById("runCode").addEventListener("click", async function () {
