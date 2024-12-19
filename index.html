@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-<p id="weird"></p>
+
 <button id="resetButton">reset</button>
 
 
@@ -151,7 +151,8 @@
                 }
 
                 else {
-                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.output || "Code Successfully Submitted<br>"+"No output";
+                    outputDiv.innerHTML= "Code Successfully Submitted<br>"
+                    outputDiv.innerHTML += result.output || "No output";
 
                 } 
             } catch (error) {
