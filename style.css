@@ -1,34 +1,56 @@
-/* Container for the grid */
-.codel-grid {
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 columns */
-    grid-template-rows: repeat(6, 1fr);   /* 6 rows */
-    gap: 10px; /* Space between squares */
-    width: 300px; /* Total width of the grid */
-    height: 360px; /* Total height of the grid */
-    margin: 0 auto; /* Center the grid */
-}
-
-/* Individual squares */
-.grid-square {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .rectangle {
+    width: 100px;
+    height: 50px; /* Rectangular shape */
     background-color: lightgray;
-    border: 2px solid darkgray;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
     font-weight: bold;
-    text-transform: uppercase;
-}
-
-/* Green row styling */
-.green-row {
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .rectangle.green {
     background-color: green;
     color: white;
-}
+  }
 
-
-
+  .rectangle.red {
+    background-color: red;
+    color: white;
+  }
+  
 .headers{
     display: flex;
     justify-content: space-between;

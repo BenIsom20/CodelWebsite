@@ -20,46 +20,19 @@
         <h6 ><a href="How.html">HOW TO PLAY THE GAME</a></h6>
     </div>
 
-        <div>
-            <p id="Question">Placeholder for questions</p>
-        </div>
+        
     
 
 <!-- WORDLE LIKE GRID CODE-->
 <h1 style="text-align: center;">CODEL</h1>
-<div class="codel-grid">
-    <!-- Squares for the grid -->
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
-    <div class="grid-square"></div>
+<div>
+    <p id="Question" style="text-align: center;">make something that prints 12345 <br>Test1: is 1 there?<br>Test2: is 2 there?<br>Test3: is 3 there?<br>Test4: is 4 there?<br>Test5: is 5 there?</p>
 </div>
+<div id="grid-container" class="grid"></div>
+  
+  
+
+  
 
 <!--Code for input output and buttons-->
     <div class="container mt-4">
@@ -80,8 +53,10 @@
             </div>
         </div>
     </div>
-<p id="weird"></p>
-<button id="resetButton">reset</button>
+
+    <p id="weird"></p>
+
+
 
 
 
@@ -104,7 +79,7 @@
 
             // Send code to backend for execution
             try {
-                const response = await fetch("http://127.0.0.1:5000/test", {
+                const response = await fetch("http://127.0.0.1:5000/run", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ code: userCode }),
@@ -129,10 +104,10 @@
         document.getElementById("submitCode").addEventListener("click", async function () {
             const userCode = editor.getValue(); // Get the code from CodeMirror
             const outputDiv = document.getElementById("output");
-
+            
             // Send code to backend for execution
             try {
-                const response = await fetch("http://127.0.0.1:5000/run", {
+                const response = await fetch("http://127.0.0.1:5000/test", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ code: userCode }),
@@ -142,11 +117,26 @@
 
                 // Display the result or error
                 if(!result.error.length==0){
-                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.error
+                    outputDiv.textContent = "COMPILATION ERROR"
+                    outputDiv.innerHTML +="<br>NO SUBMISSION RECORDED<br>ERROR OUTPUT:<br>"
+                    outputDiv.innerHTML += result.error
                 }
 
                 else {
-                    outputDiv.innerHTML = "Code Successfully Submitted<br>"+result.output || "Code Successfully Submitted<br>"+"No output";
+                    outputDiv.innerHTML = "Code Successfully Submitted<br>output:<br>"
+                    outputDiv.innerHTML += result.output || "No output";
+
+                    const resultT1 = result.t1;
+                    const resultT2 = result.t2;
+                    const resultT3 = result.t3;
+                    const resultT4 = result.t4;
+                    const resultT5 = result.t5;
+
+                    const resultList = [resultT1, resultT2, resultT3, resultT4, resultT5]
+                    const numTests = result.numTests
+                    colorRow(resultList, numTests);
+                    addRow(numTests);
+                    
 
                 } 
             } catch (error) {
@@ -159,47 +149,133 @@
 
 
 
-    <!--SCRIPT FOR CODEL GRID-->
-    <script>
-        // Initialize the row counter
-        let currentRow = 0;
-    
-        // JavaScript to handle button click
-        document.getElementById('submitCode').addEventListener('click', () => {
-            if (currentRow < 6) { // Ensure we don't exceed 6 rows
-                // Select all squares in the grid
-                const gridSquares = document.querySelectorAll('.grid-square');
-                const columns = 5; // Number of columns in the grid
-    
-                // Calculate the start and end indices of the current row
-                const startIndex = currentRow * columns;
-                const endIndex = (currentRow + 1) * columns;
-    
-                // Loop through the squares in the current row and add the green-row class
-                for (let i = startIndex; i < endIndex; i++) {
-                    gridSquares[i].classList.add('green-row');
-                }
-    
-                // Increment the row counter
-                currentRow++;
-            } else {
-                //alert('All rows have been colored!');
-            }
-        });
-    
-    
-        // JavaScript to handle the "Reset Grid" button click
-        document.getElementById('resetButton').addEventListener('click', () => {
-            // Remove the green color from all squares
-            const gridSquares = document.querySelectorAll('.grid-square');
-            gridSquares.forEach(square => {
-                square.classList.remove('green-row');
-            });
-    
-            // Reset the row counter
-            currentRow = 0;
-        });
 
-    </script>
+<!-- SCRIPT FOR CODEL SQUARES -->
+<script>
+const gridContainer = document.getElementById('grid-container');
+const addRowButton = document.getElementById('submitCode');
+const colorRowButton = document.getElementById('color-row-button');
+
+let currentRowIndex = 0; // Tracks which row to color next
+
+function addRow(numTests) {
+  const columnNumber = numTests;
+  const rowNumber = gridContainer.children.length / columnNumber + 1; // Determine the current row number (1-based index)
+  
+  for (let i = 1; i <= columnNumber; i++) {
+    const rectangle = document.createElement('div');
+    rectangle.classList.add('rectangle');
+    rectangle.textContent = `${"Test: "} ${i}`; // Text format: "number row"
+    gridContainer.appendChild(rectangle);
+  }
+}
+
+function colorRow(stringList, numTests) {
+  const rectangles = document.querySelectorAll('.rectangle');
+  const totalColumns = numTests;
+  const totalRows = rectangles.length / totalColumns; // Total number of rows in the grid
+
+  if (currentRowIndex < totalRows) {
+    // Calculate the start and end indices of the current row
+    const startIndex = currentRowIndex * totalColumns;
+    const endIndex = startIndex + totalColumns;
+    if (!Array.isArray(stringList)) {
+    const weird = document.getElementById("weird");
+    weird.innerHTML="not array"
+  }
+
+    stringList.forEach((result, index) => {
+  if (result == "Success") {
+    rectangles[index+startIndex].classList.add('green');
+    // Add your success logic here
+  } else if (result == "Failure") {
+    rectangles[index+startIndex].classList.add('red');
+    // Add your failure logic here
+  }
+  else{
+    console.log(`Index ${index}: Unknown value (${result}).`);
+  }
+});
+
+
+    currentRowIndex++; // Move to the next row
+  } 
+}
+
+
+colorRowButton.addEventListener('click', colorRow);
+
+// Initialize with one row
+addRow();
+
+</script>
+
+
+<!--SCRIPT TO INITIALIZE WITH 1 ROW-->
+
+<script>
+    async function initializeColumn() {
+        const gridContainer = document.getElementById('grid-container');
+        
+        // Ensure gridContainer exists before adding elements
+        if (!gridContainer) {
+            console.error("Grid container not found!");
+            return;
+        }
+
+        // Wait for DOMContentLoaded (but async function is enough for our purpose)
+        const userCode = editor.getValue(); // Get the code from CodeMirror
+        const outputDiv = document.getElementById("output");
+        const weird = document.getElementById("weird");
+
+        // Send code to backend for execution
+        try {
+            const response = await fetch("http://127.0.0.1:5000/test", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code: userCode }),
+            });
+
+            const result = await response.json();
+
+            if (result.error && result.error.length > 0) {
+                outputDiv.textContent = result.error;
+            } else {
+                outputDiv.textContent = result.output || "No output";
+            }
+
+            // After getting the result, use numTests to create rectangles and update grid
+            const numTest = result.numTests;
+
+            // Ensure numTest is valid and is a number
+            if (numTest && typeof numTest === "number" && numTest > 0) {
+                // Update the CSS grid layout based on numTests
+                const gridElement = document.querySelector('.grid');
+                if (gridElement) {
+                    gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`; // Update the number of columns dynamically
+                }
+
+                // Create rectangles based on numTests
+                for (let i = 1; i <= numTest; i++) {
+                    const rectangle = document.createElement('div');
+                    rectangle.classList.add('rectangle');
+                    rectangle.textContent = `Test: ${i}`; // Column is always 1, row is i
+                    gridContainer.appendChild(rectangle);
+                }
+            } else {
+                console.error("Invalid numTests value.");
+            }
+        } catch (error) {
+            outputDiv.textContent = "Failed to connect to the server.";
+        }
+    }
+
+    // Initialize with one column of rectangles based on numTests
+    initializeColumn();
+</script>
+
+
+
+
 </body>
 </html>
