@@ -4,17 +4,18 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-  }
-  
-  .grid {
+}
+
+.grid {
     display: grid;
     gap: 10px;
     margin-bottom: 20px;
-  }
-  
-  .rectangle {
+}
+
+.rectangle {
     width: 100px;
-    height: 50px; /* Rectangular shape */
+    height: 50px;
+    /* Rectangular shape */
     background-color: lightgray;
     display: flex;
     justify-content: center;
@@ -24,9 +25,9 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: center;
-  }
-  
-  button {
+}
+
+button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -35,23 +36,23 @@ body {
     border: none;
     border-radius: 5px;
     margin: 5px;
-  }
-  
-  button:hover {
+}
+
+button:hover {
     background-color: #0056b3;
-  }
-  
-  .rectangle.green {
+}
+
+.rectangle.green {
     background-color: green;
     color: white;
-  }
+}
 
-  .rectangle.red {
+.rectangle.red {
     background-color: red;
     color: white;
-  }
-  
-.headers{
+}
+
+.headers {
     display: flex;
     justify-content: space-between;
     width: 100%;
