@@ -61,7 +61,8 @@ def test_code():
             **results,
             "output": process.stdout,
             "error": process.stderr,
-            "numTests": len(results)
+            "numTests": len(results),
+            "testList": results
         })
 
     except subprocess.TimeoutExpired:
