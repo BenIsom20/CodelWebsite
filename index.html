@@ -140,12 +140,20 @@ document.getElementById("submitCode").addEventListener("click", async function (
             // Call the function to color rows based on the test results
             colorRow(resultsArray, numTests);
 
-            // Call the function to add rows in the grid based on the number of tests
-            addRow(numTests);
+            
+
+            //checks if all tests pass
+            if(!victoryCheck(numTests)){
+                // Call the function to add rows in the grid based on the number of tests
+                addRow(numTests);
+            }
+            
+            
+            
         }
     } catch (error) {
         // Handle the case where the fetch request fails (e.g., server not reachable)
-        outputDiv.textContent = "Failed to connect to the server.";
+        outputDiv.textContent = "Failed to connect to the server." + error;
     }
 });
 
@@ -216,11 +224,51 @@ function colorRow(stringList, numTests) {
   } 
 }
 
-// Event listener for the colorRowButton
-colorRowButton.addEventListener('click', colorRow);  // When the colorRowButton is clicked, call the colorRow function
+function victoryCheck(numTests) {
+  // Get all elements with the class 'rectangle' (all the grid cells)
+  const rectangles = document.querySelectorAll('.rectangle');
+  
+  // Calculate the total number of columns (numTests should match the number of columns)
+  const totalColumns = numTests;
 
-// Initialize with one row (by calling addRow with the number of tests)
-addRow(5);  // Assume 5 tests for initialization
+  // Decrement currentRowIndex by 1 to refer to the previous row (since index starts from 0)
+  const newCurrentRow = currentRowIndex - 1;
+
+  // Calculate the start and end indices for the current row of rectangles
+  const startIndex = newCurrentRow * totalColumns;
+  const endIndex = startIndex + totalColumns;
+
+  // Ensure that there are enough rectangles in the grid to match the current row
+  if (rectangles.length < endIndex) {
+    // If not enough rectangles exist, log an error and return false
+    console.error('Not enough rectangles in the grid.');
+    return false; // Return false if there aren't enough rectangles
+  }
+
+  // Loop through each rectangle in the current row
+  for (let i = startIndex; i < endIndex; i++) {
+    const rectangle = rectangles[i];
+
+    // Check if the rectangle exists at the current index
+    if (!rectangle) {
+      // If the rectangle is undefined, log an error and return false
+      console.error(`Rectangle at index ${i} is undefined.`);
+      return false;
+    }
+
+    // Check if the rectangle has the 'green' class
+    if (!rectangle.classList.contains('green')) {
+      // If any rectangle is not green, return false
+      return false;
+    }
+  }
+
+  // If all rectangles in the current row are green, return true
+  return true;
+}
+
+
+  
 
 </script>
 
