@@ -47,11 +47,23 @@ def test_code():
             timeout=5  # Prevent long-running processes
         )
         
-        # Check if "1" is in the output
-        if "1" in process.stdout:
-            return jsonify({"output": "Success"})
-        else:
-            return jsonify({"output": "Failure"})
+         # Prepare the result for each test
+        results = {
+            "t1": "Success" if "1" in process.stdout else "Failure",
+            "t2": "Success" if "2" in process.stdout else "Failure",
+            "t3": "Success" if "3" in process.stdout else "Failure",
+            "t4": "Success" if "4" in process.stdout else "Failure",
+            "t5": "Success" if "5" in process.stdout else "Failure",
+        }
+
+        # Return the combined result
+        return jsonify({
+            **results,
+            "output": process.stdout,
+            "error": process.stderr,
+            "numTests": len(results),
+            "testList": results
+        })
 
     except subprocess.TimeoutExpired:
         return jsonify({"error": "Code execution timed out"}), 400
