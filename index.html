@@ -31,8 +31,7 @@
     <!-- WORDLE LIKE GRID CODE-->
     <h1 style="text-align: center;">CODEL</h1>
     <div>
-        <p id="Question" style="text-align: center;">make something that prints 12345 <br>Test1: is 1 there?<br>Test2:
-            is 2 there?<br>Test3: is 3 there?<br>Test4: is 4 there?<br>Test5: is 5 there?</p>
+        <p id="Question" style="text-align: center;"></p>
     </div>
     <div id="grid-container" class="grid"></div>
 
@@ -308,25 +307,11 @@
 
             // Send the code to the backend for execution
             try {
-                // Make an asynchronous POST request to the backend to execute the user's code
-                const response = await fetch("http://127.0.0.1:5000/test", {
-                    method: "POST",  // HTTP method is POST
-                    headers: { "Content-Type": "application/json" },  // Set the content type to JSON
-                    body: JSON.stringify({ code: userCode }),  // Send the user's code as JSON in the request body
-                });
-
-                // Parse the JSON response from the backend
+                const response = await fetch("http://127.0.0.1:5000/Startup");
                 const result = await response.json();
 
-                // Check if there's an error in the result and display it
-                if (result.error && result.error.length > 0) {
-                    outputDiv.textContent = result.error;  // Display the error message in the output div
-                } else {
-                    outputDiv.textContent = result.output || "No output";  // Display the output or a default message if no output
-                }
-
                 // After receiving the result, use the numTests property to create rectangles in the grid
-                const numTest = result.numTests;  // Get the number of tests from the response
+                const numTest = result.Array;  // Get the number of tests from the response
 
                 // Ensure numTest is a valid number greater than 0
                 if (numTest && typeof numTest === "number" && numTest > 0) {
@@ -363,6 +348,24 @@
 
     </script>
 
+
+<script>
+    // Function to fetch and display the test explanation
+    async function fetchTestExplanation() {
+        const questionElement = document.getElementById("Question");
+        try {
+            const response = await fetch("http://127.0.0.1:5000/Startup");
+            const data = await response.json();
+            questionElement.innerHTML = data.explanation;
+        } catch (error) {
+            questionElement.textContent = "Failed to load test explanation.";
+            console.error("Error fetching test explanation:", error);
+        }
+    }
+
+    // Run on startup
+    fetchTestExplanation();
+</script>
 
 
 
