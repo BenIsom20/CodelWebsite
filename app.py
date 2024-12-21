@@ -1,10 +1,19 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import subprocess
+from db_helper import get_challenge_by_id
 
 app = Flask(__name__)
 # Enable CORS for all routes
 CORS(app)
+
+# Global variable for storing the current challenge
+current_challenge = {}
+
+def set_current_challenge(challenge_id):
+    """Fetch the challenge from the database and set it to the global variable."""
+    global current_challenge
+    current_challenge = get_challenge_by_id(challenge_id)
 
 @app.route("/run", methods=["POST"])
 def execute_code():
@@ -73,9 +82,13 @@ def test_code():
 
 @app.route("/Startup", methods=["GET"])
 def Startup():
+
+    # Set the current challenge to the first one
+    set_current_challenge(1)
+
     # Example explanation for the test
     descriptions = {
-        "Question": "Write a method to print 12345",
+        "Question": current_challenge["prompt"],
         "test1ex": "Test 1: Checking if 1 is present",
         "test2ex": "Test 2: Checking if 2 is present",
         "test3ex": "Test 3: Checking if 3 is present",
