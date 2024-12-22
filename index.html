@@ -17,9 +17,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="script.js"></script>
+    <script src="editor.js" defer></script>
+    <script src="timer.js" defer></script>
+    <script src="grid.js" defer></script>
+
 
 </head>
+
+
+<!-- NAVBAR CODE -->
 
 <body>
     <nav class="mainNavbar">
@@ -27,18 +33,21 @@
             <a>
                 <span id="stopwatch"></span>
             </a>
-            <div class = "nav-links">
-                <a href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-bar-chart-alt-2' ></i></a>
-                <a href="Developers.html" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-bulb' ></i></i></a>
-                <a href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-help-circle'></i></a>
+            <div class="nav-links">
+                <a href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime()"><i
+                        class='bx bxs-bar-chart-alt-2'></i></a>
+                <a href="Developers.html" class="navObjects" onclick="storeStopwatchTime()"><i
+                        class='bx bxs-bulb'></i></i></a>
+                <a href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
+                        class='bx bxs-help-circle'></i></a>
             </div>
         </div>
     </nav>
-    
 
 
 
-    <!-- WORDLE LIKE GRID CODE-->
+
+    <!-- Challenge and title code-->
     <h1 style="text-align: center; padding-top:20px">CODEL</h1>
     <div>
         <p id="Question" style="text-align: center;"></p>
@@ -47,13 +56,11 @@
 
 
 
-
-
     <!--Code for input output and buttons-->
     <div class="container mt-4">
         <div class="row">
             <div class="col">
-                <textarea id="editor" class="form-control" style = "align-items: center;"></textarea>
+                <textarea id="editor" class="form-control" style="align-items: center;"></textarea>
             </div>
         </div>
         <div class="row mt-3">
@@ -71,363 +78,7 @@
         </div>
     </div>
 
-    
 
-
-
-
-
-    <!--SCRIPT FOR CODE INPUT OUTPUT-->
-    <script>
-        // Initialize CodeMirror editor
-        var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
-            mode: "text/x-python",
-            theme: "midnight",
-            lineNumbers: true,
-            autoCloseBrackets: true,
-        });
-        editor.setSize("90%", 300);
-
-        // Event listener for "Run Code" button
-        document.getElementById("runCode").addEventListener("click", async function () {
-            const userCode = editor.getValue(); // Get the code from CodeMirror
-            const outputDiv = document.getElementById("output");
-            const weird = document.getElementById("weird");
-
-            // Send code to backend for execution
-            try {
-                const response = await fetch("http://127.0.0.1:5000/run", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ code: userCode }),
-                });
-
-                const result = await response.json();
-
-                if (result.error && result.error.length > 0) {
-                    outputDiv.textContent = result.error
-                }
-                else {
-                    outputDiv.textContent = result.output || "No output";
-                }
-            } catch (error) {
-                outputDiv.textContent = "Failed to connect to the server.";
-            }
-        });
-
-
-
-        // Event listener for "Submit Code" button
-        document.getElementById("submitCode").addEventListener("click", async function () {
-            // Get the user's code from the CodeMirror editor
-            const userCode = editor.getValue();
-            // Get the output display div element
-            const outputDiv = document.getElementById("output");
-
-            // Send the user's code to the backend for execution
-            try {
-                // Make an asynchronous POST request to the Flask backend
-                const response = await fetch("http://127.0.0.1:5000/test", {
-                    method: "POST",  // HTTP method (POST)
-                    headers: { "Content-Type": "application/json" },  // Set request headers
-                    body: JSON.stringify({ code: userCode }),  // Send the code as JSON in the body
-                });
-
-                // Parse the JSON response from the backend
-                const result = await response.json();
-
-                // Check if there was an error in the response (e.g., compilation error)
-                if (!result.error.length == 0) {
-                    // Display compilation error message if there is an error
-                    outputDiv.textContent = "COMPILATION ERROR";
-                    outputDiv.innerHTML += "<br>NO SUBMISSION RECORDED<br>ERROR OUTPUT:<br>";
-                    outputDiv.innerHTML += result.error;  // Display the error details
-                } else {
-                    // If there is no error, display the success message and the output
-                    outputDiv.innerHTML = "Code Successfully Submitted<br>output:<br>";
-                    outputDiv.innerHTML += result.output || "No output";  // Display the output, or "No output" if none
-
-                    // Convert the 'testList' (a dictionary of test results) into an array
-                    const array = result.testList;
-                    const resultsArray = Object.values(array);  // Get an array of values from the test results object
-
-                    // Get the number of tests
-                    const numTests = result.numTests;
-
-                    // Call the function to color rows based on the test results
-                    colorRow(resultsArray, numTests);
-
-
-
-                    //checks if all tests pass
-                    if (!victoryCheck(numTests)) {
-                        // Call the function to add rows in the grid based on the number of tests
-                        addRow(numTests);
-                    }
-                    else {
-                        const submitButton = document.getElementById("submitCode");
-                        submitButton.disabled = true;
-                        stopStopwatch();
-                    }
-
-
-
-                }
-            } catch (error) {
-                // Handle the case where the fetch request fails (e.g., server not reachable)
-                outputDiv.textContent = "Failed to connect to the server." + error;
-            }
-        });
-
-    </script>
-
-
-
-
-
-
-    <!-- SCRIPT FOR CODEL SQUARES -->
-    <script>
-        // Get references to the grid container and buttons from the DOM
-        const gridContainer = document.getElementById('grid-container');  // The container where the rectangles will be added
-        const addRowButton = document.getElementById('submitCode');  // Button to trigger adding a new row
-        const colorRowButton = document.getElementById('color-row-button');  // Button to trigger coloring the current row
-
-        let currentRowIndex = 0;  // Keeps track of the current row index that should be colored
-
-        // Function to add a new row to the grid
-        function addRow(numTests) {
-            const columnNumber = numTests;  // Set the number of columns to match the number of tests
-            const rowNumber = gridContainer.children.length / columnNumber + 1;  // Calculate the current row number (1-based index)
-
-            // Loop through each column and create a rectangle for each test
-            for (let i = 1; i <= columnNumber; i++) {
-                const rectangle = document.createElement('div');  // Create a new div element for each rectangle
-                rectangle.classList.add('rectangle');  // Add the 'rectangle' class for styling
-                rectangle.textContent = `${"Test: "} ${i}`;  // Set the text content to display the test number
-                gridContainer.appendChild(rectangle);  // Append the rectangle to the grid container
-            }
-        }
-
-        // Function to color a row based on the results
-        function colorRow(stringList, numTests) {
-            const rectangles = document.querySelectorAll('.rectangle');  // Get all rectangles in the grid
-            const totalColumns = numTests;  // Set the total number of columns in the grid
-            const totalRows = rectangles.length / totalColumns;  // Calculate the total number of rows in the grid
-
-            // Check if there are still rows to color
-            if (currentRowIndex < totalRows) {
-                // Calculate the start and end indices for the current row
-                const startIndex = currentRowIndex * totalColumns;
-                const endIndex = startIndex + totalColumns;
-
-                // Check if stringList is an array (for debugging)
-                if (!Array.isArray(stringList)) {
-                    const weird = document.getElementById("weird");  // Find the element with id "weird"
-                    weird.innerHTML = "not array";  // Display a message if stringList is not an array
-                }
-
-                // Loop through each result in the stringList and color the corresponding rectangle
-                stringList.forEach((result, index) => {
-                    if (result == "Success") {
-                        // If the result is "Success", add a 'green' class to the corresponding rectangle
-                        rectangles[index + startIndex].classList.add('green');
-                    } else if (result == "Failure") {
-                        // If the result is "Failure", add a 'red' class to the corresponding rectangle
-                        rectangles[index + startIndex].classList.add('red');
-                    } else {
-                        // If the result is neither "Success" nor "Failure", log the unknown value
-                        console.log(`Index ${index}: Unknown value (${result}).`);
-                    }
-                });
-
-                // Increment the row index to move to the next row for the next time colorRow is called
-                currentRowIndex++;
-            }
-        }
-
-        function victoryCheck(numTests) {
-            // Get all elements with the class 'rectangle' (all the grid cells)
-            const rectangles = document.querySelectorAll('.rectangle');
-
-            // Calculate the total number of columns (numTests should match the number of columns)
-            const totalColumns = numTests;
-
-            // Decrement currentRowIndex by 1 to refer to the previous row (since index starts from 0)
-            const newCurrentRow = currentRowIndex - 1;
-
-            // Calculate the start and end indices for the current row of rectangles
-            const startIndex = newCurrentRow * totalColumns;
-            const endIndex = startIndex + totalColumns;
-
-            // Ensure that there are enough rectangles in the grid to match the current row
-            if (rectangles.length < endIndex) {
-                // If not enough rectangles exist, log an error and return false
-                console.error('Not enough rectangles in the grid.');
-                return false; // Return false if there aren't enough rectangles
-            }
-
-            // Loop through each rectangle in the current row
-            for (let i = startIndex; i < endIndex; i++) {
-                const rectangle = rectangles[i];
-
-                // Check if the rectangle exists at the current index
-                if (!rectangle) {
-                    // If the rectangle is undefined, log an error and return false
-                    console.error(`Rectangle at index ${i} is undefined.`);
-                    return false;
-                }
-
-                // Check if the rectangle has the 'green' class
-                if (!rectangle.classList.contains('green')) {
-                    // If any rectangle is not green, return false
-                    return false;
-                }
-            }
-
-            // If all rectangles in the current row are green, return true
-            return true;
-        }
-
-
-
-
-    </script>
-
-
-    <!--SCRIPT TO INITIALIZE WITH 1 ROW-->
-
-    <script>
-        // Asynchronous function to initialize the grid and send code for execution
-        async function initializeColumn() {
-            // Get the grid container element where the rectangles will be appended
-            const gridContainer = document.getElementById('grid-container');
-
-            // Ensure the gridContainer exists before trying to add elements to it
-            if (!gridContainer) {
-                console.error("Grid container not found!");  // Log an error if grid container is not found
-                return;  // Exit the function if grid container is not available
-            }
-
-            // Get the user's code from the CodeMirror editor
-            const userCode = editor.getValue();
-            // Get the output div to display results
-            const outputDiv = document.getElementById("output");
-            // (Unused in this code, but might be for debugging or other purposes)
-            const weird = document.getElementById("weird");
-
-            // Send the code to the backend for execution
-            try {
-                const response = await fetch("http://127.0.0.1:5000/Startup");
-                const result = await response.json();
-
-                // After receiving the result, use the numTests property to create rectangles in the grid
-                const numTest = result.Array;  // Get the number of tests from the response
-
-                // Ensure numTest is a valid number greater than 0
-                if (numTest && typeof numTest === "number" && numTest > 0) {
-                    // Update the grid's CSS layout dynamically based on numTests
-                    const gridElement = document.querySelector('.grid');
-                    if (gridElement) {
-                        // Set the number of columns in the grid dynamically
-                        gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;  // Update grid layout for columns
-                    }
-
-                    // Create the rectangles (one for each test) and add them to the grid container
-                    for (let i = 1; i <= numTest; i++) {
-                        // Create a new div element for each rectangle
-                        const rectangle = document.createElement('div');
-                        // Add a class to the rectangle for styling
-                        rectangle.classList.add('rectangle');
-                        // Set the text content of the rectangle to display the test number
-                        rectangle.textContent = `Test: ${i}`;
-                        // Append the rectangle to the grid container
-                        gridContainer.appendChild(rectangle);
-                    }
-                } else {
-                    // Log an error if numTest is not valid
-                    console.error("Invalid numTests value.");
-                }
-            } catch (error) {
-                // Handle any errors that occur during the fetch or other asynchronous operations
-                outputDiv.textContent = "Failed to connect to the server.";  // Display a connection error message
-            }
-        }
-
-        // Initialize the grid by calling the function to set up the columns and rectangles
-        initializeColumn();
-
-    </script>
-
-
-<script>
-    // Function to fetch and display the test explanation
-    async function fetchTestExplanation() {
-        const questionElement = document.getElementById("Question");
-        try {
-            const response = await fetch("http://127.0.0.1:5000/Startup");
-            const data = await response.json();
-            questionElement.innerHTML = data.explanation;
-        } catch (error) {
-            questionElement.textContent = "Failed to load test explanation.";
-            console.error("Error fetching test explanation:", error);
-        }
-    }
-
-    // Run on startup
-    fetchTestExplanation();
-</script>
-
-<script>
-    let stopwatchTime = 0; // Initial time in seconds
-let stopwatchInterval;
-let isRunning = false; // To track if the stopwatch is running
-
-// Function to start the stopwatch
-function startStopwatch() {
-    const savedTime = localStorage.getItem("stopwatchTime");
-    if (savedTime) {
-        stopwatchTime = parseInt(savedTime, 10); // Restore saved time
-    }
-    updateStopwatchDisplay();
-
-    // Start the stopwatch interval if it's not already running
-    if (!isRunning) {
-        stopwatchInterval = setInterval(() => {
-            stopwatchTime++;
-            updateStopwatchDisplay();
-            localStorage.setItem("stopwatchTime", stopwatchTime); // Save time
-        }, 1000);
-        isRunning = true;
-    }
-}
-
-// Function to stop the stopwatch but keep the time
-function stopStopwatch() {
-    clearInterval(stopwatchInterval); // Stop the interval
-    isRunning = false; // Set isRunning to false, so we don't start the interval again
-    localStorage.setItem("stopwatchTime", stopwatchTime); // Keep the current time in localStorage
-}
-
-// Function to update the display of the stopwatch
-function updateStopwatchDisplay() {
-    const hours = Math.floor(stopwatchTime / 3600); // Get hours
-    const minutes = Math.floor((stopwatchTime % 3600) / 60); // Get minutes
-    const seconds = stopwatchTime % 60; // Get seconds
-    const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
-    document.getElementById("stopwatch").textContent = formattedTime;
-}
-
-// Function to pad the time with a leading zero if needed
-function padZero(time) {
-    return time < 10 ? "0" + time : time;
-}
-
-// Start the stopwatch when the page loads
-window.onload = function() {
-    startStopwatch();
-};
-</script>
 
 </body>
 
