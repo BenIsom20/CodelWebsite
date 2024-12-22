@@ -8,11 +8,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to play Codel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-    <button><a href="index.html">Back to Codel</a></button>
-    <h1>THIS IS HOW YOU PLAY THE GAME</h1>
+
+    <nav class="subNavbar">
+        <div class="navbar-container">
+            <a href="index.html" class="backButton" onclick="startStopwatch()" >BACK TO CODEL</a>
+            <div class="nav-links">
+                <a href="Leaderboard.html" class="navObjects"><i class='bx bxs-bar-chart-alt-2' ></i></a>
+                <a href="Developers.html" class="navObjects" ><i class='bx bxs-bulb' ></i></i></a>
+            </div>        
+        </div>
+    </nav>
+
+    
+    <main>
+        <section class="how-to-play">
+            <h1>How to Play CODEL</h1>
+
+            <p>Welcome to <strong>CODEL</strong>! Every day, you'll be challenged with a new coding task. Whether you're a beginner or an experienced coder, this game will help you practice and improve your Python skills.</p>
+
+            <h2 class = "head">Objective</h2>
+            <p>
+            The goal of the game is to solve the challenge in either the <strong>least amount of time</strong> or the <strong>least number of attempts</strong>. 
+            For example:
+            <ul>
+                <li>A solve with <strong>2 attempts</strong> and <strong>10 minutes</strong> would beat a solve with <strong>3 attempts</strong> and <strong>5 minutes</strong>.</li>
+                <li>However, a solve with <strong>2 attempts</strong> and <strong>5 minutes</strong> would beat a solve with <strong>2 attempts</strong> and <strong>10 minutes</strong>.</li>
+            </ul>
+            </p>
+
+            <h2 class = "head">The Basics</h2>
+
+            <h3>1. Daily Challenge</h3>
+            <p>Every day, a new coding challenge will be available. The challenge will appear right below the <strong>CODEL</strong> heading, so you'll always know what you're working on.</p>
+
+            <h3>2. Write Your Code</h3>
+            <p>Below the challenge description, you'll find an <strong>input box</strong> where you can write your Python code to solve the problem. Use your best coding skills to write a solution. Don't worry if you're unsure; you can always test your code before submitting it!</p>
+
+            <h3>3. Test Your Code</h3>
+            <p>Once you're happy with your code, you have two options:</p>
+            <ul>
+                <li><strong>Run Code:</strong> If you'd like to test your solution yourself, click the <strong>Run Code</strong> button. This will run your code and let you see the output right away.</li>
+                <li><strong>Submit Code:</strong> If you're confident your code is correct, click the <strong>Submit Code</strong> button to submit it for testing.</li>
+            </ul>
+
+            <h3>4. See How You Did</h3>
+            <p>After you submit your code, the game will run a series of <strong>tests</strong> to check if your solution is correct.</p>
+            <ul>
+                <li>If <strong>everything works perfectly</strong>, you'll see green squares next to each test — indicating that you passed all the tests.</li>
+                <li>If any tests fail, you'll see <strong>red squares</strong>. These indicate where your solution didn't work as expected.</li>
+            </ul>
+
+            <h3>5. What Happens if There’s an Error?</h3>
+            <p>If there is an error in your code (such as a syntax error or an exception), it won't count as a submission. Instead, you'll see an error message telling you what went wrong. Don’t worry, just fix the error and try again!</p>
+
+            <h2 class = "head">Tips for Success</h2>
+            <ul>
+                <li><strong>Test First:</strong> If you're unsure whether your solution works, hit <strong>Run Code</strong> to check it before you submit.</li>
+                <li><strong>Read the Instructions Carefully:</strong> Make sure you understand the challenge before you start coding. The more clearly you understand the problem, the easier it will be to solve.</li>
+                <li><strong>Don’t Rush:</strong> Take your time to write clean, efficient code. You have plenty of time to work on each challenge, so no need to rush.</li>
+                <li><strong>Check Your Output:</strong> When running your code, check the output to make sure it matches what’s expected. If the output is wrong, adjust your code and test again.</li>
+            </ul>
+
+            <h2 class = "head">Ready to Start?</h2>
+            <p>You’re now ready to start coding! Click 'BACK TO CODEL' in the top bar to begin and see what’s waiting for you today. Good luck, and happy coding!</p>
+        </section>
+    </main>
 </body>
 
 </html>

@@ -75,7 +75,7 @@ def test_code():
 def Startup():
     # Example explanation for the test
     descriptions = {
-        "Question": "Write a method to print 12345",
+        "Question": "Challenge: Write a method to print 12345<br>",
         "test1ex": "Test 1: Checking if 1 is present",
         "test2ex": "Test 2: Checking if 2 is present",
         "test3ex": "Test 3: Checking if 3 is present",
