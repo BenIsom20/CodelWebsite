@@ -17,9 +17,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
     <script src="editor.js" defer></script>
     <script src="timer.js" defer></script>
     <script src="grid.js" defer></script>
+    <script src="submit.js" defer></script>
+    
+    
 
 
 </head>
@@ -34,11 +38,11 @@
                 <span id="stopwatch"></span>
             </a>
             <div class="nav-links">
-                <a href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime()"><i
+                <a id = "leader" href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime();"><i
                         class='bx bxs-bar-chart-alt-2'></i></a>
-                <a href="Developers.html" class="navObjects" onclick="storeStopwatchTime()"><i
+                <a id = "develop" href="Developers.html" class="navObjects" onclick="storeStopwatchTime()"><i
                         class='bx bxs-bulb'></i></i></a>
-                <a href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
+                <a id = "how" href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
                         class='bx bxs-help-circle'></i></a>
             </div>
         </div>
@@ -64,10 +68,10 @@
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col">
+            <div class="but">
                 <button id="runCode" class="mainbutton">Run Code</button>
-                <button id="submitCode" class="mainbutton" style="position: absolute; margin-left: 10%; ">Submit
-                    Code</button>
+                <button id="submitCode" class="mainbutton" >Submit Code</button>
+                <button id="saveCode" class="mainbutton"  >Save Code</button>
             </div>
         </div>
         <div class="row mt-3">
@@ -78,7 +82,39 @@
         </div>
     </div>
 
+<p id="weird"></p>
 
+<!-- ONE SINGULAR ONLOAD FUNCTION -->
+<script>
+    window.onload = function() {
+        startStopwatch();
+        fetchTestExplanation();
+        const gridData = localStorage.getItem("gridState");
+        if(gridData){
+            loadGridState();
+        }else{
+            initializeColumn();
+            //document.getElementById("weird").innerHTML = "initialize"
+        }
+        
+        loadCode();
+        victory();
+    }
+</script>
+
+
+<button id="resetButton" class="mainbutton">Reset</button>
+
+<script>
+    // Function to reset the state by clearing localStorage and reloading the page
+function resetState() {
+    localStorage.clear(); // Clear all data from localStorage
+    location.reload(); // Reload the page to reset everything
+    
+}
+
+document.getElementById("resetButton").addEventListener("click", resetState);
+</script>
 
 </body>
 

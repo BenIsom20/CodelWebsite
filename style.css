@@ -41,6 +41,7 @@ body {
     font-weight: bold; /* Bold text */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+    margin-right: 20px;
 }
 
 /* Hover effect */
@@ -142,4 +143,8 @@ main {
     font-weight: bold
 }
 
+
+.but{
+    justify-content: space-between;
+}
 

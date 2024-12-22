@@ -46,7 +46,8 @@ function padZero(time) {
     return time < 10 ? "0" + time : time; // If time is less than 10, add a leading zero
 }
 
-// Start the stopwatch when the page loads
-window.onload = function () {
-    startStopwatch(); // Call startStopwatch to begin the timer when the page is loaded
-};
+
+
+
+
+
