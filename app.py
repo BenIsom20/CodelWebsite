@@ -91,16 +91,16 @@ def Startup():
 
     # Set the current challenge to the first one
     set_current_challenge(1)
-    set_current_challenge_cases(1)
-
-    # Example explanation for the test
+    set_current_challenge_cases(2)
+        
+    # Explanation for the test
     descriptions = {
         "Question": current_challenge["prompt"],
-        "test1ex": "Test 1: Checking if 1 is present",
-        "test2ex": "Test 2: Checking if 2 is present",
-        "test3ex": "Test 3: Checking if 3 is present",
-        "test4ex": "Test 4: Checking if 4 is present",
-        "test5ex": "Test 5: Checking if 5 is present"
+        **{
+            f"Case {i + 1}": 
+            f"Case {i + 1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"
+            for i, case in enumerate(current_challenge_cases)
+        }
     }
 
     explanation = ""

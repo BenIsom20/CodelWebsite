@@ -14,14 +14,16 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Flask and Flask-CORS (optional)
-RUN pip3 install flask flask-cors mysql-connector-python
+RUN pip3 install flask flask-cors mysql-connector-python pyyaml
 
 # Create a directory for the Flask app
 WORKDIR /app
 
 # Copy the Flask app into the container
 COPY app.py /app
-COPY db_helper.py /db_helper
+COPY db_helper.py /app
+COPY challenges /app
+COPY challenger /app
 
 # Expose the port that Flask will run on
 EXPOSE 5000
