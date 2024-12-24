@@ -1,9 +1,12 @@
 body {
-    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    margin:0;
+    background-color: #333; /* Set background to black */
+    color: #39FF14; /* Neon green color for text */
+    font-family: Arial, sans-serif; /* Optional: Choose a font */
+    
 }
 
 .grid {
@@ -25,21 +28,26 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: center;
+    color: black;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
+.mainbutton {
+    background-color: lightgrey; /* Light gray background */
+    color: black; /* Black text */
+    border: 2px solid black; /* Black border for definition */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for size */
+    font-size: 16px; /* Comfortable font size */
+    font-weight: bold; /* Bold text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+    margin-right: 20px;
 }
 
-button:hover {
-    background-color: #0056b3;
+/* Hover effect */
+.mainbutton:hover {
+    background-color: darkgrey; /* Slightly darker light gray */
+    color: black; /* Keep text color black */
 }
 
 .rectangle.green {
@@ -52,12 +60,91 @@ button:hover {
     color: white;
 }
 
-.headers {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 20px;
 
+
+
+.mainNavbar {
+    background-color: #333; /* Dark background color */
+    color: white;
+    padding: 10px 20px;
+    position: relative; /* Keeps the navbar at the top of the page */
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    
 }
+
+.subNavbar {
+    background-color: #333; /* Dark background color */
+    color: white;
+    padding: 10px 20px;
+    position: fixed; /* Keeps the navbar at the top of the page */
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    
+    
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between; /* Ensures "Back to Codel" is on the left and the icons on the right */
+    align-items: center;
+    width: 100%; /* Make sure it takes up the full width */
+    
+}
+
+.backButton {
+    color: #39FF14; /* Neon green for text */
+    text-decoration: none; /* Remove underline */
+    font-size: 18px;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+}
+
+.nav-links {
+    display: flex; /* Use flex to arrange the icons */
+    justify-content: flex-end; /* Align items to the right */
+}
+
+.navObjects {
+    color: white; /* Icon color */
+    margin-left: 15px;
+    font-size: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.navObjects:hover {
+    background-color: darkgrey;
+    border-color: #ccc;
+}
+
+.backButton:hover {
+    background-color: darkgrey;
+    border-color: #ccc;
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top:100px;
+}
+
+#stopwatch {
+    font-size: 35px;
+    
+    
+    border: 2px solid #39FF14;
+    border-radius: 10px;
+}
+
+.head {
+    font-weight: bold
+}
+
+
+.but{
+    justify-content: space-between;
+}
+
