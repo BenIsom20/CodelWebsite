@@ -5,7 +5,8 @@ USE qsdb;
 CREATE TABLE IF NOT EXISTS challenges (
     challenge_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT
+    prompt TEXT,
+    date TIMESTAMP
 );
 
 -- Create challenge_cases table with foreign key
@@ -18,17 +19,14 @@ CREATE TABLE IF NOT EXISTS challenge_cases (
     FOREIGN KEY (challenge_id) REFERENCES challenges(challenge_id)  -- Foreign key to challenges table
 );
 
--- Insert challenges
-INSERT INTO challenges (name, description) VALUES
-('Reverse a String', 'This challenge requires you to reverse a given string.');
-
--- Insert challenge cases (note the challenge_id references challenges)
-INSERT INTO challenge_cases (challenge_id, prompt, given_data, expected) VALUES
-(1, 'Reverse a string', 'hello', 'olleh'),
-(1, 'Reverse an empty string ', '', ''),
-(1, 'Reverse a string with spaces', 'hello world', 'dlrow olleh'),
-(1, 'Reverse a single character string', 'a', 'a');
-
-
+-- Create function_skeletons table with foreign key to challenges table
+CREATE TABLE IF NOT EXISTS function_skeletons (
+    function_skeleton_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique ID for each function skeleton
+    challenge_id INT NOT NULL,  -- Foreign key referencing challenges
+    name VARCHAR(255) NOT NULL,  -- Function name
+    parameters VARCHAR(255),  -- Function parameters as a string
+    skeleton TEXT,  -- Function skeleton
+    FOREIGN KEY (challenge_id) REFERENCES challenges(challenge_id)  -- Foreign key to challenges table
+);
 
 

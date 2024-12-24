@@ -1,10 +1,31 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import subprocess
+from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id
 
 app = Flask(__name__)
 # Enable CORS for all routes
 CORS(app)
+
+# Global variable for storing the current challenge
+current_challenge = {}
+current_challenge_cases = []
+current_challenge_function_skeleton = {}
+
+def set_current_challenge(challenge_id):
+    """Fetch the challenge from the database and set it to the global variable."""
+    global current_challenge
+    current_challenge = get_challenge_by_id(challenge_id)
+
+def set_current_challenge_cases(challenge_id):
+    """Fetch the challenge cases from the database and set them to the global variable."""
+    global current_challenge_cases
+    current_challenge_cases = get_challenge_cases_by_id(challenge_id)
+
+def set_current_challenge_function_skeleton(challenge_id):
+    """Fetch the function skeleton from the database and set it to the global variable."""
+    global current_challenge_function_skeleton
+    current_challenge_function_skeleton = get_function_skeleton_by_id(challenge_id)
 
 @app.route("/run", methods=["POST"])
 def execute_code():
@@ -73,14 +94,20 @@ def test_code():
 
 @app.route("/Startup", methods=["GET"])
 def Startup():
-    # Example explanation for the test
+
+    # Set the current challenge to the first one
+    set_current_challenge(1)
+    set_current_challenge_cases(1)
+    set_current_challenge_function_skeleton(1)
+        
+    # Explanation for the test
     descriptions = {
-        "Question": "Challenge: Write a method to print 12345<br>",
-        "test1ex": "Test 1: Checking if 1 is present",
-        "test2ex": "Test 2: Checking if 2 is present",
-        "test3ex": "Test 3: Checking if 3 is present",
-        "test4ex": "Test 4: Checking if 4 is present",
-        "test5ex": "Test 5: Checking if 5 is present"
+        "Question": current_challenge["prompt"],
+        **{
+            f"Case {i + 1}": 
+            f"Case {i + 1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"
+            for i, case in enumerate(current_challenge_cases)
+        }
     }
 
     explanation = ""
@@ -96,3 +123,11 @@ def Startup():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
+@app.route('/get_skeleton/<int:challenge_id>', methods=['GET'])
+def get_skeleton(challenge_id):
+    skeleton = current_challenge_function_skeleton
+    if skeleton:
+        return jsonify(skeleton), 200
+    else:
+        return jsonify({"error": "Skeleton not found"}), 404
