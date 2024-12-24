@@ -102,5 +102,8 @@ document.getElementById("runCode").addEventListener("click", async function () {
 });
 
 document.addEventListener("DOMContentLoaded", () =>{
-    loadSkeleton(1);
+    if(!localStorage.getItem("savedCode")){
+        loadSkeleton(1);
+    }
+    
 });
