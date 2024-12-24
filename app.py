@@ -98,8 +98,7 @@ def Startup():
     # Set the current challenge to the first one
     set_current_challenge(1)
     set_current_challenge_cases(1)
- 
-        
+   
     # Explanation for the test
     descriptions = {
         "Question": current_challenge["prompt"],
@@ -115,12 +114,10 @@ def Startup():
         explanation += value + "<br>" 
     # Add the value to the total
 
-    
     return jsonify({
         "explanation": explanation,
         "Array": len(descriptions)-1
     })
-
 
 @app.route('/get_skeleton/<int:challenge_id>', methods=['GET'])
 def get_skeleton(challenge_id):

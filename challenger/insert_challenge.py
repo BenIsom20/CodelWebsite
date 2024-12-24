@@ -118,6 +118,35 @@ def list_challenges():
 
     return challenges
 
+# Function to list challenges that can be added (exist in YAML files but not in the database)
+def list_challenges_to_add():
+    # Database connection
+    conn = mysql.connector.connect(
+        host='db',
+        user='devuser',
+        password='devpass',
+        database='qsdb'
+    )
+    cursor = conn.cursor()
+
+    # Fetch challenge names already in the database
+    cursor.execute("""
+        SELECT name FROM challenges
+    """)
+    existing_challenges = {row[0] for row in cursor.fetchall()}
+
+    cursor.close()
+    conn.close()
+
+    # List YAML files in the folder
+    available_files = list_yaml_files()
+
+    # Filter challenges that are not in the database
+    challenges_to_add = [f for f in available_files if f not in existing_challenges]
+
+    return challenges_to_add
+
+
 # Main function to run the script
 def main():
     # Ask user for action
@@ -128,33 +157,33 @@ def main():
     action = input("Please enter the number corresponding to your choice: ")
 
     if action == "1":
-        # List available challenges in the database
-        available_challenges = list_challenges()
+        # List challenges that can be added
+        challenges_to_add = list_challenges_to_add()
 
-        if not available_challenges:
-            print("No challenges found in the database.")
+        if not challenges_to_add:
+            print("No new challenges to add. All challenges in the folder are already in the database.")
             return
 
-        # Prompt user for the challenge_id to insert
-        challenge_id = input("Please enter the challenge ID of the challenge to insert: ")
+        print("Challenges available to add:")
+        for i, challenge in enumerate(challenges_to_add, start=1):
+            print(f"{i}. {challenge}")
 
-        # Check if the challenge_id is valid
+        # Prompt user for the challenge to insert
+        choice = input("Enter the number of the challenge you want to add: ")
+
         try:
-            challenge_id = int(challenge_id)
+            choice_index = int(choice) - 1
+            if 0 <= choice_index < len(challenges_to_add):
+                selected_challenge = challenges_to_add[choice_index]
+                yaml_file = os.path.join('../challenges', selected_challenge + '.yml')
+                challenge_data = load_challenge_data(yaml_file)
+                insert_challenge_data(challenge_data)
+                print(f"Challenge '{selected_challenge}' and its cases have been added successfully.")
+            else:
+                print("Invalid choice. Please select a valid number from the list.")
         except ValueError:
-            print(f"Error: '{challenge_id}' is not a valid challenge ID.")
-            return
+            print("Invalid input. Please enter a number.")
 
-        # Find the challenge file corresponding to the challenge_id
-        challenge = next((ch for ch in available_challenges if ch[0] == challenge_id), None)
-        if challenge:
-            yaml_file = os.path.join('../challenges', challenge[1] + '.yml')
-            challenge_data = load_challenge_data(yaml_file)
-            insert_challenge_data(challenge_data)
-            print(f"Challenge '{challenge[1]}' and its cases have been added successfully.")
-        else:
-            print(f"Error: Challenge ID '{challenge_id}' not found.")
-        
     elif action == "2":
         # Insert all challenges from YAML files
         insert_all()

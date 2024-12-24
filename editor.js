@@ -45,8 +45,6 @@ document.getElementById("how").addEventListener("click", async function() {
     outputDiv.innerHTML="Code Successfully Saved!";
 });
 
-
-
 // Function to load the saved code from localStorage when the page is loaded
 function loadCode() {
         const savedCode = localStorage.getItem("savedCode"); // Retrieve saved code from localStorage
@@ -73,7 +71,6 @@ async function loadSkeleton(challengeId) {
         console.error('Error fetching skeleton:', error);
     }
 }
-
 
 // Event listener for "Run Code" button
 document.getElementById("runCode").addEventListener("click", async function () {
