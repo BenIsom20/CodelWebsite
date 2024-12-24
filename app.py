@@ -98,7 +98,6 @@ def Startup():
     # Set the current challenge to the first one
     set_current_challenge(1)
     set_current_challenge_cases(1)
-    set_current_challenge_function_skeleton(1)
         
     # Explanation for the test
     descriptions = {
@@ -123,11 +122,3 @@ def Startup():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
-
-@app.route('/get_skeleton/<int:challenge_id>', methods=['GET'])
-def get_skeleton(challenge_id):
-    skeleton = current_challenge_function_skeleton
-    if skeleton:
-        return jsonify(skeleton), 200
-    else:
-        return jsonify({"error": "Skeleton not found"}), 404

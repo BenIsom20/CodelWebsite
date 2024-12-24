@@ -45,8 +45,6 @@ document.getElementById("how").addEventListener("click", async function() {
     outputDiv.innerHTML="Code Successfully Saved!";
 });
 
-
-
 // Function to load the saved code from localStorage when the page is loaded
 function loadCode() {
     
@@ -56,9 +54,21 @@ function loadCode() {
             editor.setValue(parsedCode); // Load the saved code into the textarea
             
         }
-    
-    
-    
+}
+
+// Fetch and Populate Skeleton Code
+async function loadSkeleton(challengeId) {
+    try {
+        const response = await fetch(/get_skeleton/${challengeId});
+        if (response.ok) {
+            const skeleton = await response.json();
+            editor.setValue(skeleton.skeleton || ""); // Populate editor with skeleton
+        } else {
+            console.error('Skeleton not found for challenge:', challengeId);
+        }
+    } catch (error) {
+        console.error('Error fetching skeleton:', error);
+    }
 }
 
 
@@ -88,4 +98,8 @@ document.getElementById("runCode").addEventListener("click", async function () {
     }
 });
 
-
+// Load the Skeleton for a Challenge on Page Load
+document.addEventListener("DOMContentLoaded", () => {
+    loadSavedCode(); // Load locally saved code if available
+    loadSkeleton(1); // Load skeleton for challenge ID 1 (example)
+});
