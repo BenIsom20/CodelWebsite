@@ -47,7 +47,6 @@ document.getElementById("how").addEventListener("click", async function() {
 
 // Function to load the saved code from localStorage when the page is loaded
 function loadCode() {
-    
         const savedCode = localStorage.getItem("savedCode"); // Retrieve saved code from localStorage
         const parsedCode = JSON.parse(savedCode);
         if (parsedCode) {
@@ -56,6 +55,7 @@ function loadCode() {
         }
 }
 
+<<<<<<< HEAD
 // Fetch and Populate Skeleton Code
 async function loadSkeleton(challengeId) {
     try {
@@ -66,6 +66,20 @@ async function loadSkeleton(challengeId) {
         } else {
             console.error('Skeleton not found for challenge:', challengeId);
         }
+=======
+
+// Fetch and Populate Skeleton Code
+async function loadSkeleton(challengeId) {
+    
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/get_skeleton/${challengeId}`);
+        if (response.ok) {
+            const skeleton = await response.json();
+            const ske = skeleton.skeleton;
+            editor.setValue(ske); // Populate editor with skeleton
+        
+        } 
+>>>>>>> da2bd5c89028c49e59668db4c9a3f2769c3be9a8
     } catch (error) {
         console.error('Error fetching skeleton:', error);
     }
@@ -98,8 +112,13 @@ document.getElementById("runCode").addEventListener("click", async function () {
     }
 });
 
+<<<<<<< HEAD
 // Load the Skeleton for a Challenge on Page Load
 document.addEventListener("DOMContentLoaded", () => {
     loadSavedCode(); // Load locally saved code if available
     loadSkeleton(1); // Load skeleton for challenge ID 1 (example)
+=======
+document.addEventListener("DOMContentLoaded", () =>{
+    loadSkeleton(1);
+>>>>>>> da2bd5c89028c49e59668db4c9a3f2769c3be9a8
 });

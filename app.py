@@ -98,7 +98,7 @@ def Startup():
     # Set the current challenge to the first one
     set_current_challenge(1)
     set_current_challenge_cases(1)
-        
+   
     # Explanation for the test
     descriptions = {
         "Question": current_challenge["prompt"],
@@ -114,11 +114,22 @@ def Startup():
         explanation += value + "<br>" 
     # Add the value to the total
 
-    
     return jsonify({
         "explanation": explanation,
         "Array": len(descriptions)-1
     })
 
+@app.route('/get_skeleton/<int:challenge_id>', methods=['GET'])
+def get_skeleton(challenge_id):
+    set_current_challenge_function_skeleton(challenge_id)
+    skeleton = current_challenge_function_skeleton
+    skel = skeleton["skeleton"]
+    if skeleton:
+        return jsonify({"skeleton": skel}), 200  # Ensure 'skeleton' key
+    else:
+        return jsonify({"error": "Skeleton not found"}), 404
+
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
