@@ -49,16 +49,29 @@ document.getElementById("how").addEventListener("click", async function() {
 
 // Function to load the saved code from localStorage when the page is loaded
 function loadCode() {
-    
         const savedCode = localStorage.getItem("savedCode"); // Retrieve saved code from localStorage
         const parsedCode = JSON.parse(savedCode);
         if (parsedCode) {
             editor.setValue(parsedCode); // Load the saved code into the textarea
             
         }
+}
+
+
+// Fetch and Populate Skeleton Code
+async function loadSkeleton(challengeId) {
     
-    
-    
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/get_skeleton/${challengeId}`);
+        if (response.ok) {
+            const skeleton = await response.json();
+            const ske = skeleton.skeleton;
+            editor.setValue(ske); // Populate editor with skeleton
+        
+        } 
+    } catch (error) {
+        console.error('Error fetching skeleton:', error);
+    }
 }
 
 
@@ -88,4 +101,6 @@ document.getElementById("runCode").addEventListener("click", async function () {
     }
 });
 
-
+document.addEventListener("DOMContentLoaded", () =>{
+    loadSkeleton(1);
+});
