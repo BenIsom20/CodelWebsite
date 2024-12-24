@@ -17,7 +17,7 @@ def get_challenge_by_id(challenge_id):
         cursor = connection.cursor()
 
         # Query to fetch the challenge by ID
-        cursor.execute("SELECT challenge_id, name, prompt FROM challenges WHERE challenge_id = %s", (challenge_id,))
+        cursor.execute("SELECT challenge_id, name, prompt, date FROM challenges WHERE challenge_id = %s", (challenge_id,))
         challenge = cursor.fetchone()  # Fetch a single record
 
         if challenge:
@@ -25,7 +25,8 @@ def get_challenge_by_id(challenge_id):
             return {
                 "challenge_id": challenge[0],
                 "name": challenge[1],
-                "prompt": challenge[2]
+                "prompt": challenge[2],
+                "date": challenge[3]
             }
         else:
             return None  # If no challenge is found
@@ -76,6 +77,49 @@ def get_challenge_cases_by_id(challenge_id):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return []
+
+    finally:
+        # Safely close the connection if it was successfully established
+        if connection and connection.is_connected():
+            cursor.close()
+            connection.close()
+
+def get_function_skeleton_by_id(challenge_id):
+    """Fetch the function skeleton for a specific challenge by its ID from the database."""
+    connection = None  # Initialize connection to None
+    try:
+        # Establish connection to the database
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # Query to fetch the function skeleton by challenge ID
+        cursor.execute(
+            """
+            SELECT function_skeleton_id, challenge_id, name, parameters, skeleton 
+            FROM function_skeletons 
+            WHERE challenge_id = %s
+            """,
+            (challenge_id,)
+        )
+
+        # Fetch the first record (assuming only one skeleton per challenge)
+        skeleton = cursor.fetchone()
+
+        # Return the record as a dictionary if it exists, otherwise return None
+        if skeleton:
+            return {
+                "function_skeleton_id": skeleton[0],
+                "challenge_id": skeleton[1],
+                "name": skeleton[2],
+                "parameters": skeleton[3],
+                "skeleton": skeleton[4]
+            }
+        else:
+            return None
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
 
     finally:
         # Safely close the connection if it was successfully established

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import subprocess
-from db_helper import get_challenge_by_id, get_challenge_cases_by_id
+from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id
 
 app = Flask(__name__)
 # Enable CORS for all routes
@@ -10,6 +10,7 @@ CORS(app)
 # Global variable for storing the current challenge
 current_challenge = {}
 current_challenge_cases = []
+current_challenge_function_skeleton = {}
 
 def set_current_challenge(challenge_id):
     """Fetch the challenge from the database and set it to the global variable."""
@@ -20,6 +21,11 @@ def set_current_challenge_cases(challenge_id):
     """Fetch the challenge cases from the database and set them to the global variable."""
     global current_challenge_cases
     current_challenge_cases = get_challenge_cases_by_id(challenge_id)
+
+def set_current_challenge_function_skeleton(challenge_id):
+    """Fetch the function skeleton from the database and set it to the global variable."""
+    global current_challenge_function_skeleton
+    current_challenge_function_skeleton = get_function_skeleton_by_id(challenge_id)
 
 @app.route("/run", methods=["POST"])
 def execute_code():
@@ -91,7 +97,8 @@ def Startup():
 
     # Set the current challenge to the first one
     set_current_challenge(1)
-    set_current_challenge_cases(2)
+    set_current_challenge_cases(1)
+    set_current_challenge_function_skeleton(1)
         
     # Explanation for the test
     descriptions = {
@@ -116,3 +123,11 @@ def Startup():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
+@app.route('/get_skeleton/<int:challenge_id>', methods=['GET'])
+def get_skeleton(challenge_id):
+    skeleton = current_challenge_function_skeleton
+    if skeleton:
+        return jsonify(skeleton), 200
+    else:
+        return jsonify({"error": "Skeleton not found"}), 404
