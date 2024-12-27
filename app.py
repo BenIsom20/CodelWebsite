@@ -3,9 +3,26 @@ from flask_cors import CORS
 import subprocess
 from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id
 
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+import bcrypt
+import mysql.connector
+
 app = Flask(__name__)
 # Enable CORS for all routes
 CORS(app)
+
+
+
+
+app.config["JWT_SECRET_KEY"] = "changeLater"
+jwt = JWTManager(app)
+
+db_config = {
+    'host': 'db', # change this to the name of my db container if using docker
+    'user': 'devuser', 
+    'password': 'devpass',
+    'database': 'qsdb' #database name
+}
 
 # Global variable for storing the current challenge
 current_challenge = {}
@@ -128,6 +145,96 @@ def get_skeleton(challenge_id):
         return jsonify({"skeleton": skel}), 200  # Ensure 'skeleton' key
     else:
         return jsonify({"error": "Skeleton not found"}), 404
+
+
+# Register a new user
+@app.route("/register", methods=["POST"])
+def register():
+    try:
+        data = request.json
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email")
+
+        if not username or not password or not email:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        # Hash the password
+        hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # Check if username or email already exists
+        cursor.execute("SELECT user_id FROM users WHERE username = %s OR email = %s", (username, email))
+        if cursor.fetchone():
+            return jsonify({"error": "Username or email already exists"}), 400
+
+        # Insert new user into database
+        cursor.execute(
+            "INSERT INTO users (username, password_hash, email) VALUES (%s, %s, %s)",
+            (username, hashed_password, email)
+        )
+        connection.commit()
+
+        return jsonify({"message": "User registered successfully"}), 201
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": f"Database error: {err}"}), 500
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+# Login an existing user and generate JWT token
+@app.route("/login", methods=["POST"])
+def login():
+    try:
+        data = request.json
+        username = data.get("username")
+        password = data.get("password")
+
+        if not username or not password:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT user_id, password_hash FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+
+        if not user or not bcrypt.checkpw(password.encode("utf-8"), user[1].encode("utf-8")):
+            return jsonify({"error": "Invalid username or password"}), 401
+
+        # Generate JWT token
+        access_token = create_access_token(identity={"user_id": user[0], "username": username})
+        return jsonify({"access_token": access_token}), 200
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": f"Database error: {err}"}), 500
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+# A protected route that requires JWT token
+@app.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    try:
+        current_user = get_jwt_identity()
+        return jsonify({"message": f"Hello, {current_user['username']}!"}), 200
+    except:
+        return jsonify({"error": "Invalid token"}), 401
+    
+
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":

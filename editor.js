@@ -19,6 +19,15 @@ document.getElementById("saveCode").addEventListener("click", async function() {
 });
 
 // Event listener for the "Save Code" button to trigger the saveCode function
+document.getElementById("user").addEventListener("click", async function() {
+    const userCode = editor.getValue();
+    const stringUserCode = JSON.stringify(userCode);
+    localStorage.setItem("savedCode", stringUserCode);
+    const outputDiv = document.getElementById("output"); // Output div where results will be displayed
+    outputDiv.innerHTML="Code Successfully Saved!";
+});
+
+// Event listener for the "Save Code" button to trigger the saveCode function
 document.getElementById("leader").addEventListener("click", async function() {
     const userCode = editor.getValue();
     const stringUserCode = JSON.stringify(userCode);
