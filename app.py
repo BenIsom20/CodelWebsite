@@ -53,6 +53,16 @@ def execute_code():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+import subprocess
+import logging
+import textwrap
+
+# Setup logging configuration
+logging.basicConfig(level=logging.DEBUG)
+
+import io
+import sys
+
 @app.route("/test", methods=["POST"])
 def test_code():
     try:
@@ -60,35 +70,84 @@ def test_code():
         data = request.json
         code = data.get("code", "")
 
-        # Execute the code using subprocess
-        process = subprocess.run(
-            ["python3", "-c", code],
-            text=True,
-            capture_output=True,
-            timeout=5  # Prevent long-running processes
-        )
-        
-         # Prepare the result for each test
-        results = {
-            "t1": "Success" if "1" in process.stdout else "Failure",
-            "t2": "Success" if "2" in process.stdout else "Failure",
-            "t3": "Success" if "3" in process.stdout else "Failure",
-            "t4": "Success" if "4" in process.stdout else "Failure",
-            #"t5": "Success" if "5" in process.stdout else "Failure",
-        }
+        # Debugging: Print the received code
+        print("Received code to execute:")
+        print(code)
+
+        # Get function name
+        function_name = current_challenge_function_skeleton['name']
+
+        # Debugging: Print the function name
+        print(f"Function name: {function_name}")
+
+        # Create the results dictionary
+        results = {}
+
+        # Loop through each test case
+        for case in current_challenge_cases:
+            # Get given data & expected for case
+            given_data = case['given_data']
+            expected = case['expected']
+
+            # Debugging: Print the test case details
+            print(f"Running test case: {case['challenge_case_id']}")
+            print(f"Given data: {given_data}")
+            print(f"Expected: {expected}")
+
+            # Setup the function call
+            code_call = f"{function_name}({given_data})"
+            print(f"Function call: {code_call}")
+
+            # Prepare the code to execute, including the function call and print statement
+            full_code = f"""
+{code}
+
+# Call the function and print the result
+result = {code_call}
+print(result)  # This will print the result to stdout
+"""
+
+            # Capture the output using StringIO
+            captured_output = io.StringIO()
+            sys.stdout = captured_output  # Redirect stdout to capture print statements
+
+            try:
+                # Execute the code dynamically
+                exec(full_code)
+
+                # Get the captured output
+                actual_output = captured_output.getvalue().strip()
+
+                # Debugging: Print the actual vs expected comparison
+                print(f"Actual output: {actual_output}")
+                print(f"Expected output: {expected}")
+
+                # Convert both expected and actual to the same type
+                if str(actual_output) == str(expected):
+                    results[case['challenge_case_id']] = "Success"
+                else:
+                    results[case['challenge_case_id']] = f"Failure: Expected '{expected}', got '{actual_output}'"
+
+            except Exception as e:
+                # Handle any errors in code execution
+                print(f"Error executing code: {e}")
+                results[case['challenge_case_id']] = f"Error: {str(e)}"
+
+            finally:
+                sys.stdout = sys.__stdout__  # Reset stdout to default
+
+        # Debugging: Print the final results dictionary
+        print("Test results:", results)
 
         # Return the combined result
         return jsonify({
-            **results,
-            "output": process.stdout,
-            "error": process.stderr,
             "numTests": len(results),
             "testList": results
         })
 
-    except subprocess.TimeoutExpired:
-        return jsonify({"error": "Code execution timed out"}), 400
     except Exception as e:
+        # Handle general exceptions
+        print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 
@@ -96,8 +155,9 @@ def test_code():
 def Startup():
 
     # Set the current challenge to the first one
-    set_current_challenge(1)
-    set_current_challenge_cases(1)
+    set_current_challenge(2)
+    set_current_challenge_cases(2)
+    set_current_challenge_function_skeleton(2)
    
     # Explanation for the test
     descriptions = {
@@ -128,7 +188,6 @@ def get_skeleton(challenge_id):
         return jsonify({"skeleton": skel}), 200  # Ensure 'skeleton' key
     else:
         return jsonify({"error": "Skeleton not found"}), 404
-
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

@@ -35,18 +35,16 @@ function colorRow(stringList, numTests) {
         const startIndex = currentRowIndex * totalColumns;
         const endIndex = startIndex + totalColumns;
 
-
-
         // Loop through each result in the stringList and color the corresponding rectangle
         stringList.forEach((result, index) => {
-            if (result == "Success") {
+            if (result === "Success") {
                 // If the result is "Success", add a 'green' class to the corresponding rectangle
                 rectangles[index + startIndex].classList.add('green');
-            } else if (result == "Failure") {
-                // If the result is "Failure", add a 'red' class to the corresponding rectangle
+            } else if (result.includes("Failure")) {
+                // If the result includes "Failure", add a 'red' class to the corresponding rectangle
                 rectangles[index + startIndex].classList.add('red');
             } else {
-                // If the result is neither "Success" nor "Failure", log the unknown value
+                // If the result is neither "Success" nor contains "Failure", log the unknown value
                 console.log(`Index ${index}: Unknown value (${result}).`);
             }
         });
