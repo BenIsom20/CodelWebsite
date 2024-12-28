@@ -4,8 +4,7 @@
 var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     mode: "text/x-python", // Set the mode to Python for syntax highlighting
     theme: "midnight", // Set the theme for the editor
-    lineNumbers: true, // Enable line numbers in the editor
-    autoCloseBrackets: true, // Enable auto-closing of brackets
+    lineNumbers: true, // Enable line numbers
 });
 editor.setSize("90%", 300); // Set the editor size to 90% width and 300px height
 

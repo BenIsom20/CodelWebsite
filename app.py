@@ -104,11 +104,16 @@ def test_code():
 
 # Call the function and print the result
 result = {code_call}
+# Clear the buffer before executing the code
+captured_output.seek(0)  # Move cursor to the beginning of the buffer
+captured_output.truncate(0)  # Clear the content in the buffer
 print(result)  # This will print the result to stdout
 """
-
             # Capture the output using StringIO
             captured_output = io.StringIO()
+
+ 
+
             sys.stdout = captured_output  # Redirect stdout to capture print statements
 
             try:

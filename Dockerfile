@@ -14,7 +14,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Flask and Flask-CORS (optional)
-RUN pip3 install flask flask-cors mysql-connector-python pyyaml
+RUN pip3 install flask flask-cors mysql-connector-python pyyaml pylint
 
 # Create a directory for the Flask app
 WORKDIR /app
