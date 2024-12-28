@@ -72,7 +72,8 @@ async function loginUser(username, password) {
             // Log success message if login is successful
             console.log('Login successful:', data);
             const token = data.access_token;  // Save the token to use for protected routes
-            localStorage.setItem('jwt_token', token);  // Store the token in localStorage (or sessionStorage)
+            localStorage.clear();
+            localStorage.setItem('jwt_token', token);  // Store the token in localStorage
             document.getElementById("debug").innerHTML = "Registration successful";
         } else {
             // Log error message if login fails
@@ -119,7 +120,46 @@ async function accessProtectedRoute() {
     }
 }
 
+ async function deleteUser() {
+    const username = document.getElementById("delusername").value;
+    const password = document.getElementById("delpassword").value;
+
+    if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+    }
+
+    const payload = {
+        username: username,
+        password: password
+    };
+
+    try {
+        const response = await fetch('http://localhost:5000/delete_user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            alert(data.message);
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert("An error occurred while deleting the account." + error);
+    }
+}
 
 
+document.getElementById("delete").addEventListener("click", deleteUser);
 document.getElementById("login").addEventListener("click", captureLogin);
 document.getElementById("register").addEventListener("click", captureRegister);
+document.getElementById("logout").addEventListener("click", function () {
+    localStorage.clear();
+    document.getElementById("debug").innerHTML = "Logged out successfully";
+});

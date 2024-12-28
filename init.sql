@@ -37,7 +37,12 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    streak INT NOT NULL DEFAULT 0, 
+    wins INT NOT NULL DEFAULT 0,
+    curtimer TEXT,
+    curgrid TEXT,
+    curcode TEXT
 );
 
 

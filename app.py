@@ -6,6 +6,7 @@ from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_functi
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import bcrypt
 import mysql.connector
+import json
 
 app = Flask(__name__)
 # Enable CORS for all routes
@@ -228,15 +229,124 @@ def protected():
         return jsonify({"error": "Invalid token"}), 401
     
 
+def get_db_connection():
+    return mysql.connector.connect(
+        host="db",  # Docker service name for the database
+        user="devuser",
+        password="devpass",
+        database="qsdb"
+    )
+
+
+@app.route("/victory", methods=["POST"])
+@jwt_required()  # Protect the route
+def victory():
+    try:
+        # Get the username from the JWT token
+        whatUser = get_jwt_identity()  # This fetches the identity stored in the token during login
+        username = whatUser['username']
+        # Get the JSON payload from the request
+        data = request.json
+        
+        # Extract values from the payload
+        grid_state = data.get("gridState")  # Value from local storage
+        stopwatch_time = data.get("stopwatchTime")  # Value from local storage
+        saved_code = data.get("savedCode")  # Value from local storage
+
+        # Update the user's record in the database
+        query = """
+            UPDATE users
+            SET curtimer = %s, curgrid = %s, curcode = %s
+            WHERE username = %s
+        """
+        values = (stopwatch_time, grid_state, saved_code, username)
+
+        # Connect to the database
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        cursor.execute(query, values)
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        return jsonify({"message": "User state updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+@app.route("/delete_user", methods=["POST"])
+def delete_user():
+    try:
+        # Get the JSON payload from the request
+        data = request.json
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username or not password:
+            return jsonify({"error": "Username and password are required."}), 400
+
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT user_id, password_hash FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+
+        if not user or not bcrypt.checkpw(password.encode("utf-8"), user[1].encode("utf-8")):
+            return jsonify({"error": "Invalid username or password"}), 401
+
+
+
+        # Delete the user and their associated data
+        cursor.execute("DELETE FROM users WHERE username = %s", (username,))
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return jsonify({"message": "User and their data have been deleted successfully."}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# Example route to get user data
+@app.route("/get_user_data", methods=["GET"])
+@jwt_required()  # Protect the route with JWT token
+def get_user_data():
+    try:
+        # Get the username from the JWT token
+        whatuse = get_jwt_identity()  # This fetches the identity stored in the token during login
+        username = whatuse['username']
+        # Here you would fetch the user data from the database using the username
+        connection = get_db_connection()  # Ensure you have a function to get the DB connection
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if user is None:
+            return jsonify({"time": "domb"})  # Return None if no user data is found
+        else:
+            # Return user data (for example, return user details excluding password)
+            user_data = {
+                "username": user[1],
+                "time": user[7],
+                "grid": user[8],
+                "code": user[9],
+            }
+            return jsonify({"time": user_data["time"], "grid": user_data["grid"], "code": user_data["code"]}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
 
-
-
-
-
-
+#ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
 
