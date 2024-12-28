@@ -123,7 +123,7 @@ document.getElementById("runCode").addEventListener("click", async function () {
 
 document.addEventListener("DOMContentLoaded", () =>{
     if(!localStorage.getItem("savedCode")){
-        loadSkeleton(1);
+        loadSkeleton(3);
     }
     
 });

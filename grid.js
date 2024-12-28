@@ -37,10 +37,10 @@ function colorRow(stringList, numTests) {
 
         // Loop through each result in the stringList and color the corresponding rectangle
         stringList.forEach((result, index) => {
-            if (result === "Success") {
+            if (result.includes("Success")) {
                 // If the result is "Success", add a 'green' class to the corresponding rectangle
                 rectangles[index + startIndex].classList.add('green');
-            } else if (result.includes("Failure")) {
+            } else if (result.includes("Failure") || result.includes("Error")) {
                 // If the result includes "Failure", add a 'red' class to the corresponding rectangle
                 rectangles[index + startIndex].classList.add('red');
             } else {
