@@ -32,7 +32,7 @@ def execute_code():
     try:
         # Get the code from the request
         data = request.json
-        code = data.get("code", "")
+        code = data.get("code", "").replace("\t", "    ")
 
         # Execute the code using subprocess (Python interpreter)
         process = subprocess.run(
@@ -117,6 +117,8 @@ print(result)  # This will print the result to stdout
             sys.stdout = captured_output  # Redirect stdout to capture print statements
 
             try:
+                full_code = full_code.replace("\t", "    ")
+
                 # Execute the code dynamically
                 exec(full_code)
 
@@ -160,9 +162,9 @@ print(result)  # This will print the result to stdout
 def Startup():
 
     # Set the current challenge to the first one
-    set_current_challenge(2)
-    set_current_challenge_cases(2)
-    set_current_challenge_function_skeleton(2)
+    set_current_challenge(1)
+    set_current_challenge_cases(1)
+    set_current_challenge_function_skeleton(1)
    
     # Explanation for the test
     descriptions = {

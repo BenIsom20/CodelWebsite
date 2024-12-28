@@ -2,10 +2,34 @@
 
 // Initialize CodeMirror editor with Python syntax highlighting and other settings
 var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
-    mode: "text/x-python", // Set the mode to Python for syntax highlighting
-    theme: "midnight", // Set the theme for the editor
-    lineNumbers: true, // Enable line numbers
+    mode: "text/x-python",          // Set the mode to Python for syntax highlighting
+    theme: "midnight",             // Set the theme for the editor
+    lineNumbers: true,              // Enable line numbers
+    lineWrapping: true,             // Enable line wrapping for long lines
+    matchBrackets: true,            // Highlight matching brackets
+    autoCloseBrackets: true,        // Automatically close brackets
+    indentUnit: 4,                  // Set the indentation size to 4 spaces
+    indentWithTabs: true,          // Use tabs instead of spaces for indentation
+    tabSize: 4,                     // Display tabs as 4 spaces wide
+    extraKeys: {
+        "Ctrl-Space": "autocomplete", // Enable autocomplete with Ctrl+Space
+        "Ctrl-Q": function(cm) {       // Toggle line commenting with Ctrl+Q
+            cm.toggleComment();
+        }
+    },
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // Add gutters for line numbers and folding
+    foldGutter: true,              // Enable code folding
+    styleActiveLine: true,         // Highlight the active line
+    highlightSelectionMatches: {   // Highlight all matching selections
+        showToken: true,
+        annotateScrollbar: true
+    },
+    readOnly: false,               // Set to true if the editor should be read-only
+    autofocus: true,               // Automatically focus on the editor when the page loads
+    cursorBlinkRate: 530,          // Set cursor blink rate
+    viewportMargin: Infinity,      // Ensure the editor renders all lines (useful for long files)
 });
+
 editor.setSize("90%", 300); // Set the editor size to 90% width and 300px height
 
 // Event listener for the "Save Code" button to trigger the saveCode function
@@ -99,7 +123,7 @@ document.getElementById("runCode").addEventListener("click", async function () {
 
 document.addEventListener("DOMContentLoaded", () =>{
     if(!localStorage.getItem("savedCode")){
-        loadSkeleton(2);
+        loadSkeleton(1);
     }
     
 });
