@@ -1,5 +1,5 @@
 // JAVASCRIPT CODE FOR ALL CODEMIRROR ITEMS
-
+var attempt = 0;
 // Initialize CodeMirror editor with Python syntax highlighting and other settings
 var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     mode: "text/x-python", // Set the mode to Python for syntax highlighting
@@ -113,12 +113,13 @@ async function victorySend() {
         if (localStorage.getItem("jwt_token") != null) {
 
             const token = localStorage.getItem("jwt_token");
-
+            
             //  Prepare the payload
             const payload = {
                 gridState: localStorage.getItem("gridState"),
                 stopwatchTime: localStorage.getItem("stopwatchTime"),
-                savedCode: localStorage.getItem("savedCode")
+                savedCode: localStorage.getItem("savedCode"),
+                attempts: attempt
             };
 
 
@@ -169,6 +170,7 @@ async function victorySend() {
 // SCRIPT FOR THE SUBMIT BUTTON SO THAT THE EVENT LISTERS CAN BE ONE
 // Add an event listener to the "submitCode" button that triggers when it's clicked
 document.getElementById("submitCode").addEventListener("click", async function () {
+    attempt++;
     var victory = false;
     // Get the user's code from the CodeMirror editor (this is where the user inputs their code)
     const userCode = editor.getValue();

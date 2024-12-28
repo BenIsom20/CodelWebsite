@@ -152,26 +152,29 @@ def get_skeleton(challenge_id):
 @app.route("/register", methods=["POST"])
 def register():
     try:
+        # Extract data from the JSON payload in the request
         data = request.json
         username = data.get("username")
         password = data.get("password")
         email = data.get("email")
 
+        # Ensure all required fields are provided
         if not username or not password or not email:
             return jsonify({"error": "Missing required fields"}), 400
 
-        # Hash the password
+        # Hash the password securely
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
+        # Connect to the database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
 
-        # Check if username or email already exists
+        # Check if the username or email already exists in the database
         cursor.execute("SELECT user_id FROM users WHERE username = %s OR email = %s", (username, email))
         if cursor.fetchone():
             return jsonify({"error": "Username or email already exists"}), 400
 
-        # Insert new user into database
+        # Insert the new user into the database
         cursor.execute(
             "INSERT INTO users (username, password_hash, email) VALUES (%s, %s, %s)",
             (username, hashed_password, email)
@@ -181,54 +184,68 @@ def register():
         return jsonify({"message": "User registered successfully"}), 201
 
     except mysql.connector.Error as err:
+        # Handle any database errors
         return jsonify({"error": f"Database error: {err}"}), 500
     finally:
+        # Ensure the database connection is closed
         if connection.is_connected():
             cursor.close()
             connection.close()
 
-# Login an existing user and generate JWT token
+
+# Login an existing user and generate a JWT token
 @app.route("/login", methods=["POST"])
 def login():
     try:
+        # Extract data from the JSON payload in the request
         data = request.json
         username = data.get("username")
         password = data.get("password")
 
+        # Ensure both username and password are provided
         if not username or not password:
             return jsonify({"error": "Missing required fields"}), 400
 
+        # Connect to the database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
 
+        # Retrieve the user from the database
         cursor.execute("SELECT user_id, password_hash FROM users WHERE username = %s", (username,))
         user = cursor.fetchone()
 
+        # Verify the provided password against the stored hash
         if not user or not bcrypt.checkpw(password.encode("utf-8"), user[1].encode("utf-8")):
             return jsonify({"error": "Invalid username or password"}), 401
 
-        # Generate JWT token
+        # Generate a JWT token for the authenticated user
         access_token = create_access_token(identity={"user_id": user[0], "username": username})
         return jsonify({"access_token": access_token}), 200
 
     except mysql.connector.Error as err:
+        # Handle any database errors
         return jsonify({"error": f"Database error: {err}"}), 500
     finally:
+        # Ensure the database connection is closed
         if connection.is_connected():
             cursor.close()
             connection.close()
 
-# A protected route that requires JWT token
+
+# A protected route that requires a valid JWT token
 @app.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
     try:
+        # Get the current user's identity from the JWT token
         current_user = get_jwt_identity()
         return jsonify({"message": f"Hello, {current_user['username']}!"}), 200
     except:
+        # Handle invalid or missing tokens
         return jsonify({"error": "Invalid token"}), 401
-    
 
+
+# Helper function to get a database connection
 def get_db_connection():
     return mysql.connector.connect(
         host="db",  # Docker service name for the database
@@ -238,67 +255,70 @@ def get_db_connection():
     )
 
 
+# Update the user's state after a victory
 @app.route("/victory", methods=["POST"])
 @jwt_required()  # Protect the route
 def victory():
     try:
         # Get the username from the JWT token
-        whatUser = get_jwt_identity()  # This fetches the identity stored in the token during login
+        whatUser = get_jwt_identity()
         username = whatUser['username']
-        # Get the JSON payload from the request
+
+        # Extract data from the JSON payload in the request
         data = request.json
-        
-        # Extract values from the payload
-        grid_state = data.get("gridState")  # Value from local storage
-        stopwatch_time = data.get("stopwatchTime")  # Value from local storage
-        saved_code = data.get("savedCode")  # Value from local storage
+        grid_state = data.get("gridState")
+        stopwatch_time = data.get("stopwatchTime")
+        saved_code = data.get("savedCode")
+        attempts = data.get("attempts")
 
         # Update the user's record in the database
         query = """
             UPDATE users
-            SET curtimer = %s, curgrid = %s, curcode = %s
+            SET wins = wins + 1, curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
             WHERE username = %s
         """
-        values = (stopwatch_time, grid_state, saved_code, username)
+        values = (stopwatch_time, grid_state, saved_code, attempts, username)
 
-        # Connect to the database
+        # Execute the query
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
         cursor.execute(query, values)
-        
         connection.commit()
+
         cursor.close()
         connection.close()
-        
+
         return jsonify({"message": "User state updated successfully"}), 200
     except Exception as e:
+        # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
 
-
+# Delete a user and their associated data
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
     try:
-        # Get the JSON payload from the request
+        # Extract data from the JSON payload in the request
         data = request.json
         username = data.get('username')
         password = data.get('password')
 
+        # Ensure both username and password are provided
         if not username or not password:
             return jsonify({"error": "Username and password are required."}), 400
 
+        # Connect to the database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
 
+        # Verify the user's credentials
         cursor.execute("SELECT user_id, password_hash FROM users WHERE username = %s", (username,))
         user = cursor.fetchone()
 
         if not user or not bcrypt.checkpw(password.encode("utf-8"), user[1].encode("utf-8")):
             return jsonify({"error": "Invalid username or password"}), 401
 
-
-
-        # Delete the user and their associated data
+        # Delete the user from the database
         cursor.execute("DELETE FROM users WHERE username = %s", (username,))
         connection.commit()
 
@@ -308,19 +328,21 @@ def delete_user():
         return jsonify({"message": "User and their data have been deleted successfully."}), 200
 
     except Exception as e:
+        # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
 
-# Example route to get user data
+# Retrieve user data from the database
 @app.route("/get_user_data", methods=["GET"])
 @jwt_required()  # Protect the route with JWT token
 def get_user_data():
     try:
         # Get the username from the JWT token
-        whatuse = get_jwt_identity()  # This fetches the identity stored in the token during login
+        whatuse = get_jwt_identity()
         username = whatuse['username']
-        # Here you would fetch the user data from the database using the username
-        connection = get_db_connection()  # Ensure you have a function to get the DB connection
+
+        # Fetch the user's data from the database
+        connection = get_db_connection()
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
         user = cursor.fetchone()
@@ -329,9 +351,10 @@ def get_user_data():
         connection.close()
 
         if user is None:
-            return jsonify({"time": "domb"})  # Return None if no user data is found
+            # Return a default response if no data is found
+            return jsonify({"time": "domb"})
         else:
-            # Return user data (for example, return user details excluding password)
+            # Format the user's data into a JSON response
             user_data = {
                 "username": user[1],
                 "time": user[7],
@@ -341,8 +364,8 @@ def get_user_data():
             return jsonify({"time": user_data["time"], "grid": user_data["grid"], "code": user_data["code"]}), 200
 
     except Exception as e:
+        # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
-
 
 
 
