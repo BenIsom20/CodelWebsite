@@ -135,7 +135,7 @@ async function initializeColumn() {
                 // Add a class to the rectangle for styling
                 rectangle.classList.add('rectangle');
                 // Set the text content of the rectangle to display the test number
-                rectangle.textContent = `Test: ${i}`;
+                rectangle.textContent = `Case: ${i}`;
                 // Append the rectangle to the grid container
                 gridContainer.appendChild(rectangle);
             }
