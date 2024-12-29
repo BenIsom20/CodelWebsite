@@ -17,7 +17,7 @@ function addRow(numTests) {
     for (let i = 1; i <= columnNumber; i++) {
         const rectangle = document.createElement('div');  // Create a new div element for each rectangle
         rectangle.classList.add('rectangle');  // Add the 'rectangle' class for styling
-        rectangle.textContent = `${"Test: "} ${i}`;  // Set the text content to display the test number
+        rectangle.textContent = `${"Case: "} ${i}`;  // Set the text content to display the test number
         gridContainer.appendChild(rectangle);  // Append the rectangle to the grid container
     }
     amountOfRow++;
@@ -52,50 +52,6 @@ function colorRow(stringList, numTests) {
         // Increment the row index to move to the next row for the next time colorRow is called
         currentRowIndex++;
     }
-}
-
-// Function to check if all tests in the current row are successful (green)
-function victoryCheck(numTests) {
-    // Get all elements with the class 'rectangle' (all the grid cells)
-    const rectangles = document.querySelectorAll('.rectangle');
-
-    // Calculate the total number of columns (numTests should match the number of columns)
-    const totalColumns = numTests;
-
-    // Decrement currentRowIndex by 1 to refer to the previous row (since index starts from 0)
-    const newCurrentRow = currentRowIndex - 1;
-
-    // Calculate the start and end indices for the current row of rectangles
-    const startIndex = newCurrentRow * totalColumns;
-    const endIndex = startIndex + totalColumns;
-
-    // Ensure that there are enough rectangles in the grid to match the current row
-    if (rectangles.length < endIndex) {
-        // If not enough rectangles exist, log an error and return false
-        console.error('Not enough rectangles in the grid.');
-        return false; // Return false if there aren't enough rectangles
-    }
-
-    // Loop through each rectangle in the current row
-    for (let i = startIndex; i < endIndex; i++) {
-        const rectangle = rectangles[i];
-
-        // Check if the rectangle exists at the current index
-        if (!rectangle) {
-            // If the rectangle is undefined, log an error and return false
-            console.error(`Rectangle at index ${i} is undefined.`);
-            return false;
-        }
-
-        // Check if the rectangle has the 'green' class
-        if (!rectangle.classList.contains('green')) {
-            // If any rectangle is not green, return false
-            return false;
-        }
-    }
-
-    // If all rectangles in the current row are green, return true
-    return true;
 }
 
 // Asynchronous function to initialize the grid and send code for execution

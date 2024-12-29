@@ -30,3 +30,21 @@ CREATE TABLE IF NOT EXISTS function_skeletons (
 );
 
 
+
+-- user data
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    streak INT NOT NULL DEFAULT 0, 
+    wins INT NOT NULL DEFAULT 0,
+    curtimer INT NOT NULL DEFAULT 0,
+    curgrid TEXT,
+    curcode TEXT,
+    attempts INT NOT NULL DEFAULT 0
+);
+
+
+

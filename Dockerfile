@@ -13,8 +13,11 @@ RUN apt-get update && \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Flask and Flask-CORS (optional)
-RUN pip3 install flask flask-cors mysql-connector-python pyyaml
+# Copy the requirements.txt file into the container
+COPY requirements.txt /app/
+
+# Install dependencies from requirements.txt
+RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
 # Create a directory for the Flask app
 WORKDIR /app
@@ -30,4 +33,3 @@ EXPOSE 5000
 
 # Run the Flask app when the container starts
 CMD ["python3", "app.py"]
-
