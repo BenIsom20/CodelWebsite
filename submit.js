@@ -26,8 +26,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
             const givenValues = result.givenValues; // Get the given values from the response
             const numTests = result.numTests;
 
-            // Color the rows based on test results
-            colorRow(resultsArray, numTests);
+            
 
             // Display each test result with its given_value and actual result
             let resultDetails = "<h3>Test Results:</h3><ul>";
@@ -42,10 +41,11 @@ document.getElementById("submitCode").addEventListener("click", async function (
             outputDiv.innerHTML += resultDetails;
 
             // Check if all tests pass
-            if (!victoryCheck(resultsArray)) {
+            if (victoryCheck(resultsArray) == "f") {
                 // If not all tests pass, add a new row to the grid
                 addRow(numTests);
-            } else {
+                colorRow(resultsArray, numTests);
+            } else if (victoryCheck(resultsArray) == "s") {
                 // If all tests pass, disable the submit button and stop the stopwatch
                 document.getElementById("submitCode").disabled = true;
                 stopStopwatch();
@@ -72,12 +72,26 @@ document.getElementById("submitCode").addEventListener("click", async function (
 function victoryCheck(resultsArray) {
     // Loop through each result to find any "Failure"
     for (let result of resultsArray) {
-        if (result.includes("Failure")) {
-            return false; // Return false if any failure is found
-        }
-        if (result.includes("Error")) {
-            return false; // Return false if any error is found
-        }
+        if (errored(result)){return "e"}
     }
-    return true; // Return true if all tests passed
+    for (let result of resultsArray) {
+        if (failed(result)){return "f"}
+    }
+    return "s"; // Return true if all tests passed
+}
+
+function failed(result){
+    if (result.includes("Failure")) {
+        return true; // Return false if any failure is found
+    }else{
+        return false;
+    }
+}
+
+function errored(result){
+    if (result.includes("Error")) {
+        return true; // Return false if any failure is found
+    }else{
+        return false;
+    }
 }
