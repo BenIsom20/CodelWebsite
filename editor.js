@@ -89,7 +89,7 @@ function loadCode() {
 
 // Function to fetch and populate skeleton code based on a challenge ID
 async function loadSkeleton(challengeId) {
-    const response = await fetch(`http://127.0.0.1:5000/get_skeleton/${challengeId}`); // Fetch skeleton code from the server
+    const response = await fetch(`http://127.0.0.1:5000/get_skeleton`); // Fetch skeleton code from the server
     if (response.ok) {
         const skeleton = await response.json(); // Parse the server response
         const ske = skeleton.skeleton; // Extract the skeleton code

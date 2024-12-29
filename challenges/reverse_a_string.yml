@@ -1,6 +1,6 @@
 challenge:
   name: "Reverse a String"
-  date: "2000-01-01"
+  date: "2024-12-29"
   function:
     name: "reverse_string"
     parameters: ["s"]
