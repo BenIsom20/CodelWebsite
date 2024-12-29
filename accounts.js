@@ -1,5 +1,23 @@
 // JAVASCRIPT FOR ALL ACCOUNTS FUNCTIONALITY
 
+// Helper function to validate the username
+function isValidUsername(username) {
+    const usernameRegex = /^[a-zA-Z0-9]+$/; // Allows only letters and numbers
+    return usernameRegex.test(username) && username.length <= 254;
+}
+
+// Helper function to validate the email
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation
+    return emailRegex.test(email);
+}
+
+// Helper function to validate the password
+function isValidPassword(password) {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{5,}$/;
+    return passwordRegex.test(password);
+}
+
 // Function to capture login details and trigger the login process
 function captureLogin() {
     // Retrieve username and password from the login form
@@ -7,6 +25,9 @@ function captureLogin() {
     const password = document.getElementById('logpassword').value;
     // Call the loginUser function to handle login
     loginUser(username, password);
+    // Clear input fields
+    document.getElementById('logusername').value = '';
+    document.getElementById('logpassword').value = '';
 }
 
 // Function to capture registration details and trigger the registration process
@@ -15,8 +36,29 @@ function captureRegister() {
     const username = document.getElementById('regusername').value;
     const password = document.getElementById('regpassword').value;
     const email = document.getElementById('regemail').value;
+
+    if (!isValidUsername(username)) {
+        alert("Invalid username.");
+        return;
+    }
+
+    if (!isValidEmail(email)) {
+        alert("Invalid email format.");
+        return;
+    }
+
+    if (!isValidPassword(password)) {
+        alert("Invalid password format. Must have >= 5 characters, at least 1 uppercase letter, and at least 1 digit.");
+        return;
+    }
+
     // Call the registerUser function to handle registration
     registerUser(username, password, email);
+
+    // Clear input fields
+    document.getElementById('regusername').value = '';
+    document.getElementById('regpassword').value = '';
+    document.getElementById('regemail').value = '';
 }
 
 // Function to register a new user
@@ -35,7 +77,7 @@ async function registerUser(username, password, email) {
     if (response.ok) {
         alert("Registration successful"); // Notify the user on successful registration
     } else {
-        alert("Registration failed"); // Notify the user on registration failure
+        alert("Username or Email already in use"); // Notify the user on registration failure
     }
 }
 
@@ -58,7 +100,7 @@ async function loginUser(username, password) {
         localStorage.setItem('jwt_token', token); // Store the token in localStorage
         alert("Login successful"); // Notify the user on successful login
     } else {
-        alert("Login failed"); // Notify the user on login failure
+        alert("Username or password incorrect"); // Notify the user on login failure
     }
 }
 
@@ -107,10 +149,14 @@ async function deleteUser() {
 
     const data = await response.json();
     if (response.ok) {
-        alert(data.message); // Notify the user on successful deletion
+        alert("Account successfully deleted"); // Notify the user on successful deletion
     } else {
-        alert(data.error); // Notify the user on deletion failure
+        alert("Username or password incorrect"); // Notify the user on deletion failure
     }
+
+    // Clear input fields
+    document.getElementById("delusername").value = '';
+    document.getElementById("delpassword").value = '';
 }
 
 // Add event listeners to handle button clicks
