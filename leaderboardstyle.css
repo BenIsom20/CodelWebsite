@@ -1,36 +1,67 @@
 .leaderboard-container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
 }
 
-.leaderboard-table {
-    display: flex;
-    flex-direction: column;
+h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
 }
 
-.leaderboard-header, .leaderboard-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+.leaderboard {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    background: #007bff;
+    color: #fff;
+    padding: 1rem;
     font-weight: bold;
-    background-color: #f0f0f0;
 }
 
 .leaderboard-row {
-    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+.leaderboard-row:nth-child(even) {
+    background: darkgrey;
+}
+
+.leaderboard-row:nth-child(odd) {
+    background: lightgrey;
+}
+
+.leaderboard-row:last-child {
+    border-bottom: none;
 }
 
 .top-player {
-    background-color: gold;
+    background: #ffd700;
     font-weight: bold;
 }
 
 span {
-    width: 20%;
+    flex: 1;
     text-align: center;
+}
+
+span:first-child {
+    text-align: left;
+    flex: 0.5;
+}
+
+span:last-child {
+    text-align: right;
+    flex: 0.5;
 }

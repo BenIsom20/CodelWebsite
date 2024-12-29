@@ -9,7 +9,7 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="leaderboard.css">
+    <link rel="stylesheet" href="leaderboardstyle.css">
 
 </head>
 
@@ -31,7 +31,7 @@
     <!-- CODE FOR THE LEADERBOARD-->
     <main>
         <div class="leaderboard-container">
-            <h1>Leaderboard</h1>
+            <h1>Codel Leaderboard</h1>
             <div id="debug"></div> <!-- Debug message will show here -->
             <div class="leaderboard-table">
                 <div class="leaderboard-header">
@@ -98,7 +98,7 @@ window.onload = async function () {
             });
 
             // Update the debug message to indicate that the leaderboard was successfully loaded
-            document.getElementById("debug").innerText = "Leaderboard loaded successfully";
+            //document.getElementById("debug").innerText = "Leaderboard loaded successfully";
         } else {
             // If the response is not successful, display an error message
             document.getElementById("debug").innerText = "Error: " + data.error;

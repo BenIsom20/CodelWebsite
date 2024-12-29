@@ -193,6 +193,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
             outputDiv.textContent = "COMPILATION ERROR";
             outputDiv.innerHTML += "<br>NO SUBMISSION RECORDED<br>ERROR OUTPUT:<br>";
             outputDiv.innerHTML += result.error;  // Display the error message
+            attempt--;
         } else {
             const userCode = editor.getValue();
             const stringUserCode = JSON.stringify(userCode);
