@@ -1,19 +1,21 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import subprocess
-import io
-import sys
-import logging
 from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import bcrypt
 import mysql.connector
+import json
+import io
+import logging
+import sys
 
 app = Flask(__name__)
+# Enable CORS for all routes
 CORS(app)
 
-
-
+# Setup logging configuration
+logging.basicConfig(level=logging.DEBUG)
 
 app.config["JWT_SECRET_KEY"] = "changeLater"
 jwt = JWTManager(app)
@@ -26,10 +28,6 @@ db_config = {
 }
 
 # Global variable for storing the current challenge
-# Setup logging configuration
-logging.basicConfig(level=logging.DEBUG)
-
-# Global variables to store current challenge details
 current_challenge = {}
 current_challenge_cases = []
 current_challenge_function_skeleton = {}
@@ -40,7 +38,7 @@ def set_current_challenge(challenge_id):
     current_challenge = get_challenge_by_id(challenge_id)
 
 def set_current_challenge_cases(challenge_id):
-    """Fetch the challenge test cases from the database and set them to the global variable."""
+    """Fetch the challenge cases from the database and set them to the global variable."""
     global current_challenge_cases
     current_challenge_cases = get_challenge_cases_by_id(challenge_id)
 
@@ -51,18 +49,17 @@ def set_current_challenge_function_skeleton(challenge_id):
 
 @app.route("/run", methods=["POST"])
 def execute_code():
-    """Route to execute user-provided Python code."""
     try:
         # Get the code from the request
         data = request.json
-        code = data.get("code", "").replace("\t", "    ")  # Replace tabs with spaces
+        code = data.get("code", "")
 
-        # Execute the code using subprocess
+        # Execute the code using subprocess (Python interpreter)
         process = subprocess.run(
-            ["python3", "-c", code],  # Use "python" if using Python 2
+            ["python3", "-c", code],  # Adjust to "python" if using Python 2
             text=True,
             capture_output=True,
-            timeout=5  # Timeout for preventing long-running processes
+            timeout=5  # Prevent long-running processes
         )
 
         # Return the output or error
@@ -142,40 +139,44 @@ print(result)  # Print the result
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/Startup", methods=["GET"])
 def Startup():
-    """Route to initialize and return the current challenge details."""
-    # Set the current challenge to the specified challenge ID (3 in this case)
-    set_current_challenge(3)
-    set_current_challenge_cases(3)
-    set_current_challenge_function_skeleton(3)
+
+    # Set the current challenge to the first one
+    set_current_challenge(1)
+    set_current_challenge_cases(1)
    
-    # Generate an explanation for the test, including the challenge prompt and test case details
+    # Explanation for the test
     descriptions = {
         "Question": current_challenge["prompt"],
         **{
-            f"Case {i + 1}": f"Case {i + 1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"
+            f"Case {i + 1}": 
+            f"Case {i + 1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"
             for i, case in enumerate(current_challenge_cases)
         }
     }
 
-    # Generate explanation string
-    explanation = "<br>".join(descriptions.values())
+    explanation = ""
+    for value in descriptions.values():
+        explanation += value + "<br>" 
+    # Add the value to the total
 
     return jsonify({
         "explanation": explanation,
-        "Array": len(descriptions) - 1  # Number of test cases
+        "Array": len(descriptions)-1
     })
 
 @app.route('/get_skeleton/<int:challenge_id>', methods=['GET'])
 def get_skeleton(challenge_id):
-    """Route to fetch the function skeleton for a given challenge."""
     set_current_challenge_function_skeleton(challenge_id)
     skeleton = current_challenge_function_skeleton
+    skel = skeleton["skeleton"]
     if skeleton:
-        return jsonify({"skeleton": skeleton["skeleton"]}), 200
+        return jsonify({"skeleton": skel}), 200  # Ensure 'skeleton' key
     else:
         return jsonify({"error": "Skeleton not found"}), 404
+
 
 # Register a new user
 @app.route("/register", methods=["POST"])
@@ -221,6 +222,7 @@ def register():
             cursor.close()
             connection.close()
 
+
 # Login an existing user and generate a JWT token
 @app.route("/login", methods=["POST"])
 def login():
@@ -259,6 +261,7 @@ def login():
             cursor.close()
             connection.close()
 
+
 # A protected route that requires a valid JWT token
 @app.route("/protected", methods=["GET"])
 @jwt_required()
@@ -271,6 +274,7 @@ def protected():
         # Handle invalid or missing tokens
         return jsonify({"error": "Invalid token"}), 401
 
+
 # Helper function to get a database connection
 def get_db_connection():
     return mysql.connector.connect(
@@ -279,6 +283,7 @@ def get_db_connection():
         password="devpass",
         database="qsdb"
     )
+
 
 # Update the user's state after a victory
 @app.route("/victory", methods=["POST"])
@@ -318,6 +323,7 @@ def victory():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
+
 # Delete a user and their associated data
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
@@ -354,6 +360,7 @@ def delete_user():
     except Exception as e:
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
+
 
 # Retrieve user data from the database
 @app.route("/get_user_data", methods=["GET"])
@@ -423,3 +430,4 @@ def leaderboard():
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
