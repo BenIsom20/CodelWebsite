@@ -29,8 +29,6 @@ CREATE TABLE IF NOT EXISTS function_skeletons (
     FOREIGN KEY (challenge_id) REFERENCES challenges(challenge_id)  -- Foreign key to challenges table
 );
 
-
-
 -- user data
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,

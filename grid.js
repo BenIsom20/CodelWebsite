@@ -45,7 +45,6 @@ function colorRow(stringList, numTests) {
                 rectangles[index + startIndex].classList.add('red');
             } else {
                 // If the result is neither "Success" nor contains "Failure", log the unknown value
-                console.log(`Index ${index}: Unknown value (${result}).`);
             }
         });
 
@@ -59,7 +58,6 @@ async function initializeColumn() {
 
     // Ensure the gridContainer exists before trying to add elements to it
     if (!gridContainer) {
-        console.error("Grid container not found!");  // Log an error if grid container is not found
         return;  // Exit the function if grid container is not available
     }
 
@@ -68,62 +66,46 @@ async function initializeColumn() {
 
 
     // Send the code to the backend for execution
-    try {
-        const response = await fetch("http://127.0.0.1:5000/Startup");
-        const result = await response.json();
+    const response = await fetch("http://127.0.0.1:5000/Startup");
+    const result = await response.json();
 
-        // After receiving the result, use the numTests property to create rectangles in the grid
-        const numTest = result.Array;  // Get the number of tests from the response
+    // After receiving the result, use the numTests property to create rectangles in the grid
+    const numTest = result.Array;  // Get the number of tests from the response
 
-        // Ensure numTest is a valid number greater than 0
-        if (numTest && typeof numTest === "number" && numTest > 0) {
-            // Update the grid's CSS layout dynamically based on numTests
-            const gridElement = document.querySelector('.grid');
-            if (gridElement) {
-                // Set the number of columns in the grid dynamically
-                gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;  // Update grid layout for columns
-            }
-
-            // Create the rectangles (one for each test) and add them to the grid container
-            for (let i = 1; i <= numTest; i++) {
-                // Create a new div element for each rectangle
-                const rectangle = document.createElement('div');
-                // Add a class to the rectangle for styling
-                rectangle.classList.add('rectangle');
-                // Set the text content of the rectangle to display the test number
-                rectangle.textContent = `Case: ${i}`;
-                // Append the rectangle to the grid container
-                gridContainer.appendChild(rectangle);
-            }
-        } else {
-            // Log an error if numTest is not valid
-            console.error("Invalid numTests value.");
+    // Ensure numTest is a valid number greater than 0
+    if (numTest && typeof numTest === "number" && numTest > 0) {
+        // Update the grid's CSS layout dynamically based on numTests
+        const gridElement = document.querySelector('.grid');
+        if (gridElement) {
+            // Set the number of columns in the grid dynamically
+            gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;  // Update grid layout for columns
         }
-    } catch (error) {
-        // Handle any errors that occur during the fetch or other asynchronous operations
-        outputDiv.textContent = "Failed to connect to the server.";  // Display a connection error message
+
+        // Create the rectangles (one for each test) and add them to the grid container
+        for (let i = 1; i <= numTest; i++) {
+            // Create a new div element for each rectangle
+            const rectangle = document.createElement('div');
+            // Add a class to the rectangle for styling
+            rectangle.classList.add('rectangle');
+            // Set the text content of the rectangle to display the test number
+            rectangle.textContent = `Case: ${i}`;
+            // Append the rectangle to the grid container
+            gridContainer.appendChild(rectangle);
+        }
+    } else {
+        // Log an error if numTest is not valid
     }
+
     amountOfRow++;
 }
-
-// Initialize the grid by calling the function to set up the columns and rectangles
-
 
 // Function to fetch and display the test explanation
 async function fetchTestExplanation() {
     const questionElement = document.getElementById("Question");
-    try {
-        const response = await fetch("http://127.0.0.1:5000/Startup");
-        const data = await response.json();
-        questionElement.innerHTML = data.explanation;  // Set the inner HTML to the test explanation
-    } catch (error) {
-        questionElement.textContent = "Failed to load test explanation.";  // Show error message if fetch fails
-        console.error("Error fetching test explanation:", error);
-    }
+    const response = await fetch("http://127.0.0.1:5000/Startup");
+    const data = await response.json();
+    questionElement.innerHTML = data.explanation;  // Set the inner HTML to the test explanation
 }
-
-
-
 
 function storeGridState() {
     const grid = document.getElementById("grid-container");
@@ -145,10 +127,6 @@ function storeGridState() {
     localStorage.setItem("gridState", JSON.stringify(gridState));
 }
 
-
-
-
-
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
 async function loadGridState() {
 
@@ -165,102 +143,83 @@ async function loadGridState() {
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
             // Set the number of columns in the grid dynamically using the numTest value
-            gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`; 
+            gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;
         }
     }
 
-    try {
-        // Retrieve the saved grid state from localStorage
-        const savedState = JSON.parse(localStorage.getItem("gridState"));
+    // Retrieve the saved grid state from localStorage
+    const savedState = JSON.parse(localStorage.getItem("gridState"));
 
-        // Check if the saved state is valid and is an array
-        if (savedState && Array.isArray(savedState)) {
-            const grid = document.getElementById("grid-container");
-            grid.innerHTML = ""; // Clear the grid before reloading
+    // Check if the saved state is valid and is an array
+    if (savedState && Array.isArray(savedState)) {
+        const grid = document.getElementById("grid-container");
+        grid.innerHTML = ""; // Clear the grid before reloading
 
-            // Recreate each rectangle based on saved data
-            currentRowIndex = savedState.length / numTest - 1; // Set the current row index to the last saved row
+        // Recreate each rectangle based on saved data
+        currentRowIndex = savedState.length / numTest - 1; // Set the current row index to the last saved row
 
-            savedState.forEach((item) => {
-                // For each item in the saved state, recreate the rectangle element
-                const rectangle = document.createElement(item.tagName); // Create element
-                rectangle.textContent = item.textContent; // Set the text content of the rectangle
-                rectangle.classList.add(...item.classList); // Add the saved classes to the rectangle
-                rectangle.style.cssText = item.styles; // Apply saved styles
+        savedState.forEach((item) => {
+            // For each item in the saved state, recreate the rectangle element
+            const rectangle = document.createElement(item.tagName); // Create element
+            rectangle.textContent = item.textContent; // Set the text content of the rectangle
+            rectangle.classList.add(...item.classList); // Add the saved classes to the rectangle
+            rectangle.style.cssText = item.styles; // Apply saved styles
 
-                // Restore data-* attributes from the saved state
-                for (const [key, value] of Object.entries(item.dataset)) {
-                    rectangle.dataset[key] = value; // Restore data attributes
-                }
-
-                // Append the recreated rectangle to the grid
-                grid.appendChild(rectangle); 
-            });
-        }
-
-        // Initialize a flag to track if all rectangles in the current row are successful (green)
-        var fail = false;
-
-        // Get all elements with the class 'rectangle' (all grid cells)
-        const rectangles = document.querySelectorAll('.rectangle');
-
-        // Set the total number of columns (numTest should match the number of columns)
-        const totalColumns = numTest;
-
-        // Adjust the currentRowIndex to refer to the previous row (since index starts from 0)
-        const newCurrentRow = currentRowIndex;
-
-        // Calculate the start and end indices for the current row of rectangles
-        const startIndex = newCurrentRow * totalColumns;
-        const endIndex = startIndex + totalColumns;
-
-        // Ensure there are enough rectangles in the grid to match the current row
-        if (rectangles.length < endIndex) {
-            // If not enough rectangles exist, log an error and return false
-            console.error('Not enough rectangles in the grid.');
-            return false; // Return false if there aren't enough rectangles
-        }
-
-        // Loop through each rectangle in the current row
-        for (let i = startIndex; i < endIndex; i++) {
-            const rectangle = rectangles[i];
-
-            // Check if the rectangle exists at the current index
-            if (!rectangle) {
-                // If the rectangle is undefined, log an error and return false
-                console.error(`Rectangle at index ${i} is undefined.`);
-                return false;
+            // Restore data-* attributes from the saved state
+            for (const [key, value] of Object.entries(item.dataset)) {
+                rectangle.dataset[key] = value; // Restore data attributes
             }
 
-            // Check if the rectangle has the 'green' class
-            if (!rectangle.classList.contains('green')) {
-                // If any rectangle is not green, set fail to true
-                fail = true;
-            }
+            // Append the recreated rectangle to the grid
+            grid.appendChild(rectangle);
+        });
+    }
+
+    // Initialize a flag to track if all rectangles in the current row are successful (green)
+    var fail = false;
+
+    // Get all elements with the class 'rectangle' (all grid cells)
+    const rectangles = document.querySelectorAll('.rectangle');
+
+    // Set the total number of columns (numTest should match the number of columns)
+    const totalColumns = numTest;
+
+    // Adjust the currentRowIndex to refer to the previous row (since index starts from 0)
+    const newCurrentRow = currentRowIndex;
+
+    // Calculate the start and end indices for the current row of rectangles
+    const startIndex = newCurrentRow * totalColumns;
+    const endIndex = startIndex + totalColumns;
+
+    // Ensure there are enough rectangles in the grid to match the current row
+    if (rectangles.length < endIndex) {
+        // If not enough rectangles exist, log an error and return false
+        return false; // Return false if there aren't enough rectangles
+    }
+
+    // Loop through each rectangle in the current row
+    for (let i = startIndex; i < endIndex; i++) {
+        const rectangle = rectangles[i];
+
+        // Check if the rectangle exists at the current index
+        if (!rectangle) {
+            // If the rectangle is undefined, log an error and return false
+
+            return false;
         }
 
-        // If none of the rectangles in the current row failed (i.e., all are green)
-        if (!fail) {
-            // Disable the submit button and stop the stopwatch if all tests are successful
-            const submitButton = document.getElementById("submitCode");
-            submitButton.disabled = true; // Disable the submit button
-            stopStopwatch(); // Stop the stopwatch (assumed to be a function defined elsewhere)
+        // Check if the rectangle has the 'green' class
+        if (!rectangle.classList.contains('green')) {
+            // If any rectangle is not green, set fail to true
+            fail = true;
         }
+    }
 
-    } catch (error) {
-        // If an error occurs, display the error message in the element with id 'weird'
-        document.getElementById("weird").innerHTML = error;
+    // If none of the rectangles in the current row failed (i.e., all are green)
+    if (!fail) {
+        // Disable the submit button and stop the stopwatch if all tests are successful
+        const submitButton = document.getElementById("submitCode");
+        submitButton.disabled = true; // Disable the submit button
+        stopStopwatch(); // Stop the stopwatch (assumed to be a function defined elsewhere)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

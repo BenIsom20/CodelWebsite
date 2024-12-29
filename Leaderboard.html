@@ -14,7 +14,6 @@
 </head>
 
 <body>
-
     <!-- CODE FOR NAVBAR -->
     <nav class="subNavbar">
         <div class="navbar-container">
@@ -47,71 +46,51 @@
             </div>
         </div>
     </main>
-
     <script>
-        
-    </script>
+        // This function is triggered when the page is fully loaded
+        window.onload = async function () {
+            // Fetch the leaderboard data from the server (API endpoint)
+            const response = await fetch("http://127.0.0.1:5000/leaderboard");
 
+            // Parse the response data as JSON
+            const data = await response.json();
 
-<script>
-    // This function is triggered when the page is fully loaded
-window.onload = async function () {
-    try {
-        // Fetch the leaderboard data from the server (API endpoint)
-        const response = await fetch("http://127.0.0.1:5000/leaderboard");
+            // Check if the response is successful (status code 200)
+            if (response.ok) {
+                // Extract the leaderboard data from the response object
+                // Assumes the response contains an array of leaderboard entries under 'data.leaderboard'
+                const leaderboardData = data.leaderboard;
 
-        // Parse the response data as JSON
-        const data = await response.json();
+                // Get the div where leaderboard entries will be inserted
+                const leaderboardEntries = document.getElementById("leaderboard-entries");
 
-        // Check if the response is successful (status code 200)
-        if (response.ok) {
-            // Extract the leaderboard data from the response object
-            // Assumes the response contains an array of leaderboard entries under 'data.leaderboard'
-            const leaderboardData = data.leaderboard;
+                // Clear any existing leaderboard entries before adding the new data
+                leaderboardEntries.innerHTML = '';
 
-            // Get the div where leaderboard entries will be inserted
-            const leaderboardEntries = document.getElementById("leaderboard-entries");
+                // Iterate over each entry in the leaderboard data
+                leaderboardData.forEach((entry, index) => {
+                    // Create a new div for each leaderboard row
+                    const row = document.createElement("div");
+                    row.classList.add("leaderboard-row"); // Add a CSS class to style the row
 
-            // Clear any existing leaderboard entries before adding the new data
-            leaderboardEntries.innerHTML = '';
+                    // Highlight the top player by adding a special CSS class to the first entry
+                    if (index === 0) row.classList.add("top-player"); // Highlight the top player
 
-            // Iterate over each entry in the leaderboard data
-            leaderboardData.forEach((entry, index) => {
-                // Create a new div for each leaderboard row
-                const row = document.createElement("div");
-                row.classList.add("leaderboard-row"); // Add a CSS class to style the row
-
-                // Highlight the top player by adding a special CSS class to the first entry
-                if (index === 0) row.classList.add("top-player"); // Highlight the top player
-
-                // Insert the leaderboard entry data into the row (rank, username, attempts, time, wins)
-                row.innerHTML = `
+                    // Insert the leaderboard entry data into the row (rank, username, attempts, time, wins)
+                    row.innerHTML = `
                     <span>${index + 1}</span>  <!-- Rank (index + 1 to start from 1) -->
                     <span>${entry.username}</span>  <!-- Username -->
                     <span>${entry.attempts}</span>  <!-- Attempts -->
                     <span>${entry.time}s</span>  <!-- Time in seconds -->
                     <span>${entry.wins}</span>  <!-- Wins -->
                 `;
+                    // Append the newly created row to the leaderboard container
+                    leaderboardEntries.appendChild(row);
+                });
 
-                // Append the newly created row to the leaderboard container
-                leaderboardEntries.appendChild(row);
-            });
-
-            // Update the debug message to indicate that the leaderboard was successfully loaded
-            //document.getElementById("debug").innerText = "Leaderboard loaded successfully";
-        } else {
-            // If the response is not successful, display an error message
-            document.getElementById("debug").innerText = "Error: " + data.error;
+            }
         }
-    } catch (error) {
-        // If an error occurs during the fetch or processing, display the error message
-        document.getElementById("debug").innerText = "Error: " + error;
-    }
-}
-</script>
-
-
-
+    </script>
 </body>
 
 </html>

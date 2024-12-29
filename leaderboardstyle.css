@@ -20,7 +20,7 @@ h1 {
 .leaderboard-header {
     display: flex;
     justify-content: space-between;
-    background: #007bff;
+    background: black;
     color: #fff;
     padding: 1rem;
     font-weight: bold;

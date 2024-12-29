@@ -59,9 +59,6 @@ body {
     color: white;
 }
 
-
-
-
 .mainNavbar {
     background-color: #333; /* Dark background color */
     color: white;
@@ -142,8 +139,6 @@ main {
     font-weight: bold
 }
 
-
 .but{
     justify-content: space-between;
 }
-

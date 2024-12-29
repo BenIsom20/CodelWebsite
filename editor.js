@@ -34,71 +34,66 @@ editor.setSize("90%", 300); // Set the editor size to 90% width and 300px height
 
 // Event listener for the "Save Code" button to trigger the saveCode function
 document.getElementById("saveCode").addEventListener("click", async function () {
+    // Retrieve the current code from the editor
     const userCode = editor.getValue();
-    const stringUserCode = JSON.stringify(userCode);
-    localStorage.setItem("savedCode", stringUserCode);
+    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
+    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!";
+    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
 });
 
-// Event listener for the "Save Code" button to trigger the saveCode function
+// Event listener for the "User" button to save code and notify
 document.getElementById("user").addEventListener("click", async function () {
-    const userCode = editor.getValue();
-    const stringUserCode = JSON.stringify(userCode);
-    localStorage.setItem("savedCode", stringUserCode);
+    const userCode = editor.getValue(); // Retrieve the current code from the editor
+    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
+    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!";
+    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
 });
 
-// Event listener for the "Save Code" button to trigger the saveCode function
+// Event listener for the "Leader" button to save code and notify
 document.getElementById("leader").addEventListener("click", async function () {
-    const userCode = editor.getValue();
-    const stringUserCode = JSON.stringify(userCode);
-    localStorage.setItem("savedCode", stringUserCode);
+    const userCode = editor.getValue(); // Retrieve the current code from the editor
+    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
+    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!";
+    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
 });
 
-// Event listener for the "Save Code" button to trigger the saveCode function
+// Event listener for the "Develop" button to save code and notify
 document.getElementById("develop").addEventListener("click", async function () {
-    const userCode = editor.getValue();
-    const stringUserCode = JSON.stringify(userCode);
-    localStorage.setItem("savedCode", stringUserCode);
+    const userCode = editor.getValue(); // Retrieve the current code from the editor
+    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
+    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!";
+    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
 });
 
-// Event listener for the "Save Code" button to trigger the saveCode function
+// Event listener for the "How" button to save code and notify
 document.getElementById("how").addEventListener("click", async function () {
-    const userCode = editor.getValue();
-    const stringUserCode = JSON.stringify(userCode);
-    localStorage.setItem("savedCode", stringUserCode);
+    const userCode = editor.getValue(); // Retrieve the current code from the editor
+    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
+    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!";
+    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
 });
 
 // Function to load the saved code from localStorage when the page is loaded
 function loadCode() {
     const savedCode = localStorage.getItem("savedCode"); // Retrieve saved code from localStorage
-    const parsedCode = JSON.parse(savedCode);
+    const parsedCode = JSON.parse(savedCode); // Parse the JSON string into a usable format
     if (parsedCode) {
-        editor.setValue(parsedCode); // Load the saved code into the textarea
-
+        editor.setValue(parsedCode); // Load the saved code into the editor
     }
 }
 
-// Fetch and Populate Skeleton Code
+// Function to fetch and populate skeleton code based on a challenge ID
 async function loadSkeleton(challengeId) {
-    try {
-        const response = await fetch(`http://127.0.0.1:5000/get_skeleton/${challengeId}`);
-        if (response.ok) {
-            const skeleton = await response.json();
-            const ske = skeleton.skeleton;
-            editor.setValue(ske); // Populate editor with skeleton
-
-        }
-    } catch (error) {
-        console.error('Error fetching skeleton:', error);
+    const response = await fetch(`http://127.0.0.1:5000/get_skeleton/${challengeId}`); // Fetch skeleton code from the server
+    if (response.ok) {
+        const skeleton = await response.json(); // Parse the server response
+        const ske = skeleton.skeleton; // Extract the skeleton code
+        editor.setValue(ske); // Populate the editor with the skeleton code
     }
 }
 
@@ -107,196 +102,189 @@ document.getElementById("runCode").addEventListener("click", async function () {
     const userCode = editor.getValue(); // Get the code from CodeMirror editor
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
     // Send code to backend for execution via a POST request
-    try {
-        const response = await fetch("http://127.0.0.1:5000/run", {
-            method: "POST", // HTTP method is POST
-            headers: { "Content-Type": "application/json" }, // Set request headers for JSON content
-            body: JSON.stringify({ code: userCode }), // Send the code as JSON in the body
-        });
+    const response = await fetch("http://127.0.0.1:5000/run", {
+        method: "POST", // HTTP method is POST
+        headers: { "Content-Type": "application/json" }, // Set request headers for JSON content
+        body: JSON.stringify({ code: userCode }), // Send the code as JSON in the body
+    });
 
-        // Parse the response from the backend
-        const result = await response.json();
+    // Parse the response from the backend
+    const result = await response.json();
 
-        // Check if there is an error in the response
-        if (result.error && result.error.length > 0) {
-            outputDiv.textContent = result.error; // Display error if any
-        } else {
-            outputDiv.textContent = result.output || "No output"; // Display output or "No output" if none
-        }
-    } catch (error) {
-        outputDiv.textContent = "Failed to connect to the server."; // Handle server connection errors
+    // Check if there is an error in the response
+    if (result.error && result.error.length > 0) {
+        outputDiv.textContent = result.error; // Display error if any
+    } else {
+        outputDiv.textContent = result.output || "No output"; // Display output or "No output" if none
     }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    //runs load skeleton function to load the skeleton code
     if (!localStorage.getItem("savedCode")) {
         loadSkeleton(1);
     }
 });
 
+// Event listener for the "Submit Code" button
 document.getElementById("submitCode").addEventListener("click", async function () {
-    attempt++;
-    var victory = false;
-    // Get the user's code from the CodeMirror editor (this is where the user inputs their code)
-    const userCode = editor.getValue();
-    const outputDiv = document.getElementById("output");
+    attempt++; // Increment the attempt counter
+    var victory = false; // Track if the user achieves victory
+    const userCode = editor.getValue(); // Get the user's code from the editor
+    const outputDiv = document.getElementById("output"); // Div to display results or messages
 
     try {
         // Send the user's code to the backend via a POST request
         const response = await fetch("http://127.0.0.1:5000/test", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ code: userCode }),
+            headers: { "Content-Type": "application/json" }, // Specify JSON content type
+            body: JSON.stringify({ code: userCode }), // Send the code as a JSON object
         });
 
         // Parse the JSON response from the backend
         const result = await response.json();
 
         if (result.error && result.error.length > 0) {
-            // If there is a compilation error, display it
+            // Display compilation errors if present
             outputDiv.innerHTML = result.error;
         } else {
-
-            const userCode = editor.getValue();
+            // Save the submitted code to localStorage
             const stringUserCode = JSON.stringify(userCode);
             localStorage.setItem("savedCode", stringUserCode);
 
-            // Display success message and output
+            // Notify the user of successful submission
             outputDiv.innerHTML = "Code Successfully Submitted";
 
-            // Get the test results and number of tests
-            const resultsArray = Object.values(result.testList);
-            const givenValues = result.givenValues; // Get the given values from the response
-            const numTests = result.numTests;
+            // Extract test results and related data
+            const resultsArray = Object.values(result.testList); // Test outcomes
+            const givenValues = result.givenValues; // Input values for the tests
+            const numTests = result.numTests; // Total number of tests
 
-            // Display each test result with its given_value and actual result
+            // Display detailed test results
             let resultDetails = "<h3>Test Results:</h3><ul>";
             for (let i = 0; i < resultsArray.length; i++) {
-                const caseResult = resultsArray[i];
-                const givenValue = givenValues[i];  // Get the corresponding given value from the response
+                const caseResult = resultsArray[i]; // Test result for each case
+                const givenValue = givenValues[i]; // Corresponding input value
                 resultDetails += `<li>(${givenValue}) -> ${caseResult}</li>`;
             }
             resultDetails += "</ul>";
-
-            // Append the result details to the output
             outputDiv.innerHTML += resultDetails;
 
-            // Check if all tests pass
+            // Check the test results and update the grid accordingly
             if (victoryCheck(resultsArray) == "f") {
-                // If not all tests pass, add a new row to the grid
+                // Add a new row if not all tests pass
                 addRow(numTests);
-                colorRow(resultsArray, numTests);
+                colorRow(resultsArray, numTests); // Color the row based on test outcomes
             } else if (victoryCheck(resultsArray) == "s") {
-                colorRow(resultsArray, numTests);
+                // All tests passed
+                colorRow(resultsArray, numTests); // Update grid with success colors
                 victory = true;
-                // If all tests pass, disable the submit button and stop the stopwatch
                 const submitButton = document.getElementById("submitCode");
-                submitButton.disabled = true;  // Disable the submit button
-                stopStopwatch();  // Stop the stopwatch
+                submitButton.disabled = true; // Disable the submit button
+                stopStopwatch(); // Stop the stopwatch
             } else if (victoryCheck(resultsArray) == "e") {
+                // No significant change, decrement the attempt counter
                 attempt--;
             }
         }
     } catch (error) {
-        // Handle fetch or server errors
+        // Handle errors during the fetch or server communication
         outputDiv.textContent = "Error in submission: " + error.message;
     }
 
-    // Save the current grid state to localStorage
+    // Save the current state of the grid to localStorage
     const grid = document.getElementById("grid-container");
     const gridState = Array.from(grid.children).map(child => ({
-        tagName: child.tagName,
-        textContent: child.textContent,
-        classList: [...child.classList],
-        styles: child.style.cssText,
-        dataset: { ...child.dataset },
+        tagName: child.tagName, // HTML tag name
+        textContent: child.textContent, // Text inside the element
+        classList: [...child.classList], // List of CSS classes
+        styles: child.style.cssText, // Inline styles
+        dataset: { ...child.dataset }, // Data attributes
     }));
-
-    localStorage.setItem("gridState", JSON.stringify(gridState));
+    localStorage.setItem("gridState", JSON.stringify(gridState)); // Store grid state
 
     if (victory) {
-        victorySend();
+        victorySend(); // Send a victory signal if all tests pass
     }
 });
 
+
 // Function to check if all tests passed
 function victoryCheck(resultsArray) {
-    // Loop through each result to find any "Failure"
+    // Check for any errored test cases
     for (let result of resultsArray) {
-        if (errored(result)) { return "e" }
+        if (errored(result)) {
+            return "e"; // Return "e" if any test has an error
+        }
     }
+    // Check for any failed test cases
     for (let result of resultsArray) {
-        if (failed(result)) { return "f" }
+        if (failed(result)) {
+            return "f"; // Return "f" if any test has a failure
+        }
     }
-    return "s"; // Return true if all tests passed
+    return "s"; // Return "s" if all tests pass
 }
 
+// Function to check if a test case failed
 function failed(result) {
     if (result.includes("Failure")) {
-        return true; // Return false if any failure is found
+        return true; // Return true if "Failure" is found in the result
     } else {
-        return false;
+        return false; // Return false otherwise
     }
 }
 
+// Function to check if a test case errored
 function errored(result) {
     if (result.includes("Error")) {
-        return true; // Return false if any failure is found
+        return true; // Return true if "Error" is found in the result
     } else {
-        return false;
+        return false; // Return false otherwise
     }
 }
 
-// function that sends the victory and data to backend
+// Function to send victory state and related data to the backend
 async function victorySend() {
-    try {
-        // Retrieve the JWT token from local storage
-        if (localStorage.getItem("jwt_token") != null) {
+    // Check if a JWT token exists in local storage
+    if (localStorage.getItem("jwt_token") != null) {
+        const token = localStorage.getItem("jwt_token"); // Retrieve the token
 
-            const token = localStorage.getItem("jwt_token");
+        // Prepare the payload with relevant data from local storage
+        const payload = {
+            gridState: localStorage.getItem("gridState"),  // Grid state data
+            stopwatchTime: localStorage.getItem("stopwatchTime"),  // Stopwatch time
+            savedCode: localStorage.getItem("savedCode"),  // Saved code
+            attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
+        };
 
-            // Prepare the payload with necessary data from local storage
-            const payload = {
-                gridState: localStorage.getItem("gridState"),  // Grid state data
-                stopwatchTime: localStorage.getItem("stopwatchTime"),  // Stopwatch time
-                savedCode: localStorage.getItem("savedCode"),  // Saved code
-                attempts: attempt  // Number of attempts (ensure 'attempt' is defined elsewhere)
-            };
-
-            // Send the POST request with the token in the Authorization header
-            fetch("http://localhost:5000/victory", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",  // Indicating the request body is in JSON format
-                    "Authorization": `Bearer ${token}`  // Include the JWT token in the Authorization header
-                },
-                body: JSON.stringify(payload)  // Send the payload as a JSON string
+        // Send a POST request to the backend to update victory state
+        fetch("http://localhost:5000/victory", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",  // Indicate JSON content
+                "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
+            },
+            body: JSON.stringify(payload)  // Convert payload to JSON string
+        })
+            .then(response => response.json())  // Parse the response JSON
+            .then(data => {
+                // Handle the response from the backend
+                if (data.message) {
+                    console.log("State updated successfully:", data.message);
+                    document.getElementById("debug").innerHTML = data.message; // Display success message
+                } else if (data.error) {
+                    console.error("Error updating state:", data.error);
+                    document.getElementById("debug").innerHTML = data.error; // Display error message
+                }
             })
-                .then(response => response.json())  // Parse the response JSON
-                .then(data => {
-                    // Check for success or error message in the response
-                    if (data.message) {
-                        console.log("State updated successfully:", data.message);
-                        document.getElementById("debug").innerHTML = data.message;  // Display success message
-                    } else if (data.error) {
-                        console.error("Error updating state:", data.error);
-                        document.getElementById("debug").innerHTML = data.error;  // Display error message
-                    }
-                })
-                .catch(error => {
-                    // Handle any network or other errors
-                    console.error("Network error:", error);
-                    document.getElementById("debug").innerHTML = error;  // Display error message
-                });
-        }
-        else {
-            // If no JWT token is found in local storage, notify the user
-            document.getElementById("debug").innerHTML = "No token found";
-        }
-
-    }
-    catch (error) {
-        // Catch any unexpected errors in the function
-        document.getElementById("debug").innerHTML = error;
+            .catch(error => {
+                // Handle network or other errors
+                console.error("Network error:", error);
+                document.getElementById("debug").innerHTML = error; // Display network error message
+            });
+    } else {
+        // Notify the user if no JWT token is found in local storage
+        document.getElementById("debug").innerHTML = "No token found";
     }
 }
