@@ -13,15 +13,15 @@ challenge:
 
   cases:
     - prompt: "Find indices where nums[i] + nums[j] equals target"
-      given_data: "nums = [2, 7, 11, 15], target = 9"
+      given_data: "[2, 7, 11, 15], 9"
       expected: "[0, 1]"
 
     - prompt: "Find indices where nums[i] + nums[j] equals target"
-      given_data: "nums = [3, 2, 4], target = 6"
-      expected: "[1, 2]"
+      given_data: "[0, 2], 2"
+      expected: "[0, 1]"
 
     - prompt: "Find indices where nums[i] + nums[j] equals target"
-      given_data: "nums = [3, 3], target = 6"
+      given_data: "[3, 3], 6"
       expected: "[0, 1]"
 
 

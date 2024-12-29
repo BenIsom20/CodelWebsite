@@ -5,8 +5,7 @@ body {
     margin:0;
     background-color: #333; /* Set background to black */
     color: #39FF14; /* Neon green color for text */
-    font-family: Arial, sans-serif; /* Optional: Choose a font */
-    
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New; /* Optional: Choose a font */
 }
 
 .grid {

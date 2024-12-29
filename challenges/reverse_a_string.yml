@@ -9,22 +9,17 @@ challenge:
 
   cases:
     - prompt: "Reverse a normal string"
-      given_data: "hello"
+      given_data: "\"hello\""
       expected: "olleh"
 
     - prompt: "Reverse an empty string"
-      given_data: ""
+      given_data: "\"\""
       expected: ""
 
     - prompt: "Reverse a string with spaces"
-      given_data: "hello world"
+      given_data: "\"hello world\""
       expected: "dlrow olleh"
 
     - prompt: "Reverse a single character string"
-      given_data: "a"
+      given_data: "\"a\""
       expected: "a"
-
-
-
-
-
