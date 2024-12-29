@@ -368,6 +368,51 @@ def get_user_data():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/leaderboard", methods=["GET"])
+def leaderboard():
+    try:
+        # Connect to the database using the configuration details (db_config contains the database connection info)
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # SQL query to retrieve leaderboard data
+        # We select the columns: username, attempts, curtimer (current time), and wins
+        # We filter out entries where attempts or curtimer are zero, as they are likely invalid or not yet played
+        # The result is ordered first by attempts (ascending) and then by curtimer (ascending), to prioritize users with the least attempts and fastest times
+        # The LIMIT 10 restricts the result to the top 10 users
+        query = """
+            SELECT username, attempts, curtimer, wins
+            FROM users
+            WHERE attempts > 0 AND curtimer > 0  # Filter out users with no attempts or zero time
+            ORDER BY attempts ASC, curtimer ASC  # Sort by fewest attempts and fastest time
+            LIMIT 10;  # Get the top 10 results
+        """
+        
+        # Execute the query to fetch data from the database
+        cursor.execute(query)
+
+        # Fetch all results from the query execution
+        results = cursor.fetchall()
+
+        # Process the results into a list of dictionaries for easier handling in the frontend
+        # Each dictionary contains: 'username', 'attempts', 'time' (curtimer), and 'wins'
+        leaderboard = [{"username": row[0], "attempts": row[1], "time": row[2], "wins": row[3]} for row in results]
+
+        # Close the cursor and database connection after the operation
+        cursor.close()
+        connection.close()
+
+        # Return the leaderboard data as a JSON response with a 200 OK status
+        return jsonify({"leaderboard": leaderboard}), 200
+
+    except Exception as e:
+        # If an error occurs during the process, catch it and return a 500 Internal Server Error response
+        # The error message is sent in the JSON response
+        return jsonify({"error": str(e)}), 500
+
+
+
+
 
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":

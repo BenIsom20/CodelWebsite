@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,10 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    
+    <link rel="stylesheet" href="leaderboard.css">
+
 </head>
+
 <body>
 
     <!-- CODE FOR NAVBAR -->
@@ -17,18 +20,98 @@
         <div class="navbar-container">
             <a href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO CODEL</a>
             <div class="nav-links">
-                <a href="Developers.html" class="navObjects" ><i class='bx bxs-bulb' ></i></i></a>
+                <a href="Developers.html" class="navObjects"><i class='bx bxs-bulb'></i></i></a>
                 <a href="How.html" class="navObjects"><i class='bx bxs-help-circle'></i></a>
-                <a id = "user" href="accounts.html" class = "navObjects" ><i class='bx bx-user-circle'></i></a>   
-                
+                <a id="user" href="accounts.html" class="navObjects"><i class='bx bx-user-circle'></i></a>
+
             </div>
         </div>
     </nav>
 
     <!-- CODE FOR THE LEADERBOARD-->
     <main>
-        <h1>Leaderboard</h1>
+        <div class="leaderboard-container">
+            <h1>Leaderboard</h1>
+            <div id="debug"></div> <!-- Debug message will show here -->
+            <div class="leaderboard-table">
+                <div class="leaderboard-header">
+                    <span>#</span>
+                    <span>Username</span>
+                    <span>Attempts</span>
+                    <span>Time (s)</span>
+                    <span>Wins</span>
+                </div>
+                <div id="leaderboard-entries">
+                    <!-- Leaderboard rows will be dynamically added here -->
+                </div>
+            </div>
+        </div>
     </main>
-    
+
+    <script>
+        
+    </script>
+
+
+<script>
+    // This function is triggered when the page is fully loaded
+window.onload = async function () {
+    try {
+        // Fetch the leaderboard data from the server (API endpoint)
+        const response = await fetch("http://127.0.0.1:5000/leaderboard");
+
+        // Parse the response data as JSON
+        const data = await response.json();
+
+        // Check if the response is successful (status code 200)
+        if (response.ok) {
+            // Extract the leaderboard data from the response object
+            // Assumes the response contains an array of leaderboard entries under 'data.leaderboard'
+            const leaderboardData = data.leaderboard;
+
+            // Get the div where leaderboard entries will be inserted
+            const leaderboardEntries = document.getElementById("leaderboard-entries");
+
+            // Clear any existing leaderboard entries before adding the new data
+            leaderboardEntries.innerHTML = '';
+
+            // Iterate over each entry in the leaderboard data
+            leaderboardData.forEach((entry, index) => {
+                // Create a new div for each leaderboard row
+                const row = document.createElement("div");
+                row.classList.add("leaderboard-row"); // Add a CSS class to style the row
+
+                // Highlight the top player by adding a special CSS class to the first entry
+                if (index === 0) row.classList.add("top-player"); // Highlight the top player
+
+                // Insert the leaderboard entry data into the row (rank, username, attempts, time, wins)
+                row.innerHTML = `
+                    <span>${index + 1}</span>  <!-- Rank (index + 1 to start from 1) -->
+                    <span>${entry.username}</span>  <!-- Username -->
+                    <span>${entry.attempts}</span>  <!-- Attempts -->
+                    <span>${entry.time}s</span>  <!-- Time in seconds -->
+                    <span>${entry.wins}</span>  <!-- Wins -->
+                `;
+
+                // Append the newly created row to the leaderboard container
+                leaderboardEntries.appendChild(row);
+            });
+
+            // Update the debug message to indicate that the leaderboard was successfully loaded
+            document.getElementById("debug").innerText = "Leaderboard loaded successfully";
+        } else {
+            // If the response is not successful, display an error message
+            document.getElementById("debug").innerText = "Error: " + data.error;
+        }
+    } catch (error) {
+        // If an error occurs during the fetch or processing, display the error message
+        document.getElementById("debug").innerText = "Error: " + error;
+    }
+}
+</script>
+
+
+
 </body>
+
 </html>

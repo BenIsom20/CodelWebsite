@@ -1,0 +1,36 @@
+.leaderboard-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.leaderboard-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-header, .leaderboard-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.leaderboard-header {
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+
+.leaderboard-row {
+    background-color: #fff;
+}
+
+.top-player {
+    background-color: gold;
+    font-weight: bold;
+}
+
+span {
+    width: 20%;
+    text-align: center;
+}
