@@ -88,7 +88,7 @@ function loadCode() {
 }
 
 // Function to fetch and populate skeleton code based on a challenge ID
-async function loadSkeleton(challengeId) {
+async function loadSkeleton() {
     const response = await fetch(`http://127.0.0.1:5000/get_skeleton`); // Fetch skeleton code from the server
     if (response.ok) {
         const skeleton = await response.json(); // Parse the server response
@@ -122,7 +122,7 @@ document.getElementById("runCode").addEventListener("click", async function () {
 document.addEventListener("DOMContentLoaded", () => {
     //runs load skeleton function to load the skeleton code
     if (!localStorage.getItem("savedCode")) {
-        loadSkeleton(1);
+        loadSkeleton();
     }
 });
 
