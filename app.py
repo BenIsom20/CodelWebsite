@@ -222,8 +222,9 @@ def Startup():
     set_current_challenge_function_skeleton_by_date()
    
     # Explanation for the test
-    descriptions = {
-        "Question": current_challenge["prompt"],
+    
+    tests = {
+        
         **{
             f"Case {i + 1}": 
             f"Case {i + 1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"
@@ -232,13 +233,14 @@ def Startup():
     }
 
     explanation = ""
-    for value in descriptions.values():
+    for value in tests.values():
         explanation += value + "<br>" 
     # Add the value to the total
 
     return jsonify({
-        "explanation": explanation,
-        "Array": len(descriptions)-1
+        "prompt": current_challenge["prompt"],
+        "Cases": tests,
+        "Array": len(tests)
     })
 
 @app.route('/get_skeleton', methods=['GET'])

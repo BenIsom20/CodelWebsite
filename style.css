@@ -3,8 +3,8 @@ body {
     flex-direction: column;
     align-items: center;
     margin:0;
-    background-color: #333; /* Set background to black */
-    color: #39FF14; /* Neon green color for text */
+    background-color: #333533; /* Set background to black */
+    color: #F7F9FB; /* Neon green color for text */
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New; /* Optional: Choose a font */
 }
 
@@ -18,16 +18,16 @@ body {
     width: 100px;
     height: 50px;
     /* Rectangular shape */
-    background-color: lightgray;
+    background-color: #333533;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #F7F9FB;
     border-radius: 5px;
     text-align: center;
-    color: black;
+    color: #F7F9FB;
 }
 
 .mainbutton {
@@ -60,24 +60,24 @@ body {
 }
 
 .mainNavbar {
-    background-color: #333; /* Dark background color */
+    background-color: #333533; /* Dark background color */
     color: white;
     padding: 10px 20px;
     position: relative; /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 50px #ffe66d;
     
 }
 
 .subNavbar {
-    background-color: #333; /* Dark background color */
+    background-color: #333533; /* Dark background color */
     color: white;
     padding: 10px 20px;
     position: fixed; /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px #ffe66d;
     
     
 }
@@ -111,9 +111,18 @@ body {
 }
 
 .navObjects:hover {
-    background-color: darkgrey;
-    border-color: #ccc;
+    color: #ffe66d;
+    animation: dance 0.6s ease-in-out;
 }
+
+/* Define the dance animation */
+@keyframes dance {
+    0% { transform: rotate(0) translateY(0); }
+    15% { transform: rotate(-10deg) translateY(-5px); }
+    50% { transform: rotate(5deg) translateY(2.5px); }
+    75% { transform: rotate(-5deg) translateY(-2px); }
+    100% { transform: rotate(0) translateY(0); }
+  }
 
 .backButton:hover {
     background-color: darkgrey;
@@ -130,8 +139,8 @@ main {
 #stopwatch {
     font-size: 35px;
     
-    
-    border: 2px solid #39FF14;
+    box-shadow: 0 2px 5px #ffe66d;
+    border: 2px solid #ffe66d;
     border-radius: 10px;
 }
 
@@ -142,3 +151,17 @@ main {
 .but{
     justify-content: space-between;
 }
+
+.aligned-text {
+    text-align: left; /* Ensures a clean left edge */
+    width: 1000px; /* Set a fixed width for the text block */
+    margin: 0; /* Remove extra margin */
+    line-height: 1.6; /* Improve readability */
+    font-family: Arial, sans-serif; /* Optional: consistent font */
+  }
+
+  .centered-container {
+    display: flex;
+    justify-content: center; /* Centers the paragraph block horizontally */
+    align-items: center; /* Optional: centers vertically if needed */
+  }

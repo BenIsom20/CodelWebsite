@@ -99,13 +99,18 @@ async function initializeColumn() {
     amountOfRow++;
 }
 
-// Function to fetch and display the test explanation
 async function fetchTestExplanation() {
     const questionElement = document.getElementById("Question");
     const response = await fetch("http://127.0.0.1:5000/Startup");
     const data = await response.json();
-    questionElement.innerHTML = data.explanation;  // Set the inner HTML to the test explanation
+
+    // Set the question prompt
+    questionElement.innerHTML = data.prompt;
+
+
+
 }
+
 
 function storeGridState() {
     const grid = document.getElementById("grid-container");
