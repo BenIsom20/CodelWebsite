@@ -31,7 +31,6 @@
     <main>
         <div class="leaderboard-container">
             <h1>Codel Leaderboard</h1>
-            <div id="debug"></div> <!-- Debug message will show here -->
             <div class="leaderboard-table">
                 <div class="leaderboard-header">
                     <span>#</span>
@@ -45,51 +44,50 @@
                 </div>
             </div>
         </div>
+        <button id="load-more" class="btn btn-primary">Load More</button>
     </main>
     <script>
-        // This function is triggered when the page is fully loaded
-        window.onload = async function () {
-            // Fetch the leaderboard data from the server (API endpoint)
-            const response = await fetch("http://127.0.0.1:5000/leaderboard");
+        let offset = 0; // Start offset
+        const limit = 10; // Number of entries to fetch per request
 
-            // Parse the response data as JSON
+        // Function to load leaderboard entries
+        async function loadLeaderboard() {
+            const response = await fetch(`http://127.0.0.1:5000/leaderboard?offset=${offset}&limit=${limit}`);
             const data = await response.json();
 
-            // Check if the response is successful (status code 200)
             if (response.ok) {
-                // Extract the leaderboard data from the response object
-                // Assumes the response contains an array of leaderboard entries under 'data.leaderboard'
                 const leaderboardData = data.leaderboard;
-
-                // Get the div where leaderboard entries will be inserted
                 const leaderboardEntries = document.getElementById("leaderboard-entries");
 
-                // Clear any existing leaderboard entries before adding the new data
-                leaderboardEntries.innerHTML = '';
-
-                // Iterate over each entry in the leaderboard data
                 leaderboardData.forEach((entry, index) => {
-                    // Create a new div for each leaderboard row
                     const row = document.createElement("div");
-                    row.classList.add("leaderboard-row"); // Add a CSS class to style the row
-
-                    // Highlight the top player by adding a special CSS class to the first entry
-                    if (index === 0) row.classList.add("top-player"); // Highlight the top player
-
-                    // Insert the leaderboard entry data into the row (rank, username, attempts, time, wins)
+                    row.classList.add("leaderboard-row");
                     row.innerHTML = `
-                    <span>${index + 1}</span>  <!-- Rank (index + 1 to start from 1) -->
-                    <span>${entry.username}</span>  <!-- Username -->
-                    <span>${entry.attempts}</span>  <!-- Attempts -->
-                    <span>${entry.time}s</span>  <!-- Time in seconds -->
-                    <span>${entry.wins}</span>  <!-- Wins -->
-                `;
-                    // Append the newly created row to the leaderboard container
+                <span>${offset + index + 1}</span>
+                <span>${entry.username}</span>
+                <span>${entry.attempts}</span>
+                <span>${entry.time}s</span>
+                <span>${entry.wins}</span>
+            `;
                     leaderboardEntries.appendChild(row);
                 });
 
+                // Increment offset for the next batch
+                offset += limit;
+
+                // Hide the "Load More" button if no more data
+                if (leaderboardData.length < limit) {
+                    document.getElementById("load-more").style.display = "none";
+                }
             }
         }
+
+        // Load initial leaderboard data on page load
+        window.onload = loadLeaderboard;
+
+        // Attach click event to the "Load More" button
+        document.getElementById("load-more").addEventListener("click", loadLeaderboard);
+
     </script>
 </body>
 

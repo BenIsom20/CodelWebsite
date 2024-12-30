@@ -44,3 +44,7 @@ CREATE TABLE IF NOT EXISTS users (
     attempts INT NOT NULL DEFAULT 0,
     completed BIT NOT NULL DEFAULT 0
 );
+
+
+
+
