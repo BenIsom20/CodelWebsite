@@ -11,6 +11,7 @@ import logging
 import sys
 from flask_apscheduler import APScheduler
 from pytz import timezone
+from better_profanity import profanity
 
 app = Flask(__name__)
 # Enable CORS for all routes
@@ -249,7 +250,6 @@ def get_skeleton():
     else:
         return jsonify({"error": "Skeleton not found"}), 404
 
-# Register a new user
 @app.route("/register", methods=["POST"])
 def register():
     try:
@@ -262,6 +262,10 @@ def register():
         # Ensure all required fields are provided
         if not username or not password or not email:
             return jsonify({"error": "Missing required fields"}), 400
+
+        profanity.load_censor_words()  # Load default list of profane words
+        if profanity.contains_profanity(username):
+            return jsonify({"error": "Profanity detected in username"}), 400
 
         # Hash the password securely
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
@@ -286,10 +290,10 @@ def register():
 
     except mysql.connector.Error as err:
         # Handle any database errors
-        return jsonify({"error": f"Database error: {err}"}), 500
+        return jsonify({"error": "Username or Email already in use"}), 500
     finally:
         # Ensure the database connection is closed
-        if connection.is_connected():
+        if 'connection' in locals() and connection.is_connected():
             cursor.close()
             connection.close()
 

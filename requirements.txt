@@ -7,3 +7,4 @@ pyyaml
 Flask-APScheduler
 pytz
 tzdata
+better-profanity
