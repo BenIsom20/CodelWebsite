@@ -32,58 +32,48 @@ var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
 
 editor.setSize("90%", 300); // Set the editor size to 90% width and 300px height
 
-// Event listener for the "Save Code" button to trigger the saveCode function
-document.getElementById("saveCode").addEventListener("click", async function () {
+function saveCode() {
     // Retrieve the current code from the editor
     const userCode = editor.getValue();
     const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
-    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
-    const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
-});
 
-// Event listener for the "User" button to save code and notify
-document.getElementById("user").addEventListener("click", async function () {
-    const userCode = editor.getValue(); // Retrieve the current code from the editor
-    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
-    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
-    const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
-});
+    // Calculate the timestamp for midnight
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+    const expiry = midnight.getTime(); // Timestamp for midnight
 
-// Event listener for the "Leader" button to save code and notify
-document.getElementById("leader").addEventListener("click", async function () {
-    const userCode = editor.getValue(); // Retrieve the current code from the editor
-    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
-    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
-    const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
-});
+    // Wrap the state with an expiry timestamp
+    const stateWithExpiry = {
+        stringUserCode, // Save the user code
+        expiry,    // Save the expiration timestamp (midnight)
+    };
 
-// Event listener for the "Develop" button to save code and notify
-document.getElementById("develop").addEventListener("click", async function () {
-    const userCode = editor.getValue(); // Retrieve the current code from the editor
-    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
-    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
+    // Save the array with expiry to localStorage
+    localStorage.setItem("gridState", JSON.stringify(stateWithExpiry));
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
     outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
-});
+}
 
-// Event listener for the "How" button to save code and notify
-document.getElementById("how").addEventListener("click", async function () {
-    const userCode = editor.getValue(); // Retrieve the current code from the editor
-    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
-    localStorage.setItem("savedCode", stringUserCode); // Save the code in localStorage
-    const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    outputDiv.innerHTML = "Code Successfully Saved!"; // Notify the user of success
-});
+// Event listener for the "Save Code" button to trigger the saveCode function
+document.getElementById("saveCode").addEventListener("click", savedCode);
+document.getElementById("user").addEventListener("click", savedCode);
+document.getElementById("leader").addEventListener("click", savedCode);
+document.getElementById("develop").addEventListener("click", savedCode);
+document.getElementById("how").addEventListener("click", savedCode);
 
 // Function to load the saved code from localStorage when the page is loaded
 function loadCode() {
     const savedCode = localStorage.getItem("savedCode"); // Retrieve saved code from localStorage
     const parsedCode = JSON.parse(savedCode); // Parse the JSON string into a usable format
+    const now = new Date();
+
+    if (now.getTime() > parsedCode.expiry) {
+        // If expired, remove it and return null
+        localStorage.removeItem("parsedCode");
+    }
+
     if (parsedCode) {
-        editor.setValue(parsedCode); // Load the saved code into the editor
+        editor.setValue(parsedCode[0]); // Load the saved code into the editor
     }
 }
 
@@ -201,8 +191,21 @@ document.getElementById("submitCode").addEventListener("click", async function (
         styles: child.style.cssText, // Inline styles
         dataset: { ...child.dataset }, // Data attributes
     }));
-    localStorage.setItem("gridState", JSON.stringify(gridState)); // Store grid state
+    
+    // Calculate the timestamp for midnight
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+    const expiry = midnight.getTime(); // Timestamp for midnight
 
+    // Wrap the state with an expiry timestamp
+    const stateWithExpiry = {
+        gridState, // Save the grid state
+        expiry,    // Save the expiration timestamp (midnight)
+    };
+
+    // Save the array with expiry to localStorage
+    localStorage.setItem("gridState", JSON.stringify(stateWithExpiry));
+    
     if (victory) {
         victorySend(); // Send a victory signal if all tests pass
     }
@@ -250,11 +253,15 @@ async function victorySend() {
     if (localStorage.getItem("jwt_token") != null) {
         const token = localStorage.getItem("jwt_token"); // Retrieve the token
 
+        const storedGrid = JSON.parse(localStorage.getItem("gridState"));
+        const storedStopwatch = JSON.parse(localStorage.getItem("stopwatchTime"));
+        const storedCode = JSON.parse(localStorage.getItem("savedCode"));
+
         // Prepare the payload with relevant data from local storage
         const payload = {
-            gridState: localStorage.getItem("gridState"),  // Grid state data
-            stopwatchTime: localStorage.getItem("stopwatchTime"),  // Stopwatch time
-            savedCode: localStorage.getItem("savedCode"),  // Saved code
+            gridState: JSON.stringify(storedGrid[0]),  // Grid state data
+            stopwatchTime: JSON.stringify(storedStopwatch[0]),  // Stopwatch time
+            savedCode: JSON.stringify(storedCode[0]),  // Saved code
             attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
         };
 

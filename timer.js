@@ -8,8 +8,18 @@ let isRunning = false; // Flag to track if the stopwatch is currently running
 function startStopwatch() {
     // Try to retrieve the saved time from localStorage (if any)
     const savedTime = localStorage.getItem("stopwatchTime");
-    if (savedTime) {
-        stopwatchTime = parseInt(savedTime, 10); // If a saved time exists, restore it
+    const item = JSON.parse(savedTime);
+    const now = new Date();
+
+    // Check if the item has expired
+    if (now.getTime() > item.expiry) {
+        // If expired, remove it and return null
+        localStorage.removeItem("gridState");
+        return null;
+    }
+
+    if (item[0]) {
+        stopwatchTime = parseInt(item[0], 10); // If a saved time exists, restore it
     }
     updateStopwatchDisplay(); // Update the display with the current time
 
@@ -19,7 +29,19 @@ function startStopwatch() {
         stopwatchInterval = setInterval(() => {
             stopwatchTime++; // Increment the stopwatch time by 1 second
             updateStopwatchDisplay(); // Update the display with the new time
-            localStorage.setItem("stopwatchTime", stopwatchTime); // Save the updated time in localStorage
+
+            // Calculate the timestamp for midnight
+            const now = new Date();
+            const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+            const expiry = midnight.getTime(); // Timestamp for midnight
+
+            // Wrap the state with an expiry timestamp
+            const stopwatchWithExpiry = {
+                stopwatchTime, // Save the grid state
+                expiry,    // Save the expiration timestamp (midnight)
+            };
+
+            localStorage.setItem("stopwatchTime", stopwatchWithExpiry); // Save the updated time in localStorage
         }, 1000);
         isRunning = true; // Set isRunning to true to indicate the stopwatch is running
     }

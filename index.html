@@ -59,7 +59,7 @@
 
 
 
-        <p id="Question" style="text-align: center; padding-top: 50px; width: 1000px; padding-bottom: 25px"></p>
+    <p id="Question" style="text-align: center; padding-top: 50px; width: 1000px; padding-bottom: 25px"></p>
 
     <div id="grid-container" class="grid"></div>
 
@@ -109,11 +109,33 @@
             const code = result.code;  // Retrieved saved code
             const grid = result.grid;  // Retrieved grid state
 
+            // Calculate the timestamp for midnight
+            const now = new Date();
+            const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+            const expiry = midnight.getTime(); // Timestamp for midnight
+
+            // Wrap the state with an expiry timestamp
+            const timeState = {
+                time, // Save the user code
+                expiry,    // Save the expiration timestamp (midnight)
+            };
+            // Wrap the state with an expiry timestamp
+            const codeState = {
+                code, // Save the user code
+                expiry,    // Save the expiration timestamp (midnight)
+            };
+            // Wrap the state with an expiry timestamp
+            const gridState = {
+                grid, // Save the user code
+                expiry,    // Save the expiration timestamp (midnight)
+            };
+
+
             // If all required data is present, save it to local storage and initialize the app
             if (time && code && grid) {
-                localStorage.setItem("stopwatchTime", time);
-                localStorage.setItem("savedCode", code);
-                localStorage.setItem("gridState", grid);
+                localStorage.setItem("stopwatchTime", JSON.stringify(timeState));
+                localStorage.setItem("savedCode", JSON.stringify(codeState));
+                localStorage.setItem("gridState", JSON.stringify(gridState));
                 loadCode();           // Load the saved code into the editor
                 startStopwatch();     // Start the stopwatch with the saved time
                 loadGridState();      // Restore the grid state
@@ -139,13 +161,22 @@
             const token = localStorage.getItem("jwt_token");
             const gridData = localStorage.getItem("gridState");
 
+            // Check grid state expiration
+            const gridDataParsed = JSON.parse(gridData);
+            const now = new Date();
+
+            // Clear the grid if day has passed
+            if (now.getTime() > savedState.expiry) {
+                localStorage.removeItem("gridState");
+            }
+
             // Check if the token exists in local storage
             if (!token) {
                 // If no token is found, start the stopwatch
                 startStopwatch();
 
                 // Check if grid state exists in local storage
-                if (gridData) {
+                if (gridDataParsed[0]) {
                     loadGridState();  // Load the saved grid state
                 } else {
                     initializeColumn();  // Initialize a new grid structure if no data is found

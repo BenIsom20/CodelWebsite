@@ -111,7 +111,6 @@ async function fetchTestExplanation() {
 
 }
 
-
 function storeGridState() {
     const grid = document.getElementById("grid-container");
     const gridState = [];
@@ -128,9 +127,21 @@ function storeGridState() {
         });
     }
 
-    // Save the array to localStorage
-    localStorage.setItem("gridState", JSON.stringify(gridState));
+    // Calculate the timestamp for midnight
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+    const expiry = midnight.getTime(); // Timestamp for midnight
+
+    // Wrap the state with an expiry timestamp
+    const stateWithExpiry = {
+        gridState, // Save the grid state
+        expiry,    // Save the expiration timestamp (midnight)
+    };
+
+    // Save the array with expiry to localStorage
+    localStorage.setItem("gridState", JSON.stringify(stateWithExpiry));
 }
+
 
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
 async function loadGridState() {
@@ -154,16 +165,22 @@ async function loadGridState() {
 
     // Retrieve the saved grid state from localStorage
     const savedState = JSON.parse(localStorage.getItem("gridState"));
+    const now = new Date();
+
+    // Clear the grid if day has passed
+    if (now.getTime() > savedState.expiry) {
+        localStorage.removeItem("gridState");
+    }
 
     // Check if the saved state is valid and is an array
-    if (savedState && Array.isArray(savedState)) {
+    if (savedState[0] && Array.isArray(savedState[0])) {
         const grid = document.getElementById("grid-container");
         grid.innerHTML = ""; // Clear the grid before reloading
 
         // Recreate each rectangle based on saved data
-        currentRowIndex = savedState.length / numTest - 1; // Set the current row index to the last saved row
+        currentRowIndex = savedState[0].length / numTest - 1; // Set the current row index to the last saved row
 
-        savedState.forEach((item) => {
+        savedState[0].forEach((item) => {
             // For each item in the saved state, recreate the rectangle element
             const rectangle = document.createElement(item.tagName); // Create element
             rectangle.textContent = item.textContent; // Set the text content of the rectangle
