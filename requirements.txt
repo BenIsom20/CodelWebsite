@@ -4,3 +4,7 @@ mysql-connector-python
 bcrypt
 flask-jwt-extended
 pyyaml
+Flask-APScheduler
+pytz
+tzdata
+better-profanity

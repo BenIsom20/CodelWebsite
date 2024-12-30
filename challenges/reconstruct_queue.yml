@@ -1,0 +1,20 @@
+challenge:
+  name: "Queue Reconstruction by Height"
+  date: "2024-12-30"
+  function:
+    name: "reconstruct_queue"
+    parameters: ["people"]
+  prompt: |
+    "Write a Python function that takes an array 'people', where each element is a pair [hi, ki]. 
+    'hi' is the height of a person, and 'ki' is the number of people in front of them who have a height greater than or equal to 'hi'.
+    Reconstruct and return the queue that satisfies these conditions. The input array is not necessarily sorted.
+    The returned queue should be an array where queue[j] = [hj, kj] represents the person at position 'j'."
+
+  cases:
+    - prompt: "Reconstruct a queue from an example with mixed heights and positions"
+      given_data: "[[7,0],[4,4],[7,1],[5,0],[6,1],[5,2]]"
+      expected: "[[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]]"
+
+    - prompt: "Reconstruct a queue with increasing heights and mixed positions"
+      given_data: "[[6,0],[5,0],[4,0],[3,2],[2,2],[1,4]]"
+      expected: "[[4,0],[5,0],[2,2],[3,2],[1,4],[6,0]]"

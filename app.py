@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import subprocess
-from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id
+from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id, get_challenge_by_date, get_challenge_cases_by_date, get_function_skeleton_by_date
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import bcrypt
 import mysql.connector
@@ -9,6 +9,9 @@ import json
 import io
 import logging
 import sys
+from flask_apscheduler import APScheduler
+from pytz import timezone
+from better_profanity import profanity
 
 app = Flask(__name__)
 # Enable CORS for all routes
@@ -28,24 +31,96 @@ db_config = {
 }
 
 # Global variable for storing the current challenge
+current_challenge_id = 0
 current_challenge = {}
 current_challenge_cases = []
 current_challenge_function_skeleton = {}
 
-def set_current_challenge(challenge_id):
+def set_current_challenge_by_id(challenge_id):
     """Fetch the challenge from the database and set it to the global variable."""
     global current_challenge
     current_challenge = get_challenge_by_id(challenge_id)
 
-def set_current_challenge_cases(challenge_id):
+def set_current_challenge_cases_by_id(challenge_id):
     """Fetch the challenge cases from the database and set them to the global variable."""
     global current_challenge_cases
     current_challenge_cases = get_challenge_cases_by_id(challenge_id)
 
-def set_current_challenge_function_skeleton(challenge_id):
+def set_current_challenge_function_skeleton_by_id(challenge_id):
     """Fetch the function skeleton from the database and set it to the global variable."""
     global current_challenge_function_skeleton
     current_challenge_function_skeleton = get_function_skeleton_by_id(challenge_id)
+
+def set_current_challenge_by_date():
+    """Fetch the challenge from the database and set it to the global variable."""
+    global current_challenge
+    current_challenge = get_challenge_by_date()
+
+def set_current_challenge_cases_by_date():
+    """Fetch the challenge cases from the database and set them to the global variable."""
+    global current_challenge_cases
+    current_challenge_cases = get_challenge_cases_by_date()
+
+def set_current_challenge_function_skeleton_by_date():
+    """Fetch the function skeleton from the database and set it to the global variable."""
+    global current_challenge_function_skeleton
+    current_challenge_function_skeleton = get_function_skeleton_by_date()
+
+# Configuration for APScheduler
+class Config:
+    SCHEDULER_API_ENABLED = True  # Enables the scheduler's API for job management
+
+app.config.from_object(Config)
+scheduler = APScheduler()
+scheduler.init_app(app)
+
+# Define a scheduled job with a timezone
+@scheduler.task("cron", id="midnight_job", hour=0, minute=0, timezone=timezone("America/Chicago"))
+def midnight_job():
+    """Scheduled job to reset the daily challenge and clear user progress."""
+    try:
+        # Reset the current challenge, cases, and function skeleton
+        set_current_challenge_by_date()
+        set_current_challenge_cases_by_date()
+        set_current_challenge_function_skeleton_by_date()
+
+        # Connect to the database
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # Clear all users' curtimer, curgrid, curcode, and attempts (this resets for all users)
+        query_reset_progress = """
+            UPDATE users
+            SET curtimer = 0, curgrid = NULL, curcode = NULL, attempts = 0;
+        """
+        cursor.execute(query_reset_progress)
+
+        # Reset streak to zero only for users where completed is false or zero
+        query_reset_streak = """
+            UPDATE users
+            SET streak = 0
+            WHERE completed = 0
+        """
+        cursor.execute(query_reset_streak)
+
+        query_reset_completed = """
+            UPDATE users
+            SET completed = 0;
+        """
+        cursor.execute(query_reset_completed)
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        logging.info("Midnight job ran successfully: User progress cleared and challenge updated, streak reset for incomplete users.")
+
+    except Exception as e:
+        logging.error(f"Error during midnight job: {e}")
+
+# Start the scheduler
+scheduler.start()
 
 @app.route("/run", methods=["POST"])
 def execute_code():
@@ -139,13 +214,12 @@ print(result)  # Print the result
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 @app.route("/Startup", methods=["GET"])
 def Startup():
-
-    # Set the current challenge to the first one
-    set_current_challenge(1)
-    set_current_challenge_cases(1)
+    # Set the current challenge
+    set_current_challenge_by_date()
+    set_current_challenge_cases_by_date()
+    set_current_challenge_function_skeleton_by_date()
    
     # Explanation for the test
     descriptions = {
@@ -167,9 +241,8 @@ def Startup():
         "Array": len(descriptions)-1
     })
 
-@app.route('/get_skeleton/<int:challenge_id>', methods=['GET'])
-def get_skeleton(challenge_id):
-    set_current_challenge_function_skeleton(challenge_id)
+@app.route('/get_skeleton', methods=['GET'])
+def get_skeleton():
     skeleton = current_challenge_function_skeleton
     skel = skeleton["skeleton"]
     if skeleton:
@@ -177,8 +250,6 @@ def get_skeleton(challenge_id):
     else:
         return jsonify({"error": "Skeleton not found"}), 404
 
-
-# Register a new user
 @app.route("/register", methods=["POST"])
 def register():
     try:
@@ -191,6 +262,10 @@ def register():
         # Ensure all required fields are provided
         if not username or not password or not email:
             return jsonify({"error": "Missing required fields"}), 400
+
+        profanity.load_censor_words()  # Load default list of profane words
+        if profanity.contains_profanity(username):
+            return jsonify({"error": "Profanity detected in username"}), 400
 
         # Hash the password securely
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
@@ -215,13 +290,12 @@ def register():
 
     except mysql.connector.Error as err:
         # Handle any database errors
-        return jsonify({"error": f"Database error: {err}"}), 500
+        return jsonify({"error": "Username or Email already in use"}), 500
     finally:
         # Ensure the database connection is closed
-        if connection.is_connected():
+        if 'connection' in locals() and connection.is_connected():
             cursor.close()
             connection.close()
-
 
 # Login an existing user and generate a JWT token
 @app.route("/login", methods=["POST"])
@@ -261,7 +335,6 @@ def login():
             cursor.close()
             connection.close()
 
-
 # A protected route that requires a valid JWT token
 @app.route("/protected", methods=["GET"])
 @jwt_required()
@@ -274,7 +347,6 @@ def protected():
         # Handle invalid or missing tokens
         return jsonify({"error": "Invalid token"}), 401
 
-
 # Helper function to get a database connection
 def get_db_connection():
     return mysql.connector.connect(
@@ -283,7 +355,6 @@ def get_db_connection():
         password="devpass",
         database="qsdb"
     )
-
 
 # Update the user's state after a victory
 @app.route("/victory", methods=["POST"])
@@ -304,7 +375,7 @@ def victory():
         # Update the user's record in the database
         query = """
             UPDATE users
-            SET wins = wins + 1, curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
+            SET wins = wins + 1, streak = streak + 1, completed = 1, curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
             WHERE username = %s
         """
         values = (stopwatch_time, grid_state, saved_code, attempts, username)
@@ -322,7 +393,6 @@ def victory():
     except Exception as e:
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
-
 
 # Delete a user and their associated data
 @app.route("/delete_user", methods=["POST"])
@@ -360,7 +430,6 @@ def delete_user():
     except Exception as e:
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
-
 
 # Retrieve user data from the database
 @app.route("/get_user_data", methods=["GET"])

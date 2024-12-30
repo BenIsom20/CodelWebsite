@@ -14,7 +14,7 @@ function isValidEmail(email) {
 
 // Helper function to validate the password
 function isValidPassword(password) {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{5,}$/;
+    const passwordRegex = /^(?=.*[^a-z]).{4,}$/; // Requires a non-lowercase letter and at least 4 characters
     return passwordRegex.test(password);
 }
 
@@ -48,7 +48,7 @@ function captureRegister() {
     }
 
     if (!isValidPassword(password)) {
-        alert("Invalid password format. Must have >= 5 characters, at least 1 uppercase letter, and at least 1 digit.");
+        alert("Invalid password format. Must have >= 4 characters, at least 1 non-lowercase letter.");
         return;
     }
 
@@ -63,7 +63,7 @@ function captureRegister() {
 
 // Function to register a new user
 async function registerUser(username, password, email) {
-    // Send a POST request to the registration endpoint
+            // Send a POST request to the registration endpoint
     const response = await fetch('http://localhost:5000/register', {
         method: 'POST',
         headers: {
@@ -77,7 +77,7 @@ async function registerUser(username, password, email) {
     if (response.ok) {
         alert("Registration successful"); // Notify the user on successful registration
     } else {
-        alert("Username or Email already in use"); // Notify the user on registration failure
+        alert(data.error); // Notify the user on registration failure
     }
 }
 
