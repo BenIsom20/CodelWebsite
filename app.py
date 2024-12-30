@@ -462,35 +462,42 @@ def get_user_data():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
-# Retrieve the leaderboard data from the database
 @app.route("/leaderboard", methods=["GET"])
 def leaderboard():
     try:
+        # Get the offset and limit from query parameters (default values if not provided)
+        offset = int(request.args.get("offset", 0))  # Default offset is 0
+        limit = int(request.args.get("limit", 10))  # Default limit is 10
+
         # Connect to the database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
+
+        # Query with LIMIT and OFFSET for pagination
         query = """
             SELECT username, attempts, curtimer, wins
             FROM users
             WHERE attempts > 0 AND curtimer > 0
             ORDER BY attempts ASC, curtimer ASC
-            LIMIT 10;
+            LIMIT %s OFFSET %s;
         """
-        # Retrieve the top 10 users based on their wins
-        cursor.execute(query)
+        cursor.execute(query, (limit, offset))
         results = cursor.fetchall()
-        
+
         # Format the results into a JSON response
         leaderboard = [{"username": row[0], "attempts": row[1], "time": row[2], "wins": row[3]} for row in results]
+
         # Close the cursor and connection
         cursor.close()
         connection.close()
+
         # Return the leaderboard data
         return jsonify({"leaderboard": leaderboard}), 200
 
     except Exception as e:
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
+
 
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":
