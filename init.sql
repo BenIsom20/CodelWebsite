@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS users (
     curtimer INT NOT NULL DEFAULT 0,
     curgrid TEXT,
     curcode TEXT,
-    attempts INT NOT NULL DEFAULT 0
+    attempts INT NOT NULL DEFAULT 0,
+    completed BIT NOT NULL DEFAULT 0
 );
 
 

@@ -74,7 +74,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 
 # Define a scheduled job with a timezone
-@scheduler.task("cron", id="midnight_job", hour=16, minute=17, timezone=timezone("America/Chicago"))
+@scheduler.task("cron", id="midnight_job", hour=0, minute=0, timezone=timezone("America/Chicago"))
 def midnight_job():
     """Scheduled job to reset the daily challenge and clear user progress."""
     try:
@@ -87,18 +87,33 @@ def midnight_job():
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
 
-        # Clear all users' curtimer, curgrid, curcode, and attempts
-        query = """
+        # Clear all users' curtimer, curgrid, curcode, and attempts (this resets for all users)
+        query_reset_progress = """
             UPDATE users
             SET curtimer = 0, curgrid = NULL, curcode = NULL, attempts = 0;
         """
-        cursor.execute(query)
+        cursor.execute(query_reset_progress)
+
+        # Reset streak to zero only for users where completed is false or zero
+        query_reset_streak = """
+            UPDATE users
+            SET streak = 0
+            WHERE completed = 0
+        """
+        cursor.execute(query_reset_streak)
+
+        query_reset_completed = """
+            UPDATE users
+            SET completed = 0;
+        """
+        cursor.execute(query_reset_completed)
+
         connection.commit()
 
         cursor.close()
         connection.close()
 
-        logging.info("Midnight job ran successfully: User progress cleared and challenge updated.")
+        logging.info("Midnight job ran successfully: User progress cleared and challenge updated, streak reset for incomplete users.")
 
     except Exception as e:
         logging.error(f"Error during midnight job: {e}")
@@ -356,7 +371,7 @@ def victory():
         # Update the user's record in the database
         query = """
             UPDATE users
-            SET wins = wins + 1, curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
+            SET wins = wins + 1, streak = streak + 1, completed = 1, curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
             WHERE username = %s
         """
         values = (stopwatch_time, grid_state, saved_code, attempts, username)
