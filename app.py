@@ -344,7 +344,7 @@ def protected():
     try:
         # Get the current user's identity from the JWT token
         current_user = get_jwt_identity()
-        return jsonify({"message": f"Hello, {current_user['username']}!"}), 200
+        return jsonify({"username": current_user['username']}), 200
     except:
         # Handle invalid or missing tokens
         return jsonify({"error": "Invalid token"}), 401
@@ -481,7 +481,7 @@ def leaderboard():
 
         # Query with LIMIT and OFFSET for pagination
         query = """
-            SELECT username, attempts, curtimer, wins
+            SELECT username, attempts, curtimer, streak, wins
             FROM users
             WHERE attempts > 0 AND curtimer > 0
             ORDER BY attempts ASC, curtimer ASC
@@ -491,7 +491,7 @@ def leaderboard():
         results = cursor.fetchall()
 
         # Format the results into a JSON response
-        leaderboard = [{"username": row[0], "attempts": row[1], "time": row[2], "wins": row[3]} for row in results]
+        leaderboard = [{"username": row[0], "attempts": row[1], "time": row[2], "streak": row[3], "wins": row[4]} for row in results]
 
         # Close the cursor and connection
         cursor.close()

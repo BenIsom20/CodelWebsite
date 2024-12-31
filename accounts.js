@@ -37,20 +37,20 @@ function captureRegister() {
     const password = document.getElementById('regpassword').value;
     const email = document.getElementById('regemail').value;
 
-    if (!isValidUsername(username)) {
-        alert("Invalid username.");
-        return;
-    }
+    // if (!isValidUsername(username)) {
+    //     alert("Invalid username.");
+    //     return;
+    // }
 
-    if (!isValidEmail(email)) {
-        alert("Invalid email format.");
-        return;
-    }
+    // if (!isValidEmail(email)) {
+    //     alert("Invalid email format.");
+    //     return;
+    // }
 
-    if (!isValidPassword(password)) {
-        alert("Invalid password format. Must have >= 4 characters, at least 1 non-lowercase letter.");
-        return;
-    }
+    // if (!isValidPassword(password)) {
+    //     alert("Invalid password format. Must have >= 4 characters, at least 1 non-lowercase letter.");
+    //     return;
+    // }
 
     // Call the registerUser function to handle registration
     registerUser(username, password, email);

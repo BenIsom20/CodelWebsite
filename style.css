@@ -91,7 +91,7 @@ body {
 }
 
 .backButton {
-    color: #39FF14; /* Neon green for text */
+    color: #ffe66d; /* Neon green for text */
     text-decoration: none; /* Remove underline */
     font-size: 18px;
     padding: 5px 10px;
@@ -125,13 +125,11 @@ body {
   }
 
 .backButton:hover {
-    background-color: darkgrey;
-    border-color: #ccc;
+    animation: dance 0.6s ease-in-out;
 }
 
 main {
     padding: 20px;
-    max-width: 800px;
     margin: 0 auto;
     padding-top:100px;
 }
