@@ -130,7 +130,7 @@ function storeGridState() {
 
     // Save the array to localStorage
     const jsongridState = JSON.stringify(gridState);
-    setLocalStorageWithExpiry("gridState", jsongridState);
+    setGridLocalStorageWithExpiry("gridState", jsongridState);
 }
 
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
@@ -154,7 +154,7 @@ async function loadGridState() {
     }
 
     // Retrieve the saved grid state from localStorage
-    const savedState = JSON.parse(getLocalStorageWithExpiry("gridState"));
+    const savedState = JSON.parse(getGridLocalStorageWithExpiry("gridState"));
 
     // Check if the saved state is valid and is an array
     if (savedState && Array.isArray(savedState)) {
@@ -231,7 +231,7 @@ async function loadGridState() {
 }
 
 
-function setLocalStorageWithExpiry(key, value) {
+function setGridLocalStorageWithExpiry(key, value) {
     const now = new Date();
     const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
     const expiryTime = midnight.getTime(); // Get timestamp for midnight
@@ -244,7 +244,7 @@ function setLocalStorageWithExpiry(key, value) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
-function getLocalStorageWithExpiry(key) {
+function getGridLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
 
     if (!itemStr) {

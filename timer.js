@@ -1,5 +1,3 @@
-// JAVASCRIPT FOR THE TIMER
-
 let stopwatchTime = 0; // Initial time in seconds (starts at 0)
 let stopwatchInterval; // Holds the interval ID for the stopwatch
 let isRunning = false; // Flag to track if the stopwatch is currently running
@@ -7,7 +5,7 @@ let isRunning = false; // Flag to track if the stopwatch is currently running
 // Function to start the stopwatch
 function startStopwatch() {
     // Try to retrieve the saved time from localStorage (if any)
-    const savedTime = getLocalStorageWithExpiry("stopwatchTime");
+    const savedTime = getTimerLocalStorageWithExpiry("stopwatchTime");
     if (savedTime) {
         stopwatchTime = parseInt(savedTime, 10); // If a saved time exists, restore it
     }
@@ -17,9 +15,18 @@ function startStopwatch() {
     if (!isRunning) {
         // Set an interval to increment the stopwatch time every second
         stopwatchInterval = setInterval(() => {
+
             stopwatchTime++; // Increment the stopwatch time by 1 second
+
+            try {
+                setTimerLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
+            }
+            catch (error) {
+                alert(error);
+            }
+
             updateStopwatchDisplay(); // Update the display with the new time
-            setLocalStorageWithExpiry("stopwatchTime", stopwatchTime); // Save the updated time with expiry
+            // Save the updated time with expiry
         }, 1000);
         isRunning = true; // Set isRunning to true to indicate the stopwatch is running
     }
@@ -46,21 +53,29 @@ function padZero(time) {
     return time < 10 ? "0" + time : time; // If time is less than 10, add a leading zero
 }
 
-
-function setLocalStorageWithExpiry(key, value) {
+function setTimerLocalStorageWithExpiry(key, value) {
     const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
-    const expiryTime = midnight.getTime(); // Get timestamp for midnight
+    let expiryTime;
 
+    // Check if expiration date already exists
+    const savedItem = localStorage.getItem(key);
+
+    if (savedItem) {
+        const item = JSON.parse(savedItem);
+        expiryTime = item.expiry; // Use the existing expiry time
+    } else {
+        // Set the expiry time to next midnight if it's the first time
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() +1); // Next midnight
+        expiryTime = midnight.getTime(); // Get timestamp for midnight
+    }
     const data = {
         value: value,
         expiry: expiryTime,
     };
-
-    localStorage.setItem(key, JSON.stringify(data));
+    localStorage.setItem(key, JSON.stringify(data)); // Save data with expiry
 }
 
-function getLocalStorageWithExpiry(key) {
+function getTimerLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
 
     if (!itemStr) {
@@ -77,6 +92,3 @@ function getLocalStorageWithExpiry(key) {
 
     return item.value; // Return the valid data
 }
-
-
-

@@ -30,15 +30,15 @@
     <!-- CODE FOR THE LEADERBOARD-->
     <main>
         <div class="leaderboard-container">
-            <h1>Codel Leaderboard</h1>
+            <h1>CODEL Leaderboard</h1>
             <div class="leaderboard-table">
                 <div class="leaderboard-header">
-                    <span>Rank 🏅</span>
-                    <span>Username 👤</span>
-                    <span>Attempts 🎯</span>
-                    <span>Time (s) ⏱️</span>
-                    <span>Streak 🔥</span>
-                    <span>Wins 🏆</span>
+                    <span>Rank <span class="emoji">🏅</span></span>
+                    <span>Username <span class="emoji">👤</span></span>
+                    <span>Attempts <span class="emoji">🎯</span></span>
+                    <span>Time (s) <span class="emoji">⏱️</span></span>
+                    <span>Streak <span class="emoji">🔥</span></span>
+                    <span>Wins <span class="emoji">🏆</span></span>
                 </div>
                 <div id="leaderboard-entries">
                     <!-- Leaderboard rows will be dynamically added here -->
@@ -112,7 +112,7 @@
                     }
 
                     if (entry.username == username) {
-                        rank += " (YOU) ";
+                        rank += "  YOU ";
                         row.classList.add("user-row");
                         row.style.animationDelay = `${index * 0.07}s`;
                         row.innerHTML = `

@@ -50,13 +50,15 @@ body {
 }
 
 .rectangle.green {
-    background-color: green;
-    color: white;
+
+    color: #F7F9FB;
+    border-color: #ffe66d;
 }
 
 .rectangle.red {
-    background-color: red;
-    color: white;
+
+    color: #F7F9FB;
+    border-color: red;
 }
 
 .mainNavbar {

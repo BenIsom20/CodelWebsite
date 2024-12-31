@@ -215,3 +215,7 @@ span:last-child {
 .backButton:hover {
     animation: dance 0.6s ease-in-out;
 }
+
+.emoji {
+    font-size: 1.3em; /* Adjust size as needed */
+}
