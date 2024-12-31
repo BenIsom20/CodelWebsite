@@ -129,7 +129,8 @@ function storeGridState() {
     }
 
     // Save the array to localStorage
-    localStorage.setItem("gridState", JSON.stringify(gridState));
+    const jsongridState = JSON.stringify(gridState);
+    setLocalStorageWithExpiry("gridState", jsongridState);
 }
 
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
@@ -153,7 +154,7 @@ async function loadGridState() {
     }
 
     // Retrieve the saved grid state from localStorage
-    const savedState = JSON.parse(localStorage.getItem("gridState"));
+    const savedState = JSON.parse(getLocalStorageWithExpiry("gridState"));
 
     // Check if the saved state is valid and is an array
     if (savedState && Array.isArray(savedState)) {
@@ -227,4 +228,36 @@ async function loadGridState() {
         submitButton.disabled = true; // Disable the submit button
         stopStopwatch(); // Stop the stopwatch (assumed to be a function defined elsewhere)
     }
+}
+
+
+function setLocalStorageWithExpiry(key, value) {
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+    const expiryTime = midnight.getTime(); // Get timestamp for midnight
+
+    const data = {
+        value: value,
+        expiry: expiryTime,
+    };
+
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function getLocalStorageWithExpiry(key) {
+    const itemStr = localStorage.getItem(key);
+
+    if (!itemStr) {
+        return null; // No data found
+    }
+
+    const item = JSON.parse(itemStr);
+    const now = new Date().getTime();
+
+    if (now > item.expiry) {
+        localStorage.removeItem(key); // Clear expired data
+        return null; // Indicate that the data is expired
+    }
+
+    return item.value; // Return the valid data
 }

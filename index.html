@@ -54,7 +54,7 @@
 
 
     <!-- Challenge and title code-->
-        <p id="Question" style="text-align: center; padding-top: 50px; width: 60%; padding-bottom: 25px"></p>
+    <p id="Question" style="text-align: center; padding-top: 50px; width: 60%; padding-bottom: 25px"></p>
 
     <div id="grid-container" class="grid"></div>
 
@@ -90,7 +90,8 @@
         async function getUserData() {
             // Retrieve JWT token and grid state from local storage
             const token = localStorage.getItem("jwt_token");
-            const gridData = localStorage.getItem("gridState");
+
+            const gridData = getLocalStorageWithExpiry("gridState");
 
             // Send a GET request to the backend to fetch user data
             const response = await fetch("http://127.0.0.1:5000/get_user_data", {
@@ -106,9 +107,9 @@
 
             // If all required data is present, save it to local storage and initialize the app
             if (time && code && grid) {
-                localStorage.setItem("stopwatchTime", time);
-                localStorage.setItem("savedCode", code);
-                localStorage.setItem("gridState", grid);
+                setLocalStorageWithExpiry("stopwatchTime", time);
+                setLocalStorageWithExpiry("savedCode", code);
+                setLocalStorageWithExpiry("gridState", grid);
                 loadCode();           // Load the saved code into the editor
                 startStopwatch();     // Start the stopwatch with the saved time
                 loadGridState();      // Restore the grid state
@@ -132,7 +133,7 @@
 
             // Retrieve the JWT token and grid state from local storage
             const token = localStorage.getItem("jwt_token");
-            const gridData = localStorage.getItem("gridState");
+            const gridData = getLocalStorageWithExpiry("gridState");
 
             // Check if the token exists in local storage
             if (!token) {
@@ -160,6 +161,37 @@
             location.reload(); // Reload the page to reset everything
         }
         document.getElementById("resetButton").addEventListener("click", resetState);
+
+        function setLocalStorageWithExpiry(key, value) {
+            const now = new Date();
+            const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+            const expiryTime = midnight.getTime(); // Get timestamp for midnight
+
+            const data = {
+                value: value,
+                expiry: expiryTime,
+            };
+
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function getLocalStorageWithExpiry(key) {
+            const itemStr = localStorage.getItem(key);
+
+            if (!itemStr) {
+                return null; // No data found
+            }
+
+            const item = JSON.parse(itemStr);
+            const now = new Date().getTime();
+
+            if (now > item.expiry) {
+                localStorage.removeItem(key); // Clear expired data
+                return null; // Indicate that the data is expired
+            }
+
+            return item.value; // Return the valid data
+        }
     </script>
 </body>
 

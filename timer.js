@@ -7,7 +7,7 @@ let isRunning = false; // Flag to track if the stopwatch is currently running
 // Function to start the stopwatch
 function startStopwatch() {
     // Try to retrieve the saved time from localStorage (if any)
-    const savedTime = localStorage.getItem("stopwatchTime");
+    const savedTime = getLocalStorageWithExpiry("stopwatchTime");
     if (savedTime) {
         stopwatchTime = parseInt(savedTime, 10); // If a saved time exists, restore it
     }
@@ -19,7 +19,7 @@ function startStopwatch() {
         stopwatchInterval = setInterval(() => {
             stopwatchTime++; // Increment the stopwatch time by 1 second
             updateStopwatchDisplay(); // Update the display with the new time
-            localStorage.setItem("stopwatchTime", stopwatchTime); // Save the updated time in localStorage
+            setLocalStorageWithExpiry("stopwatchTime", stopwatchTime); // Save the updated time with expiry
         }, 1000);
         isRunning = true; // Set isRunning to true to indicate the stopwatch is running
     }
@@ -29,7 +29,7 @@ function startStopwatch() {
 function stopStopwatch() {
     clearInterval(stopwatchInterval); // Clear the interval to stop the stopwatch
     isRunning = false; // Set isRunning to false to indicate the stopwatch is stopped
-    localStorage.setItem("stopwatchTime", stopwatchTime); // Save the current time in localStorage
+    setLocalStorageWithExpiry("stopwatchTime", stopwatchTime); // Save the current time with expiry
 }
 
 // Function to update the display of the stopwatch
@@ -47,7 +47,36 @@ function padZero(time) {
 }
 
 
+function setLocalStorageWithExpiry(key, value) {
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
+    const expiryTime = midnight.getTime(); // Get timestamp for midnight
 
+    const data = {
+        value: value,
+        expiry: expiryTime,
+    };
+
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function getLocalStorageWithExpiry(key) {
+    const itemStr = localStorage.getItem(key);
+
+    if (!itemStr) {
+        return null; // No data found
+    }
+
+    const item = JSON.parse(itemStr);
+    const now = new Date().getTime();
+
+    if (now > item.expiry) {
+        localStorage.removeItem(key); // Clear expired data
+        return null; // Indicate that the data is expired
+    }
+
+    return item.value; // Return the valid data
+}
 
 
 
