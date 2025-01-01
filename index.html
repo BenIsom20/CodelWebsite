@@ -23,7 +23,7 @@
     <script src="timer.js" defer></script>
     <script src="grid.js" defer></script>
     <script src="accounts.js" defer></script>
-    <script src= "popup.js" defer></script>
+    <script src="popup.js" defer></script>
 
 
     <link rel="icon" href="images/CodelIcon.png" type="image/png">
@@ -38,7 +38,9 @@
             <a>
                 <span id="stopwatch"></span>
             </a>
-            <img style="text-align: center; padding-top:10px; padding-bottom:10px;" class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo-gif" >                     
+            <a href="Developers.html" onclick="storeStopwatchTime()" class="logo-link">
+                <img class="gifClass" src="images/C.gif" alt="Animated Logo">
+            </a>
             <div class="nav-links">
                 <a id="leader" href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime();"><i
                         class='bx bxs-bar-chart-alt-2'></i></a>
@@ -55,7 +57,8 @@
 
 
     <!-- Challenge and title code-->
-    <p id="Question" style="text-align: center; padding-top: 150px; width: 60%; padding-bottom: 25px; font-size: 30px"></p>
+    <p id="Question" style="text-align: center; padding-top: 150px; width: 60%; padding-bottom: 25px; font-size: 30px">
+    </p>
 
     <div id="grid-container" class="grid"></div>
 
@@ -97,39 +100,39 @@
             <!-- Login Form -->
             <div id="loginForm" class="tab-content">
                 <h2>Login Account</h2>
-                
-                    <input id="logusername" type="text" placeholder="Username">
-                    <input id="logpassword" type="password" placeholder="Password">
-                    <p id = "lognote"></p>
-                    <button id="login">Login</button>
-                    <h2>OR</h2>
-                    <button id="logout">Logout</button>
-                
+
+                <input id="logusername" type="text" placeholder="Username">
+                <input id="logpassword" type="password" placeholder="Password">
+                <p id="lognote"></p>
+                <button id="login">Login</button>
+                <h2>OR</h2>
+                <button id="logout">Logout</button>
+
             </div>
 
             <!-- Register Form -->
             <div id="registerForm" class="tab-content" style="display: none;">
                 <h2>Register Account</h2>
-                
-                    <input id="regusername" type="text" placeholder="Username">
-                    <input id="regpassword" type="password" placeholder="Password">
-                    <input id="regemail" type="email" placeholder="Email">
-                    <p id = "regnote"></p>
-                    <button id="register">Create Account</button>
 
-                
+                <input id="regusername" type="text" placeholder="Username">
+                <input id="regpassword" type="password" placeholder="Password">
+                <input id="regemail" type="email" placeholder="Email">
+                <p id="regnote"></p>
+                <button id="register">Create Account</button>
+
+
             </div>
 
             <!-- Delete Account Form -->
             <div id="deleteForm" class="tab-content" style="display: none;">
                 <h2>Delete Account</h2>
-                
-                    <input id="delusername" type="text" placeholder="Username">
-                    <input id="delpassword" type="password" placeholder="Password">
-                    <p id = "delnote"></p>
-                    <button id="delete">delete</button>
 
-                
+                <input id="delusername" type="text" placeholder="Username">
+                <input id="delpassword" type="password" placeholder="Password">
+                <p id="delnote"></p>
+                <button id="delete">delete</button>
+
+
             </div>
         </div>
     </div>
@@ -140,23 +143,24 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
     <script>
-        $(document).ready(function(){
-            function playGif(gifclass){
+        $(document).ready(function () {
+            function playGif(gifclass) {
                 const gif = $(gifclass);
-                gif[0].src = gif[0].src.replace(/\?.*$/,"")+"?x="+Math.random();
+                gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
             }
             const seenGif = Cookies.get('seenGif');
-            if (!seenGif){
+            if (!seenGif) {
                 $('.hack6-loading-wrapper').css('display', 'flex');
                 playGif('.hack6-gif');
                 typer.js
-                Cookies.set('seenGif', true, { expires: 1});
+                Cookies.set('seenGif', true, { expires: 1 });
 
-                setTimeout(()=>{
+                setTimeout(() => {
                     $('.hack6-loading-wrapper').fadeOut(500);
                 }, 3000)
             }
         })
     </script>
 </body>
+
 </html>

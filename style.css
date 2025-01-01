@@ -130,6 +130,14 @@ body {
 
 }
 
+.logo-link {
+    display: inline-block;
+    text-align: center; /* Center the image inside the link */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 20%;
+}
+
 /* Define the dance animation */
 @keyframes dance {
     0% { transform: rotate(0) translateY(0); }
@@ -192,13 +200,13 @@ main {
 
 .gifClass {
     width: auto; /* Keep the aspect ratio */
-    max-width: 15%; /* Adjust width */
-    max-height: 15%; /* Adjust height */
+    max-width: 75%; /* Adjust width */
+    max-height: 75%; /* Adjust height */
     background-image: url('C.gif');
     background-size: contain; /* Ensure the GIF scales proportionally */
     background-repeat: no-repeat;
     display: block; /* Centering adjustments */
-    margin-left: 40px; /* Center horizontally */
+    margin-left: 60px; /* Center horizontally */
 }
 
 .cursor {
