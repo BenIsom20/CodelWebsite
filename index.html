@@ -14,6 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/python/python.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/theme/midnight.min.css">
+    <link rel="stylesheet" href="CodelTheme.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -22,9 +23,7 @@
     <script src="timer.js" defer></script>
     <script src="grid.js" defer></script>
 
-
-
-
+    <link rel="icon" href="images/CodelIcon.png" type="image/png">
 </head>
 
 
@@ -36,7 +35,7 @@
             <a>
                 <span id="stopwatch"></span>
             </a>
-            <h1 style="text-align: center; padding-top:10px">CODEL</h1>
+            <img style="text-align: center; padding-top:10px; padding-bottom:10px;" class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo-gif" >                     
             <div class="nav-links">
                 <a id="leader" href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime();"><i
                         class='bx bxs-bar-chart-alt-2'></i></a>
@@ -54,7 +53,7 @@
 
 
     <!-- Challenge and title code-->
-    <p id="Question" style="text-align: center; padding-top: 50px; width: 60%; padding-bottom: 25px"></p>
+    <p id="Question" style="text-align: center; padding-top: 150px; width: 60%; padding-bottom: 25px; font-size: 30px"></p>
 
     <div id="grid-container" class="grid"></div>
 
@@ -76,7 +75,7 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <div id="output" class="bg-dark text-light p-3" style="height: 200px; overflow-y: auto; width: 90%;">
+                <div id="output" class="output">
                     Console output</div>
             </div>
         </div>
@@ -85,6 +84,26 @@
 
     <!--keep here-->
     <script src="main.js"></script>
-</body>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            function playGif(gifclass){
+                const gif = $(gifclass);
+                gif[0].src = gif[0].src.replace(/\?.*$/,"")+"?x="+Math.random();
+            }
+            const seenGif = Cookies.get('seenGif');
+            if (!seenGif){
+                $('.hack6-loading-wrapper').css('display', 'flex');
+                playGif('.hack6-gif');
+                typer.js
+                Cookies.set('seenGif', true, { expires: 1});
+
+                setTimeout(()=>{
+                    $('.hack6-loading-wrapper').fadeOut(500);
+                }, 3000)
+            }
+        })
+    </script>
+</body>
 </html>

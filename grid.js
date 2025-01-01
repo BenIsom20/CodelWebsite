@@ -101,15 +101,90 @@ async function initializeColumn() {
 
 async function fetchTestExplanation() {
     const questionElement = document.getElementById("Question");
+
+    // Get the current date in "YYYY-MM-DD" format
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    // Get the stored cookie date (if exists)
+    const lastRunDate = Cookies.get('lastTypingEffectRunDate');
+
+    // Fetch question data
     const response = await fetch("http://127.0.0.1:5000/Startup");
     const data = await response.json();
+    const txt = data.prompt; // Get the prompt from the fetched data
 
-    // Set the question prompt
-    questionElement.innerHTML = data.prompt;
+    // Check if the date has changed
+    if (lastRunDate === currentDate) {
+        // If the effect has already run today, just populate the Question element with the full text
+        questionElement.innerHTML = txt;
+        return;
+    }
 
+    // Set the question prompt (this will initialize the text for the typing effect)
+    questionElement.innerHTML = "<span id='typed-text'></span><span class='cursor'>|</span>"; // Separate the cursor and typed-text container
 
+    let i = 0;
+    const sentencePause = 1000; // Pause duration after each sentence
+    let typingTimeout;
 
+    // Function to generate a random speed between 30 and 100
+    function getRandomSpeed() {
+        return Math.floor(Math.random() * (30 - 10 + 1)) + 10; // Random speed between 10 and 30
+    }
+
+    // Function to toggle cursor blink (only on '|')
+    function toggleCursorBlink() {
+        const cursor = document.querySelector(".cursor");
+        cursor.classList.toggle("blink"); // Toggle blink class on the cursor (|)
+    }
+
+    function typeWriter() {
+        // Check if there's more text to type
+        if (i < txt.length) {
+            const typedText = document.getElementById("typed-text");
+            // Add character to the text
+            typedText.innerHTML = txt.substring(0, i); // Add typed text (no cursor here)
+
+            // Add the blinking cursor (|)
+            const cursor = document.querySelector(".cursor");
+            cursor.style.visibility = "visible"; // Ensure cursor is visible
+
+            // Get the current character
+            const currentChar = txt.charAt(i);
+
+            // Print the character first, then handle punctuation logic
+            typedText.innerHTML = txt.substring(0, i + 1); // Add current character
+
+            if (currentChar === '.' || currentChar === '?' || currentChar === '!') {
+                // Pause after punctuation, then blink cursor
+                typingTimeout = setTimeout(() => {
+                    toggleCursorBlink(); // Start blinking the cursor
+                    // Pause before continuing the typing effect
+                    typingTimeout = setTimeout(typeWriter, sentencePause);
+                }, sentencePause); // Pause duration after punctuation
+            } else {
+                // Continue typing with random speed
+                typingTimeout = setTimeout(typeWriter, getRandomSpeed());
+            }
+
+            i++; // Increment to next character
+        } else {
+            // After typing completes, stop blinking and remove the cursor
+            const cursor = document.querySelector(".cursor");
+            cursor.classList.remove("blink"); // Stop blinking
+            setTimeout(() => {
+                cursor.style.visibility = "hidden"; // Hide cursor completely after the typing is done
+            }, 500); // Wait for a moment before hiding the cursor
+        }
+    }
+
+    // Start the typing effect
+    typeWriter();
+
+    // Set the cookie with the current date, and make it expire at midnight (next day)
+    Cookies.set('lastTypingEffectRunDate', currentDate, { expires: 1 }); // Cookie expires in 1 day
 }
+
 
 
 function storeGridState() {

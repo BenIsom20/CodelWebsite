@@ -1,0 +1,22 @@
+
+challenge:
+  name: "Permutations"
+  date: "2025-01-01"
+  function:
+    name: "permute"
+    parameters: ["nums"]
+  prompt: |
+    Write a Python function that takes a list of distinct integers as input and returns all possible permutations of the list. The order of the permutations in the output does not matter. Good Luck.
+
+  cases:
+    - prompt: "Permute a list of three distinct integers"
+      given_data: "[1, 2, 3]"
+      expected: "[[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]"
+
+    - prompt: "Permute a list of two distinct integers"
+      given_data: "[0, 1]"
+      expected: "[[0, 1], [1, 0]]"
+
+    - prompt: "Permute a list with one integer"
+      given_data: "[1]"
+      expected: "[[1]]"
