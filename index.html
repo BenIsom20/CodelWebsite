@@ -44,8 +44,7 @@
                         class='bx bxs-bulb'></i></i></a>
                 <a id="how" href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
                         class='bx bxs-help-circle'></i></a>
-                <a id="user" href="accounts.html" class="navObjects" onclick="storeStopwatchTime()"><i
-                        class='bx bx-user-circle'></i></a>
+                <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bx-user-circle'></i></a>
             </div>
         </div>
     </nav>
@@ -82,6 +81,111 @@
         </div>
     </div>
     <button id="resetButton" class="mainbutton">Reset</button>
+    <div class="button-container">
+        <button id="logoutButton">Logout</button>
+    </div>
+
+    <!-- Popup -->
+    <div id="mainPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="closePopup">&times;</span>
+            <div class="tab-buttons">
+                <button class="tab-link" data-target="loginForm">Login</button>
+                <button class="tab-link" data-target="registerForm">Register</button>
+                <button class="tab-link" data-target="deleteForm">Delete Account</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="tab-content">
+                <h2>Login</h2>
+                <form>
+                    <label for="loginUsername">Username:</label>
+                    <input type="text" id="loginUsername" name="username" required><br><br>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required><br><br>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="tab-content" style="display: none;">
+                <h2>Register</h2>
+                <form>
+                    <label for="registerUsername">Username:</label>
+                    <input type="text" id="registerUsername" name="username" required><br><br>
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" name="password" required><br><br>
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+
+            <!-- Delete Account Form -->
+            <div id="deleteForm" class="tab-content" style="display: none;">
+                <h2>Delete Account</h2>
+                <form>
+                    <label for="deleteUsername">Username:</label>
+                    <input type="text" id="deleteUsername" name="username" required><br><br>
+                    <label for="deletePassword">Password:</label>
+                    <input type="password" id="deletePassword" name="password" required><br><br>
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Open the popup when clicking the user icon
+        document.getElementById("user").addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default action for <a>
+            document.getElementById("mainPopup").style.display = "flex";
+
+            // Default to Login form
+            document.querySelector(".tab-link[data-target='loginForm']").click();
+        });
+
+        // Close the popup when clicking the close button
+        document.getElementById("closePopup").addEventListener("click", () => {
+            document.getElementById("mainPopup").style.display = "none";
+        });
+
+        // Close the popup when clicking outside the content
+        document.getElementById("mainPopup").addEventListener("click", (event) => {
+            const popupContent = document.querySelector(".popup-content");
+            if (!popupContent.contains(event.target)) {
+                document.getElementById("mainPopup").style.display = "none";
+            }
+        });
+
+        // Logout button
+        document.getElementById("logoutButton").addEventListener("click", () => {
+            alert("You have logged out.");
+        });
+
+        // Tab switching logic
+        const tabLinks = document.querySelectorAll(".tab-link");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabLinks.forEach(link => {
+            link.addEventListener("click", event => {
+                const targetId = event.target.getAttribute("data-target");
+
+                // Remove active class and hide all tab contents
+                tabLinks.forEach(link => link.classList.remove("active"));
+                tabContents.forEach(content => {
+                    content.classList.remove("active");
+                    content.style.display = "none";
+                });
+
+                // Add active class and show the selected tab content
+                event.target.classList.add("active");
+                const targetContent = document.getElementById(targetId);
+                targetContent.classList.add("active");
+                targetContent.style.display = "block";
+            });
+        });
+
+    </script>
+
 
     <!--keep here-->
     <script src="main.js"></script>

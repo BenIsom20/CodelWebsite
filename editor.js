@@ -42,7 +42,13 @@ function saveCodeAndNotify() {
 //document.getElementById("saveCode").addEventListener("click", saveCodeAndNotify);
 
 // Event listener for the "User" button to save code and notify
-document.getElementById("user").addEventListener("click", saveCodeAndNotify);
+document.getElementById("user").addEventListener("click", function () {
+    saveCodeAndNotify();
+    document.getElementById("mainPopup").style.display = "flex";
+
+    // Default to Login form
+    document.querySelector(".tab-link[data-target='loginForm']").click();
+});
 
 // Event listener for the "Leader" button to save code and notify
 document.getElementById("leader").addEventListener("click", saveCodeAndNotify);
