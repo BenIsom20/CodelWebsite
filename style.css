@@ -8,30 +8,43 @@ body {
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New; /* Optional: Choose a font */
 }
 
+.output {
+    height: 200px;
+    overflow-y: auto; 
+    width: 100%;
+    background-color: #1E1F1E;
+    padding-left: 10px;
+}
+
 .grid {
     display: grid;
-    gap: 10px;
+    row-gap: 20px; /* Reduced gap */
+    column-gap: 120px;
+    margin-bottom: 20px;
+    justify-items: center; /* Centers grid items horizontally */
+    margin-right: 25px; /* Shift the grid to the left by 50px */
     margin-bottom: 20px;
 }
 
+
 .rectangle {
-    width: 100px;
-    height: 50px;
+    width: 200px;
+    height: 100px;
     /* Rectangular shape */
     background-color: #333533;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 16px;
-    border: 1px solid #F7F9FB;
+    font-size: 30px;
+    border: 2px solid #F7F9FB;
     border-radius: 5px;
     text-align: center;
     color: #F7F9FB;
 }
 
 .mainbutton {
-    background-color: lightgrey; /* Light gray background */
+    background-color: #F7F9FB; /* Light gray background */
     color: black; /* Black text */
     border: 2px solid black; /* Black border for definition */
     border-radius: 5px; /* Rounded corners */
@@ -52,36 +65,35 @@ body {
 .rectangle.green {
 
     color: #F7F9FB;
-    border-color: #ffe66d;
+    border-color: #61C9A8ed;
 }
 
 .rectangle.red {
-
     color: #F7F9FB;
-    border-color: red;
+    border-color: #EA526F;
 }
 
 .mainNavbar {
     background-color: #333533; /* Dark background color */
-    color: white;
-    padding: 10px 20px;
-    position: relative; /* Keeps the navbar at the top of the page */
+    color: #F7F9FB;
+    padding: 0px 20px;
+    /* position: relative; Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
     box-shadow: 0 2px 50px #ffe66d;
-    
+    position: fixed;
+    top: 0px;
+    z-index: 1000;   /* Makes sure the navbar stays above other content */
 }
 
 .subNavbar {
     background-color: #333533; /* Dark background color */
-    color: white;
+    color: #F7F9FB;
     padding: 10px 20px;
     position: fixed; /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 5px #ffe66d;
-    
-    
+    box-shadow: 0 2px 5px #ffe66d; 
 }
 
 .navbar-container {
@@ -89,7 +101,6 @@ body {
     justify-content: space-between; /* Ensures "Back to Codel" is on the left and the icons on the right */
     align-items: center;
     width: 100%; /* Make sure it takes up the full width */
-    
 }
 
 .backButton {
@@ -106,7 +117,7 @@ body {
 }
 
 .navObjects {
-    color: white; /* Icon color */
+    color: #F7F9FB; /* Icon color */
     margin-left: 15px;
     font-size: 30px;
     transition: background-color 0.3s ease;
@@ -141,7 +152,7 @@ main {
 #stopwatch {
     font-size: 35px;
     
-    box-shadow: 0 2px 5px #ffe66d;
+    box-shadow: 0 0px 0px #ffe66d;
     border: 2px solid #ffe66d;
     border-radius: 10px;
 }
@@ -168,6 +179,44 @@ main {
     align-items: center; /* Optional: centers vertically if needed */
   }
 
+  /* Apply rounded corners to the CodeMirror editor container */
+#editor {
+    border-radius: 10px;  /* Adjust the radius as needed */
+    overflow: hidden;     /* Ensure content doesn't overflow outside the rounded corners */
+}
+
+/* Optionally, you can also style the actual CodeMirror instance */
+.CodeMirror {
+    border-radius: 10px;  /* Adjust radius for CodeMirror's actual wrapper */
+}
+
+.gifClass {
+    width: auto; /* Keep the aspect ratio */
+    max-width: 15%; /* Adjust width */
+    max-height: 15%; /* Adjust height */
+    background-image: url('C.gif');
+    background-size: contain; /* Ensure the GIF scales proportionally */
+    background-repeat: no-repeat;
+    display: block; /* Centering adjustments */
+    margin-left: 40px; /* Center horizontally */
+}
+
+.cursor {
+    display: inline-block;
+    font-weight: bold;
+    visibility: visible; /* Keep cursor visible by default */
+    animation: blink 0.7s step-end infinite;
+}
+
+.cursor.blink {
+    visibility: hidden; /* Blink by hiding visibility, not opacity */
+}
+
+@keyframes blink {
+    50% {
+        visibility: hidden;
+    }
+}
 
  /* Popup container */
 /* Popup container */

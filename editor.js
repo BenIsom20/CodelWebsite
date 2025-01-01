@@ -3,7 +3,7 @@ var attempt = 0;
 // Initialize CodeMirror editor with Python syntax highlighting and other settings
 var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     mode: "text/x-python",          // Set the mode to Python for syntax highlighting
-    theme: "midnight",             // Set the theme for the editor
+    theme: "CodelTheme",             // Set the theme for the editor
     lineNumbers: true,              // Enable line numbers
     lineWrapping: true,             // Enable line wrapping for long lines
     matchBrackets: true,            // Highlight matching brackets
@@ -30,7 +30,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     viewportMargin: Infinity,      // Ensure the editor renders all lines (useful for long files)
 });
 
-editor.setSize("90%", 300); // Set the editor size to 90% width and 300px height
+editor.setSize("100%", 300); // Set the editor size to 90% width and 300px height
 
 function saveCodeAndNotify() {
     const userCode = editor.getValue(); // Retrieve the current code from the editor

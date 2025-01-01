@@ -1,15 +1,15 @@
 challenge:
   name: "Roman to Integer"
-  date: "2025-01-01"
+  date: "2025-01-02"
   function:
     name: "roman_to_integer"
     parameters: ["s"]
   prompt: |
-    "Write a Python function that takes a Roman numeral as input and returns its integer equivalent.
+    Write a Python function that takes a Roman numeral as input and returns its integer equivalent.
     Roman numerals are represented by the symbols I, V, X, L, C, D, and M, with values as follows:
     I=1, V=5, X=10, L=50, C=100, D=500, M=1000. 
     Subtractive combinations include IV=4, IX=9, XL=40, XC=90, CD=400, and CM=900.
-    Convert the given Roman numeral (1 ≤ s.length ≤ 15) into an integer."
+    Convert the given Roman numeral (1 ≤ s.length ≤ 15) into an integer.
 
   cases:
     - prompt: "Convert a simple Roman numeral with additive values"
