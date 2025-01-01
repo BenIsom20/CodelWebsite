@@ -12,6 +12,8 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="popup.js" defer></script>
+    <script src="accounts.js" defer></script>
 </head>
 
 <body>
@@ -22,11 +24,63 @@
             <div class="nav-links">
                 <a href="Leaderboard.html" class="navObjects"><i class='bx bxs-bar-chart-alt-2'></i></a>
                 <a href="Developers.html" class="navObjects"><i class='bx bxs-bulb'></i></i></a>
-                <a id="user" href="accounts.html" class="navObjects"><i class='bx bx-user-circle'></i></a>
+                <a id="user" class="navObjects"><i class='bx bx-user-circle'></i></a>
 
             </div>
         </div>
     </nav>
+
+    <!-- Popup -->
+    <div id="mainPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="closePopup">&times;</span>
+            <div class="tab-buttons">
+                <button class="tab-link" data-target="loginForm">Login</button>
+                <button class="tab-link" data-target="registerForm">Register</button>
+                <button class="tab-link" data-target="deleteForm">Delete Account</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="tab-content">
+                <h2>Login Account</h2>
+
+                <input id="logusername" type="text" placeholder="Username">
+                <input id="logpassword" type="password" placeholder="Password">
+                <p id="lognote"></p>
+                <button id="login">Login</button>
+                <h2>OR</h2>
+                <button id="logout">Logout</button>
+
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="tab-content" style="display: none;">
+                <h2>Register Account</h2>
+
+                <input id="regusername" type="text" placeholder="Username">
+                <input id="regpassword" type="password" placeholder="Password">
+                <input id="regemail" type="email" placeholder="Email">
+                <p id="regnote"></p>
+                <button id="register">Create Account</button>
+
+
+            </div>
+
+            <!-- Delete Account Form -->
+            <div id="deleteForm" class="tab-content" style="display: none;">
+                <h2>Delete Account</h2>
+
+                <input id="delusername" type="text" placeholder="Username">
+                <input id="delpassword" type="password" placeholder="Password">
+                <p id="delnote"></p>
+                <button id="delete">delete</button>
+
+
+            </div>
+        </div>
+    </div>
+
+
     <!-- EXPLANATION ABOUT HOW TO PLAY CODEL-->
     <main>
         <section class="how-to-play">
@@ -42,7 +96,8 @@
                 For example:
             <ul>
                 <li>A solve with <strong>2 attempts</strong> and <strong>10 minutes</strong> would beat a solve with
-                    <strong>3 attempts</strong> and <strong>5 minutes</strong>.</li>
+                    <strong>3 attempts</strong> and <strong>5 minutes</strong>.
+                </li>
                 <li>However, a solve with <strong>2 attempts</strong> and <strong>5 minutes</strong> would beat a solve
                     with <strong>2 attempts</strong> and <strong>10 minutes</strong>.</li>
             </ul>
@@ -52,7 +107,8 @@
 
             <h3>1. Daily Challenge</h3>
             <p>Every day, a new coding challenge will be available. The challenge will appear right below the
-                <strong>CODEL</strong> heading, so you'll always know what you're working on.</p>
+                <strong>CODEL</strong> heading, so you'll always know what you're working on.
+            </p>
 
             <h3>2. Write Your Code</h3>
             <p>Below the challenge description, you'll find an <strong>input box</strong> where you can write your

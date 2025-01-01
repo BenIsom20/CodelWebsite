@@ -61,9 +61,21 @@ function captureRegister() {
     document.getElementById('regemail').value = '';
 }
 
+function captureDelete() {
+    // Retrieve username and password from the delete user form
+    const username = document.getElementById('delusername').value;
+    const password = document.getElementById('delpassword').value;
+    // Call the deleteUser function to handle deletion
+
+    deleteUser(username, password);
+    // Clear input fields
+    document.getElementById('delusername').value = '';
+    document.getElementById('delpassword').value = '';
+}
+
 // Function to register a new user
 async function registerUser(username, password, email) {
-            // Send a POST request to the registration endpoint
+    // Send a POST request to the registration endpoint
     const response = await fetch('http://localhost:5000/register', {
         method: 'POST',
         headers: {
@@ -75,9 +87,9 @@ async function registerUser(username, password, email) {
     // Parse the JSON response
     const data = await response.json();
     if (response.ok) {
-        alert("Registration successful"); // Notify the user on successful registration
+        document.getElementById('regnote').innerHTML = "Successfully Created Account";
     } else {
-        alert(data.error); // Notify the user on registration failure
+        document.getElementById('regnote').innerHTML = "Username or Email Already Exists";
     }
 }
 
@@ -98,9 +110,9 @@ async function loginUser(username, password) {
         const token = data.access_token; // Extract the token from the response
         localStorage.clear(); // Clear any existing localStorage data
         localStorage.setItem('jwt_token', token); // Store the token in localStorage
-        alert("Login successful"); // Notify the user on successful login
+        document.getElementById('lognote').innerHTML = "Successfully Logged into Account";
     } else {
-        alert("Username or password incorrect"); // Notify the user on login failure
+        document.getElementById('lognote').innerHTML = "Username or Password Incorrect";
     }
 }
 
@@ -126,44 +138,35 @@ async function accessProtectedRoute() {
 }
 
 // Function to delete a user account
-async function deleteUser() {
-    // Retrieve username and password from the delete user form
-    const username = document.getElementById("delusername").value;
-    const password = document.getElementById("delpassword").value;
+async function deleteUser(username, password) {
+        if (!username || !password) {
+            return;
+        }
+        const payload = { username, password };
+        // Send a POST request to the delete user endpoint
+        const response = await fetch('http://localhost:5000/delete_user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
 
-    if (!username || !password) {
-        alert("Please enter both username and password."); // Validate inputs
-        return;
-    }
+        const data = await response.json();
+        if (response.ok) {
+            document.getElementById('delnote').innerHTML = "Successfully Deleted Account";
+        } else {
+            document.getElementById('delnote').innerHTML = "Username or Password Incorrect";
+        }
 
-    const payload = { username, password };
 
-    // Send a POST request to the delete user endpoint
-    const response = await fetch('http://localhost:5000/delete_user', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-        alert("Account successfully deleted"); // Notify the user on successful deletion
-    } else {
-        alert("Username or password incorrect"); // Notify the user on deletion failure
-    }
-
-    // Clear input fields
-    document.getElementById("delusername").value = '';
-    document.getElementById("delpassword").value = '';
 }
 
 // Add event listeners to handle button clicks
-document.getElementById("delete").addEventListener("click", deleteUser); // Delete user
+document.getElementById("delete").addEventListener("click", captureDelete); // Delete user
 document.getElementById("login").addEventListener("click", captureLogin); // Login user
 document.getElementById("register").addEventListener("click", captureRegister); // Register user
 document.getElementById("logout").addEventListener("click", function () {
     localStorage.clear(); // Clear localStorage on logout
-    alert("logout successful") // Notify user
+    document.getElementById('lognote').innerHTML = "Successfully Logged Out" // Notify user
 });
