@@ -12,9 +12,9 @@ challenge:
 
   cases:
     - prompt: "Reconstruct a queue from an example with mixed heights and positions"
-      given_data: "[[7,0],[4,4],[7,1],[5,0],[6,1],[5,2]]"
-      expected: "[[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]]"
+      given_data: "[[7, 0], [4, 4], [7, 1], [5, 0], [6, 1], [5, 2]]"
+      expected: "[[5, 0], [7, 0], [5, 2], [6, 1], [4, 4], [7, 1]]"
 
     - prompt: "Reconstruct a queue with increasing heights and mixed positions"
-      given_data: "[[6,0],[5,0],[4,0],[3,2],[2,2],[1,4]]"
-      expected: "[[4,0],[5,0],[2,2],[3,2],[1,4],[6,0]]"
+      given_data: "[[6, 0], [5, 0], [4, 0], [3, 2], [2, 2], [1, 4]]"
+      expected: "[[4, 0], [5, 0], [2, 2], [3, 2], [1, 4], [6, 0]]"

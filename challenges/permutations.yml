@@ -1,7 +1,7 @@
 
 challenge:
   name: "Permutations"
-  date: "2025-01-01"
+  date: "2025-01-20"
   function:
     name: "permute"
     parameters: ["nums"]

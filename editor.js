@@ -189,6 +189,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
 
     if (victory) {
         victorySend(); // Send a victory signal if all tests pass
+        victorySequence(); // Display victory message and fireworks
     }
 });
 

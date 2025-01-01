@@ -4,7 +4,7 @@ body {
     align-items: center;
     margin:0;
     background-color: #333533; /* Set background to black */
-    color: #F7F9FB; /* Neon green color for text */
+    color: #e5e5e5; /* Neon green color for text */
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New; /* Optional: Choose a font */
 }
 
@@ -25,7 +25,6 @@ body {
     margin-right: 25px; /* Shift the grid to the left by 50px */
     margin-bottom: 20px;
 }
-
 
 .rectangle {
     width: 200px;
@@ -84,6 +83,8 @@ body {
     position: fixed;
     top: 0px;
     z-index: 1000;   /* Makes sure the navbar stays above other content */
+    box-shadow: 0 2px 5px rgba(168, 32, 32, 0.2);
+    
 }
 
 .subNavbar {
