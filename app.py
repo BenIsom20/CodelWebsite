@@ -222,9 +222,7 @@ def Startup():
     set_current_challenge_function_skeleton_by_date()
    
     # Explanation for the test
-    
     tests = {
-        
         **{
             f"Case {i + 1}": 
             f"Case {i + 1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"

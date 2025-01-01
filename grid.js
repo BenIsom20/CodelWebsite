@@ -111,7 +111,34 @@ async function fetchTestExplanation() {
     // Fetch question data
     const response = await fetch("http://127.0.0.1:5000/Startup");
     const data = await response.json();
-    const txt = data.prompt; // Get the prompt from the fetched data
+    var txt = data.prompt; // Get the prompt from the fetched data
+
+    if (localStorage.getItem('jwt_token')) {
+        try {
+            const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
+            const response2 = await fetch("http://127.0.0.1:5000/protected", {
+                // Send a GET request to the protected endpoint with the token in the Authorization header
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const usernameDict = await response2.json();
+            const username = usernameDict.username;
+
+            // Check if the user is logged in and add a greeting to the question prompt
+            if (response2.ok && username) {
+                // If the user is logged in, append Hello 'username' to the question prompt
+                txt = `Hello ${username}, ${txt}`;
+            }
+        } catch (error) {
+            // If there's an error fetching the username, log the error
+            alert(error);
+        }
+    } else {
+        // If the user is not logged in, append a generic greeting to the question prompt
+        txt = `Hello guest, ${txt}`;
+    }
 
     // Check if the date has changed
     if (lastRunDate === currentDate) {
@@ -184,8 +211,6 @@ async function fetchTestExplanation() {
     // Set the cookie with the current date, and make it expire at midnight (next day)
     Cookies.set('lastTypingEffectRunDate', currentDate, { expires: 1 }); // Cookie expires in 1 day
 }
-
-
 
 function storeGridState() {
     const grid = document.getElementById("grid-container");
