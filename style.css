@@ -65,12 +65,12 @@ body {
 .rectangle.green {
 
     color: #F7F9FB;
-    border-color: #61C9A8ed;
+    background-color: #61C9A8ed;
 }
 
 .rectangle.red {
     color: #F7F9FB;
-    border-color: #EA526F;
+    background-color: #EA526F;
 }
 
 .mainNavbar {
