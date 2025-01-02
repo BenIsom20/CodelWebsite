@@ -24,7 +24,13 @@ function captureLogin() {
     const username = document.getElementById('logusername').value;
     const password = document.getElementById('logpassword').value;
     // Call the loginUser function to handle login
-    loginUser(username, password);
+    if(username && password){
+        loginUser(username, password);
+
+    } else{
+        document.getElementById("lognote").innerHTML = "Please fill out all fields.";
+    }
+
     // Clear input fields
     document.getElementById('logusername').value = '';
     document.getElementById('logpassword').value = '';
@@ -35,22 +41,28 @@ function captureRegister() {
     // Retrieve username, password, and email from the registration form
     const username = document.getElementById('regusername').value;
     const password = document.getElementById('regpassword').value;
+    const confpassword = document.getElementById('regpasswordconf').value;
     const email = document.getElementById('regemail').value;
 
-    // if (!isValidUsername(username)) {
-    //     alert("Invalid username.");
-    //     return;
-    // }
+     if (!isValidUsername(username)) {
+         document.getElementById("regusernote").innerHTML = "Username Invalid";
+         return;
+     }
 
-    // if (!isValidEmail(email)) {
-    //     alert("Invalid email format.");
-    //     return;
-    // }
+    if (!isValidEmail(email)) {
+        document.getElementById("regemailnote").innerHTML = "Email Invalid";
+        return;
+    }
 
-    // if (!isValidPassword(password)) {
-    //     alert("Invalid password format. Must have >= 4 characters, at least 1 non-lowercase letter.");
-    //     return;
-    // }
+    if (!isValidPassword(password)) {
+        document.getElementById("regpassnote").innerHTML = "Password Invalid";
+        return;
+    }
+
+    if(password !== confpassword){
+        document.getElementById("regmatchnote").innerHTML = "Passwords do not match";
+        return;
+    }
 
     // Call the registerUser function to handle registration
     registerUser(username, password, email);
@@ -67,7 +79,12 @@ function captureDelete() {
     const password = document.getElementById('delpassword').value;
     // Call the deleteUser function to handle deletion
 
-    deleteUser(username, password);
+    if(username && password){
+        deleteUser(username, password);
+
+    } else{
+        document.getElementById("delnote").innerHTML = "Please fill out all fields.";
+    }
     // Clear input fields
     document.getElementById('delusername').value = '';
     document.getElementById('delpassword').value = '';
