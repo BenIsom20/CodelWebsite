@@ -89,11 +89,25 @@ window.onload = function () {
     }
 }
 
+function reloadGif() {
+    const logo = document.getElementById('logo'); // Select the logo element
+    const currentSrc = logo.src.split('?')[0]; // Remove any existing query string
+    const newSrc = currentSrc + '?t=' + new Date().getTime(); // Add a timestamp as a query string to force reload
+    logo.src = newSrc; // Reassign the src to trigger reload
+}
+
+// Call this when clearing storage or cookies
+function clearLocalStorageAndCookies() {
+    localStorage.clear(); // Clear local storage
+    document.cookie = ""; // Clear cookies (simplified, for demonstration)
+    reloadGif(); // Force the GIF to reload without flicker
+}
+
 // Function to reset the state by clearing localStorage and reloading the page
 function resetState() {
     // Clear all cookies
     const cookies = document.cookie.split(";"); // Get all cookies as an array
-
+    reloadGif(); // Force the GIF to reload without flicker
     for (let cookie of cookies) {
         const name = cookie.split("=")[0].trim(); // Extract cookie name
         // Set the cookie to expire in the past to delete it
