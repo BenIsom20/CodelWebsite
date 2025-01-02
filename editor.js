@@ -11,12 +11,6 @@ var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     indentUnit: 4,                  // Set the indentation size to 4 spaces
     indentWithTabs: true,          // Use tabs instead of spaces for indentation
     tabSize: 4,                     // Display tabs as 4 spaces wide
-    extraKeys: {
-        "Ctrl-Space": "autocomplete", // Enable autocomplete with Ctrl+Space
-        "Ctrl-Q": function (cm) {       // Toggle line commenting with Ctrl+Q
-            cm.toggleComment();
-        }
-    },
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // Add gutters for line numbers and folding
     foldGutter: true,              // Enable code folding
     styleActiveLine: true,         // Highlight the active line
@@ -284,7 +278,7 @@ function victorySequence() {
     const navbar = document.getElementById("mainNavbar");
     const logo = document.getElementById("logo");
     navbar.classList.add("vic-burst");
-    navbar.addEventListener("animationend", function() {
+    navbar.addEventListener("animationend", function () {
         navbar.classList.remove("vic-burst");
     });
     navbar.style.boxShadow = "0 2px 50px #61C9A8ed";
@@ -294,7 +288,7 @@ function victorySequence() {
 function trySequence() {
     const navbar = document.getElementById("mainNavbar");
     navbar.classList.add("try-burst");
-    navbar.addEventListener("animationend", function() {
+    navbar.addEventListener("animationend", function () {
         navbar.classList.remove("try-burst");
     });
 }

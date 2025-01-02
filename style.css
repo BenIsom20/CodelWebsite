@@ -43,22 +43,30 @@ body {
 }
 
 .mainbutton {
-    background-color: #F7F9FB; /* Light gray background */
+    background-image: linear-gradient(to left, #fceb95 50%, #ffe66d 50%); /* Gradient background */
+    background-size: 200%;
     color: #333533; /* Black text */
-    border: 2px solid 333533; /* Black border for definition */
+    border: 0px solid 333533; /* Black border for definition */
     border-radius: 5px; /* Rounded corners */
     padding: 10px 20px; /* Padding for size */
-    font-size: 16px; /* Comfortable font size */
+    font-size: 18px; /* Comfortable font size */
     font-weight: bold; /* Bold text */
     cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+    transition: 0.3s ease-out; /* Smooth hover transition */
     margin-right: 20px;
 }
 
 /* Hover effect */
 .mainbutton:hover {
-    background-color: darkgrey; /* Slightly darker light gray */
-    color: black; /* Keep text color black */
+    background-position: right; /* Slightly darker light gray *//
+}
+
+main:focus:active {
+    padding-top: 4px;
+    padding-left: 4px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    color: #e00000;
 }
 
 .rectangle.green {
@@ -91,7 +99,6 @@ body {
         height: 100px;
     }
 }
-
 
 .rectangle.red {
     color: #F7F9FB;
@@ -322,18 +329,9 @@ html {
     width: 8px; /* Width of the scrollbar */
 }
 
-::-webkit-scrollbar-track {
-    background: #333533; /* Track background color */
-    border-radius: 8px; /* Optional: Rounded corners */
-}
-
-::-webkit-scrollbar-thumb {
-    background: #333533; /* Thumb color */
-    border-radius: 4px; /* Rounded corners for thumb */
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #333533; /* Darker thumb color on hover */
+.CodeMirror {
+    resize: vertical;
+    min-height: 300px;
 }
 
 
