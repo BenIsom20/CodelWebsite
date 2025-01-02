@@ -1,11 +1,41 @@
 body {
     margin: 0;
-    background-color: #333533; /* Dark background color */
-    color: #ffe66d; /* Light text color */
+    background-color: #333533;
+    /* Dark background color */
+    color: #ffe66d;
+    /* Light text color */
     font-family: Consolas, Monaco, "Lucida Console", Courier New, monospace;
-
+    opacity: 0;
+}
+/* Keyframes for fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
+/* Keyframes for fade-out */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Fade-in animation */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
+}
+
+/* Fade-out animation */
+.fade-out {
+    animation: fadeOut 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
+}
 main {
     padding: 20px;
     margin: 0 auto;
@@ -15,10 +45,14 @@ main {
 
 .leaderboard-container {
     text-align: center;
-    width: 80%; /* 80% of the viewport width */
-    margin: 0 auto; /* Center align */
-    max-width: 1200px; /* Optional: Limit maximum width */
-    min-width: 300px; /* Optional: Prevent it from becoming too small */
+    width: 80%;
+    /* 80% of the viewport width */
+    margin: 0 auto;
+    /* Center align */
+    max-width: 1200px;
+    /* Optional: Limit maximum width */
+    min-width: 300px;
+    /* Optional: Prevent it from becoming too small */
 }
 
 h1 {
@@ -48,6 +82,7 @@ h1 {
         opacity: 0;
 
     }
+
     to {
         opacity: 1;
 
@@ -71,7 +106,7 @@ h1 {
     border-bottom: 1px solid #ddd;
     color: black;
     font-weight: bold;
-    background-color:#ffe66d;
+    background-color: #ffe66d;
     animation: fadeIn 1s ease-in-out forwards;
     opacity: 0;
 }
@@ -91,7 +126,8 @@ h1 {
 }
 
 .leaderboard-row:first-child {
-    color: #ffe66d; /* Gold color for the top player */
+    color: #ffe66d;
+    /* Gold color for the top player */
     font-weight: bold;
 
 }
@@ -114,85 +150,115 @@ span:last-child {
 
 #load-more {
     margin-top: 20px;
-    transition: opacity 0.5s ease-in-out; /* Smooth fade */
-    opacity: 0; /* Fully visible by default */
-    background-color: lightgrey; /* Light gray background */
-    color: black; /* Black text */
-    border: 2px solid black; /* Black border for definition */
-    border-radius: 8px; /* Slightly more rounded corners */
-    padding: 15px 40px; /* Increased padding for larger size */
-    font-size: 18px; /* Slightly larger font size */
-    font-weight: bold; /* Bold text */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
-    pointer-events: none; /* Prevent clicks when invisible */
-    width: 250px; /* Set a fixed width for a wider rectangle */
-    text-align: center; /* Ensure text stays centered */
+    transition: opacity 0.5s ease-in-out;
+    /* Smooth fade */
+    opacity: 0;
+    /* Fully visible by default */
+    background-color: lightgrey;
+    /* Light gray background */
+    color: black;
+    /* Black text */
+    border: 2px solid black;
+    /* Black border for definition */
+    border-radius: 8px;
+    /* Slightly more rounded corners */
+    padding: 15px 40px;
+    /* Increased padding for larger size */
+    font-size: 18px;
+    /* Slightly larger font size */
+    font-weight: bold;
+    /* Bold text */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* Smooth hover transition */
+    pointer-events: none;
+    /* Prevent clicks when invisible */
+    width: 250px;
+    /* Set a fixed width for a wider rectangle */
+    text-align: center;
+    /* Ensure text stays centered */
 }
 
 #load-more:active {
-    transform: scale(0.95) translateY(2px); /* Slightly smaller and moves down */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset; /* Inner shadow for depth */
+    transform: scale(0.95) translateY(2px);
+    /* Slightly smaller and moves down */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+    /* Inner shadow for depth */
 }
 
 #load-more:hover {
-    background-color: darkgrey; /* Slightly darker light gray */
+    background-color: darkgrey;
+    /* Slightly darker light gray */
 }
 
 #load-more.show {
-    opacity: 1; /* Invisible when hidden */
+    opacity: 1;
+    /* Invisible when hidden */
     animation: fadeIn 1s ease-in-out forwards;
-    pointer-events: all; /* Prevent clicks when invisible */
-    
+    pointer-events: all;
+    /* Prevent clicks when invisible */
+
 }
 
 .mainNavbar {
-    background-color: #333533; /* Dark background color */
+    background-color: #333533;
+    /* Dark background color */
     color: white;
     padding: 10px 20px;
-    position: relative; /* Keeps the navbar at the top of the page */
+    position: relative;
+    /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
     box-shadow: 0 2px 50px #ffe66d;
-    
+
 }
 
 .subNavbar {
-    background-color: #333533; /* Dark background color */
+    background-color: #333533;
+    /* Dark background color */
     color: white;
     padding: 10px 20px;
-    position: fixed; /* Keeps the navbar at the top of the page */
+    position: fixed;
+    /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
     box-shadow: 0 2px 5px #ffe66d;
-    
-    
+
+
 }
 
 .navbar-container {
     display: flex;
-    justify-content: space-between; /* Ensures "Back to Codel" is on the left and the icons on the right */
+    justify-content: space-between;
+    /* Ensures "Back to Codel" is on the left and the icons on the right */
     align-items: center;
-    width: 100%; /* Make sure it takes up the full width */
-    
+    width: 100%;
+    /* Make sure it takes up the full width */
+
 }
 
 .backButton {
-    color: #ffe66d; /* Neon green for text */
-    text-decoration: none; /* Remove underline */
+    color: #ffe66d;
+    /* Neon green for text */
+    text-decoration: none;
+    /* Remove underline */
     font-size: 18px;
     padding: 5px 10px;
     transition: color 0.3s ease;
 }
 
 .nav-links {
-    display: flex; /* Use flex to arrange the icons */
-    justify-content: flex-end; /* Align items to the right */
-    
+    display: flex;
+    /* Use flex to arrange the icons */
+    justify-content: flex-end;
+    /* Align items to the right */
+
 }
 
 .navObjects {
-    color: white; /* Icon color */
+    color: white;
+    /* Icon color */
     margin-left: 15px;
     font-size: 30px;
     transition: background-color 0.3s ease;
@@ -206,87 +272,32 @@ span:last-child {
 
 /* Define the dance animation */
 @keyframes dance {
-    0% { transform: rotate(0) translateY(0); }
-    15% { transform: rotate(-10deg) translateY(-5px); }
-    50% { transform: rotate(5deg) translateY(2.5px); }
-    75% { transform: rotate(-5deg) translateY(-2px); }
-    100% { transform: rotate(0) translateY(0); }
-  }
+    0% {
+        transform: rotate(0) translateY(0);
+    }
+
+    15% {
+        transform: rotate(-10deg) translateY(-5px);
+    }
+
+    50% {
+        transform: rotate(5deg) translateY(2.5px);
+    }
+
+    75% {
+        transform: rotate(-5deg) translateY(-2px);
+    }
+
+    100% {
+        transform: rotate(0) translateY(0);
+    }
+}
 
 .backButton:hover {
     animation: dance 0.6s ease-in-out;
 }
 
 .emoji {
-    font-size: 1.3em; /* Adjust size as needed */
+    font-size: 1.3em;
+    /* Adjust size as needed */
 }
-
-
-/* Popup container */
-.popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  /* Popup content */
-  .popup-content {
-    background: #333533;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
-  }
-  
-  /* Close button */
-  .close {
-    position: absolute;
-    top: 0px;
-    right: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    color: #555;
-  }
-  
-  .close:hover {
-    color: red;
-  }
-  
-  /* Tab buttons */
-  .tab-buttons {
-    
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  
-  .tab-link {
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .tab-link.active {
-    background-color: #007BFF;
-    color: white;
-  }
-  
-  /* Tab content */
-  .tab-content {
-    display: none;
-  }
-  
-  .tab-content.active {
-    display: block;
-  }

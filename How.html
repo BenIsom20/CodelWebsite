@@ -14,16 +14,16 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="popup.js" defer></script>
     <script src="accounts.js" defer></script>
+    <link rel="stylesheet" href="Popup.css">
 </head>
 
 <body>
     <!-- CODE FOR NAVBAR -->
     <nav class="subNavbar">
         <div class="navbar-container">
-            <a href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO CODEL</a>
+            <a id="backtocode" href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO CODEL</a>
             <div class="nav-links">
-                <a href="Leaderboard.html" class="navObjects"><i class='bx bxs-bar-chart-alt-2'></i></a>
-                <a href="Developers.html" class="navObjects"><i class='bx bxs-bulb'></i></i></a>
+                <a id="leader" href="Leaderboard.html" class="navObjects"><i class='bx bxs-bar-chart-alt-2'></i></a>
                 <a id="user" class="navObjects"><i class='bx bx-user-circle'></i></a>
 
             </div>
@@ -31,51 +31,53 @@
     </nav>
 
     <!-- Popup -->
-    <div id="mainPopup" class="popup">
+    <div id="mainPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
         <div class="popup-content">
             <span class="close" id="closePopup">&times;</span>
-            <div class="tab-buttons">
-                <button class="tab-link" data-target="loginForm">Login</button>
-                <button class="tab-link" data-target="registerForm">Register</button>
-                <button class="tab-link" data-target="deleteForm">Delete Account</button>
-            </div>
 
             <!-- Login Form -->
-            <div id="loginForm" class="tab-content">
-                <h2>Login Account</h2>
-
+            <div id="loginForm" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Sign In</h2>
                 <input id="logusername" type="text" placeholder="Username">
-                <input id="logpassword" type="password" placeholder="Password">
+                <p id="placeholder"></p>
+                <input class="inputs" id="logpassword" type="password" placeholder="Password">
                 <p id="lognote"></p>
-                <button id="login">Login</button>
-                <h2>OR</h2>
-                <button id="logout">Logout</button>
-
+                <button id="login">Sign In</button>
+                <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
             </div>
 
             <!-- Register Form -->
-            <div id="registerForm" class="tab-content" style="display: none;">
-                <h2>Register Account</h2>
-
+            <div id="registerForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Create an Account</h2>
                 <input id="regusername" type="text" placeholder="Username">
+                <p id="regusernote"></p>
+                <input id="regemail" type="text" placeholder="Email">
+                <p id="regemailnote"></p>
                 <input id="regpassword" type="password" placeholder="Password">
-                <input id="regemail" type="email" placeholder="Email">
-                <p id="regnote"></p>
+                <p id="regpassnote"></p>
+                <input id="regpasswordconf" type="password" placeholder="Confirm Password">
+                <p id="regmatchnote"></p>
                 <button id="register">Create Account</button>
-
-
+                <p id="regnote"></p>
+                <p class="tab-link" data-target="loginForm">Already have an account?<br> Sign In</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
             </div>
 
             <!-- Delete Account Form -->
-            <div id="deleteForm" class="tab-content" style="display: none;">
-                <h2>Delete Account</h2>
-
+            <div id="deleteForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Delete Your Account</h2>
+                <p>Are you sure you want to delete your account? This action is irreversible.</p>
                 <input id="delusername" type="text" placeholder="Username">
                 <input id="delpassword" type="password" placeholder="Password">
                 <p id="delnote"></p>
-                <button id="delete">delete</button>
-
-
+                <button id="delete" style="background-color: red; color: white;">Delete Account</button>
+                <p class="tab-link" data-target="loginForm">Sign In</p>
+                <p class="tab-link" data-target="registerForm">Create Account</p>
             </div>
         </div>
     </div>
@@ -156,6 +158,45 @@
                 for you today. Good luck, and happy coding!</p>
         </section>
     </main>
+    <script>
+        document.getElementById('leader').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
+
+        document.getElementById('backtocode').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
+
+        function smoothTransition(event) {
+            try {
+                event.preventDefault(); // Prevent the default navigation
+                const href = event.currentTarget.href; // Get the target URL
+
+                // Add the fade-out class to the body
+                document.body.classList.remove('fade-in');
+
+                document.body.classList.add('fade-out');
+
+                // Wait for the transition to complete, then navigate
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300); // Match this duration with your CSS transition time
+            }
+            catch (error) {
+                alert(error);
+            }
+
+        }
+
+
+
+
+
+        window.onload = function () {
+            document.body.classList.add('fade-in');
+        }
+    </script>
+
 </body>
 
 </html>

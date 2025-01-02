@@ -59,7 +59,7 @@ function clearExpiredLocalStorage() {
 //ONE SINGULAR ONLOAD FUNCTION -->
 // This function is executed when the window finishes loading
 window.onload = function () {
-
+    document.body.classList.add('fade-in');
     clearExpiredLocalStorage(); // Clear expired data from localStorage
 
     // Fetch and display test explanation (assumes fetchTestExplanation is defined elsewhere)

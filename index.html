@@ -36,14 +36,12 @@
             <a>
                 <span id="stopwatch"></span>
             </a>
-            <a href="Developers.html" onclick="storeStopwatchTime()" class="logo-link">
+            <a id = "develop" href="Developers.html" onclick="storeStopwatchTime()" class="logo-link">
                 <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
             </a>
             <div class="nav-links">
                 <a id="leader" href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime();"><i
                         class='bx bxs-bar-chart-alt-2'></i></a>
-                <a id="develop" href="Developers.html" class="navObjects" onclick="storeStopwatchTime()"><i
-                        class='bx bxs-bulb'></i></i></a>
                 <a id="how" href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
                         class='bx bxs-help-circle'></i></a>
                 <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bx-user-circle'></i></a>
@@ -86,14 +84,16 @@
     <button id="resetButton" class="mainbutton">Reset</button>
 
     <!-- Popup -->
-    <div id="mainPopup" class="popup" style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+    <div id="mainPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
         <div class="popup-content">
             <span class="close" id="closePopup">&times;</span>
 
             <!-- Login Form -->
-            <div id="loginForm" class="tab-content active" style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+            <div id="loginForm" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
                 <h2>Sign In</h2>
-                <input  id="logusername" type="text" placeholder="Username">
+                <input id="logusername" type="text" placeholder="Username">
                 <p id="placeholder"></p>
                 <input class="inputs" id="logpassword" type="password" placeholder="Password">
                 <p id="lognote"></p>
@@ -103,15 +103,16 @@
             </div>
 
             <!-- Register Form -->
-            <div id="registerForm" class="tab-content" style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+            <div id="registerForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
                 <h2>Create an Account</h2>
-                <input  id="regusername" type="text" placeholder="Username">
+                <input id="regusername" type="text" placeholder="Username">
                 <p id="regusernote"></p>
-                <input  id="regemail" type="text" placeholder="Email">
+                <input id="regemail" type="text" placeholder="Email">
                 <p id="regemailnote"></p>
-                <input  id="regpassword" type="password" placeholder="Password">
+                <input id="regpassword" type="password" placeholder="Password">
                 <p id="regpassnote"></p>
-                <input  id="regpasswordconf" type="password" placeholder="Confirm Password">
+                <input id="regpasswordconf" type="password" placeholder="Confirm Password">
                 <p id="regmatchnote"></p>
                 <button id="register">Create Account</button>
                 <p id="regnote"></p>
@@ -120,7 +121,8 @@
             </div>
 
             <!-- Delete Account Form -->
-            <div id="deleteForm" class="tab-content" style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+            <div id="deleteForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
                 <h2>Delete Your Account</h2>
                 <p>Are you sure you want to delete your account? This action is irreversible.</p>
                 <input id="delusername" type="text" placeholder="Username">
@@ -137,6 +139,39 @@
 
     <!--keep here-->
     <script src="main.js"></script>
+    <script>
+        document.getElementById('leader').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
+
+        document.getElementById('how').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
+        document.getElementById('develop').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
+        
+        
+        function smoothTransition(event) {
+            try {
+                event.preventDefault(); // Prevent the default navigation
+                const href = event.currentTarget.href; // Get the target URL
+
+                // Add the fade-out class to the body
+                document.body.classList.remove('fade-in');
+                document.body.classList.add('fade-out');
+
+                // Wait for the transition to complete, then navigate
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300); // Match this duration with your CSS transition time
+            }
+            catch (error) {
+                alert(error);
+            }
+
+        }
+    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
     <script>

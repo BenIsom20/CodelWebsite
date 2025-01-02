@@ -6,6 +6,37 @@ body {
     background-color: #333533; /* Set background to black */
     color: #e5e5e5; /* Neon green color for text */
     font-family: "Fira Code", monospace; /* Optional: Choose a font */
+    opacity: 0;
+
+}
+/* Keyframes for fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Keyframes for fade-out */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Fade-in animation */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
+}
+
+/* Fade-out animation */
+.fade-out {
+    animation: fadeOut 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
 }
 
 .output {
