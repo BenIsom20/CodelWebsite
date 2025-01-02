@@ -5,7 +5,6 @@ body {
     margin:0;
     background-color: #333533; /* Set background to black */
     color: #e5e5e5; /* Neon green color for text */
-<<<<<<< Updated upstream
     font-family: "Fira Code", monospace; /* Optional: Choose a font */
 }
 
@@ -15,9 +14,6 @@ body {
     width: 100%;
     background-color: #1E1F1E;
     padding-left: 10px;
-=======
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New; /* Optional: Choose a font */
->>>>>>> Stashed changes
 }
 
 .grid {
@@ -135,16 +131,11 @@ body {
     /* position: relative; Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-<<<<<<< Updated upstream
     box-shadow: 0 2px 50px #ffe66d;
     position: fixed;
     top: 0px;
     z-index: 1000;   /* Makes sure the navbar stays above other content */
     box-shadow: 0 2px 50px #ffe66d;
-=======
-    box-shadow: 0 2px 5px rgba(168, 32, 32, 0.2);
-    
->>>>>>> Stashed changes
 }
 
 .subNavbar {
