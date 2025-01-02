@@ -91,6 +91,16 @@ window.onload = function () {
 
 // Function to reset the state by clearing localStorage and reloading the page
 function resetState() {
+    // Clear all cookies
+    const cookies = document.cookie.split(";"); // Get all cookies as an array
+
+    for (let cookie of cookies) {
+        const name = cookie.split("=")[0].trim(); // Extract cookie name
+        // Set the cookie to expire in the past to delete it
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+    }
+
+    // Clear all localStorage
     localStorage.clear(); // Clear all data from localStorage
     location.reload(); // Reload the page to reset everything
 }

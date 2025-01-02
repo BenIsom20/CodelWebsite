@@ -190,6 +190,8 @@ document.getElementById("submitCode").addEventListener("click", async function (
     if (victory) {
         victorySend(); // Send a victory signal if all tests pass
         victorySequence(); // Display victory message and fireworks
+    } else {
+        trySequence(); // Display try again message and animation
     }
 });
 
@@ -278,6 +280,24 @@ async function victorySend() {
     }
 }
 
+function victorySequence() {
+    const navbar = document.getElementById("mainNavbar");
+    const logo = document.getElementById("logo");
+    navbar.classList.add("vic-burst");
+    navbar.addEventListener("animationend", function() {
+        navbar.classList.remove("vic-burst");
+    });
+    navbar.style.boxShadow = "0 2px 50px #61C9A8ed";
+    logo.src = "images/V.gif?";
+}
+
+function trySequence() {
+    const navbar = document.getElementById("mainNavbar");
+    navbar.classList.add("try-burst");
+    navbar.addEventListener("animationend", function() {
+        navbar.classList.remove("try-burst");
+    });
+}
 
 function setLocalStorageWithExpiry(key, value) {
     const now = new Date();

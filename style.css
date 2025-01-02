@@ -5,7 +5,7 @@ body {
     margin:0;
     background-color: #333533; /* Set background to black */
     color: #e5e5e5; /* Neon green color for text */
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New; /* Optional: Choose a font */
+    font-family: "Fira Code", monospace; /* Optional: Choose a font */
 }
 
 .output {
@@ -34,7 +34,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
+    font-family: "Fira Code", monospace; /* Optional: Choose a font */
     font-size: 30px;
     border: 2px solid #F7F9FB;
     border-radius: 5px;
@@ -44,8 +44,8 @@ body {
 
 .mainbutton {
     background-color: #F7F9FB; /* Light gray background */
-    color: black; /* Black text */
-    border: 2px solid black; /* Black border for definition */
+    color: #333533; /* Black text */
+    border: 2px solid 333533; /* Black border for definition */
     border-radius: 5px; /* Rounded corners */
     padding: 10px 20px; /* Padding for size */
     font-size: 16px; /* Comfortable font size */
@@ -62,14 +62,66 @@ body {
 }
 
 .rectangle.green {
-
     color: #F7F9FB;
     background-color: #61C9A8ed;
+    border: 0px solid;
+    animation: colorRevealGreen 1s;
 }
+
+@keyframes colorRevealGreen {
+    0%{
+        width: 220px;
+        height: 110px;
+        background-color: #333533;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Fira Code", monospace; /* Optional: Choose a font */
+        font-size: 30px;
+        border: 0px solid #F7F9FB;
+        border-radius: 5px;
+        text-align: center;
+        color: #F7F9FB;
+    }
+    100%{
+        color: #F7F9FB;
+        background-color: #61C9A8ed;
+        border: 0px solid;
+        width: 200px;
+        height: 100px;
+    }
+}
+
 
 .rectangle.red {
     color: #F7F9FB;
     background-color: #EA526F;
+    border: 0px solid;
+    animation: colorRevealRed 1s;
+}
+
+@keyframes colorRevealRed {
+    0%{
+        width: 220px;
+        height: 110px;
+        background-color: #333533;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Fira Code", monospace; /* Optional: Choose a font */
+        font-size: 30px;
+        border: 0px solid #F7F9FB;
+        border-radius: 5px;
+        text-align: center;
+        color: #F7F9FB;
+    }
+    100%{
+        width: 200px;
+        height: 100px;
+        color: #F7F9FB;
+        background-color: #EA526F;
+        border: 0px solid;
+    }
 }
 
 .mainNavbar {
@@ -83,8 +135,7 @@ body {
     position: fixed;
     top: 0px;
     z-index: 1000;   /* Makes sure the navbar stays above other content */
-    box-shadow: 0 2px 5px rgba(168, 32, 32, 0.2);
-    
+    box-shadow: 0 2px 50px #ffe66d;
 }
 
 .subNavbar {
@@ -102,6 +153,38 @@ body {
     justify-content: space-between; /* Ensures "Back to Codel" is on the left and the icons on the right */
     align-items: center;
     width: 100%; /* Make sure it takes up the full width */
+}
+
+.try-burst {
+    animation: tryBurst 1s;
+}
+
+@keyframes tryBurst{
+    0%{
+        box-shadow: 0 2px 50px #ffe66d;
+    }
+    50%{
+        box-shadow: 0 20px 100px #EA526F;
+    }
+    100%{
+        box-shadow: 0 2px 50px #ffe66d;
+    }
+}
+
+.vic-burst {
+    animation: vicBurst 2s;
+}
+
+@keyframes vicBurst{
+    0%{
+        box-shadow: 0 2px 50px #ffe66d;
+    }
+    30%{
+        box-shadow: 0 100px 500px #ffe66d;
+    }
+    55%{
+        box-shadow: 0 2px 50px #61C9A8ed;
+    }
 }
 
 .backButton {
@@ -203,7 +286,6 @@ main {
     width: auto; /* Keep the aspect ratio */
     max-width: 75%; /* Adjust width */
     max-height: 75%; /* Adjust height */
-    background-image: url('C.gif');
     background-size: contain; /* Ensure the GIF scales proportionally */
     background-repeat: no-repeat;
     display: block; /* Centering adjustments */
@@ -298,5 +380,32 @@ main {
   .tab-content.active {
     display: block;
   }
+
+  /* Apply styles to the entire document */
+html {
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #333533 #1E1F1E; /* Scrollbar thumb and track colors */
+    z-index: 999;
+}
+
+/* For WebKit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #333533; /* Track background color */
+    border-radius: 8px; /* Optional: Rounded corners */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333533; /* Thumb color */
+    border-radius: 4px; /* Rounded corners for thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #333533; /* Darker thumb color on hover */
+}
+
 
   

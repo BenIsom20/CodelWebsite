@@ -156,7 +156,7 @@ async function fetchTestExplanation() {
 
     // Function to generate a random speed between 30 and 100
     function getRandomSpeed() {
-        return Math.floor(Math.random() * (30 - 10 + 1)) + 10; // Random speed between 10 and 30
+        return Math.floor(Math.random() * (30 - 10 + 1)) + 20; // Random speed between 10 and 30
     }
 
     // Function to toggle cursor blink (only on '|')
@@ -324,6 +324,7 @@ async function loadGridState() {
     // If none of the rectangles in the current row failed (i.e., all are green)
     if (!fail) {
         // Disable the submit button and stop the stopwatch if all tests are successful
+        victorySequence();
         const submitButton = document.getElementById("submitCode");
         submitButton.disabled = true; // Disable the submit button
         stopStopwatch(); // Stop the stopwatch (assumed to be a function defined elsewhere)
