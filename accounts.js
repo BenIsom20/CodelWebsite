@@ -20,14 +20,17 @@ function isValidPassword(password) {
 
 // Function to capture login details and trigger the login process
 function captureLogin() {
+    document.getElementById("lognote").innerHTML = "";
+    const username = document.getElementById("logusername").value;
+    const password = document.getElementById("logpassword").value;
+
     // Retrieve username and password from the login form
-    const username = document.getElementById('logusername').value;
-    const password = document.getElementById('logpassword').value;
+
     // Call the loginUser function to handle login
-    if(username && password){
+    if (username && password) {
         loginUser(username, password);
 
-    } else{
+    } else {
         document.getElementById("lognote").innerHTML = "Please fill out all fields.";
     }
 
@@ -38,16 +41,21 @@ function captureLogin() {
 
 // Function to capture registration details and trigger the registration process
 function captureRegister() {
+    document.getElementById("regusernote").innerHTML="";
+    document.getElementById("regemailnote").innerHTML="";
+    document.getElementById("regpassnote").innerHTML="";
+    document.getElementById("regmatchnote").innerHTML="";
+
     // Retrieve username, password, and email from the registration form
     const username = document.getElementById('regusername').value;
     const password = document.getElementById('regpassword').value;
     const confpassword = document.getElementById('regpasswordconf').value;
     const email = document.getElementById('regemail').value;
 
-     if (!isValidUsername(username)) {
-         document.getElementById("regusernote").innerHTML = "Username Invalid";
-         return;
-     }
+    if (!isValidUsername(username)) {
+        document.getElementById("regusernote").innerHTML = "Username Invalid";
+        return;
+    }
 
     if (!isValidEmail(email)) {
         document.getElementById("regemailnote").innerHTML = "Email Invalid";
@@ -59,7 +67,7 @@ function captureRegister() {
         return;
     }
 
-    if(password !== confpassword){
+    if (password !== confpassword) {
         document.getElementById("regmatchnote").innerHTML = "Passwords do not match";
         return;
     }
@@ -71,18 +79,20 @@ function captureRegister() {
     document.getElementById('regusername').value = '';
     document.getElementById('regpassword').value = '';
     document.getElementById('regemail').value = '';
+    document.getElementById('regpasswordconf').value = '';
 }
 
 function captureDelete() {
+    document.getElementById("delnote").innerHTML = "";
     // Retrieve username and password from the delete user form
     const username = document.getElementById('delusername').value;
     const password = document.getElementById('delpassword').value;
     // Call the deleteUser function to handle deletion
 
-    if(username && password){
+    if (username && password) {
         deleteUser(username, password);
 
-    } else{
+    } else {
         document.getElementById("delnote").innerHTML = "Please fill out all fields.";
     }
     // Clear input fields
@@ -156,25 +166,25 @@ async function accessProtectedRoute() {
 
 // Function to delete a user account
 async function deleteUser(username, password) {
-        if (!username || !password) {
-            return;
-        }
-        const payload = { username, password };
-        // Send a POST request to the delete user endpoint
-        const response = await fetch('http://localhost:5000/delete_user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        });
+    if (!username || !password) {
+        return;
+    }
+    const payload = { username, password };
+    // Send a POST request to the delete user endpoint
+    const response = await fetch('http://localhost:5000/delete_user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    });
 
-        const data = await response.json();
-        if (response.ok) {
-            document.getElementById('delnote').innerHTML = "Successfully Deleted Account";
-        } else {
-            document.getElementById('delnote').innerHTML = "Username or Password Incorrect";
-        }
+    const data = await response.json();
+    if (response.ok) {
+        document.getElementById('delnote').innerHTML = "Successfully Deleted Account";
+    } else {
+        document.getElementById('delnote').innerHTML = "Username or Password Incorrect";
+    }
 
 
 }
