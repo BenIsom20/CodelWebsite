@@ -18,7 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+    <link rel="stylesheet" href="Popup.css">
     <script src="editor.js" defer></script>
     <script src="timer.js" defer></script>
     <script src="grid.js" defer></script>
@@ -88,54 +88,53 @@
     <button id="resetButton" class="mainbutton">Reset</button>
 
     <!-- Popup -->
-    <div id="mainPopup" class="popup">
+    <div id="mainPopup" class="popup" style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
         <div class="popup-content">
             <span class="close" id="closePopup">&times;</span>
-            <div class="tab-buttons">
-                <button class="tab-link" data-target="loginForm">Login</button>
-                <button class="tab-link" data-target="registerForm">Register</button>
-                <button class="tab-link" data-target="deleteForm">Delete Account</button>
-            </div>
 
             <!-- Login Form -->
-            <div id="loginForm" class="tab-content">
-                <h2>Login Account</h2>
-
-                <input id="logusername" type="text" placeholder="Username">
-                <input id="logpassword" type="password" placeholder="Password">
+            <div id="loginForm" class="tab-content active" style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Sign In</h2>
+                <input  id="logusername" type="text" placeholder="Username">
+                <p id="placeholder"></p>
+                <input class="inputs" id="logpassword" type="password" placeholder="Password">
                 <p id="lognote"></p>
-                <button id="login">Login</button>
-                <h2>OR</h2>
-                <button id="logout">Logout</button>
-
+                <button id="login">Sign In</button>
+                <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
             </div>
 
             <!-- Register Form -->
-            <div id="registerForm" class="tab-content" style="display: none;">
-                <h2>Register Account</h2>
-
-                <input id="regusername" type="text" placeholder="Username">
-                <input id="regpassword" type="password" placeholder="Password">
-                <input id="regemail" type="email" placeholder="Email">
-                <p id="regnote"></p>
+            <div id="registerForm" class="tab-content" style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Create an Account</h2>
+                <input  id="regusername" type="text" placeholder="Username">
+                <p id="regusernote"></p>
+                <input  id="regemail" type="text" placeholder="Email">
+                <p id="regemailnote"></p>
+                <input  id="regpassword" type="password" placeholder="Password">
+                <p id="regpassnote"></p>
+                <input  id="regpasswordconf" type="password" placeholder="Confirm Password">
+                <p id="regmatchnote"></p>
                 <button id="register">Create Account</button>
-
-
+                <p id="regnote"></p>
+                <p class="tab-link" data-target="loginForm">Already have an account?<br> Sign In</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
             </div>
 
             <!-- Delete Account Form -->
-            <div id="deleteForm" class="tab-content" style="display: none;">
-                <h2>Delete Account</h2>
-
+            <div id="deleteForm" class="tab-content" style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Delete Your Account</h2>
+                <p>Are you sure you want to delete your account? This action is irreversible.</p>
                 <input id="delusername" type="text" placeholder="Username">
                 <input id="delpassword" type="password" placeholder="Password">
                 <p id="delnote"></p>
-                <button id="delete">delete</button>
-
-
+                <button id="delete" style="background-color: red; color: white;">Delete Account</button>
+                <p class="tab-link" data-target="loginForm">Sign In</p>
+                <p class="tab-link" data-target="registerForm">Create Account</p>
             </div>
         </div>
     </div>
+
 
 
     <!--keep here-->
