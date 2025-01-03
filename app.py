@@ -376,18 +376,18 @@ def victory():
         query = """
             UPDATE users
             SET 
-                wins = wins + 1,
-                streak = streak + 1,
-                completed = 1,
-                curtimer = %s,
-                curgrid = %s,
-                curcode = %s,
+                wins = wins + 1, 
+                streak = streak + 1, 
+                completed = 1, 
+                curtimer = %s, 
+                curgrid = %s, 
+                curcode = %s, 
                 attempts = %s,
                 totalTime = totalTime + %s,
                 allStreak = CASE 
-                                WHEN streak + 1 > allStreak THEN streak + 1 
-                                ELSE allStreak 
-                            END,
+                                WHEN streak + 1 > allStreak THEN streak + 1
+                                ELSE allStreak
+                            END
             WHERE username = %s
         """
         values = (stopwatch_time, grid_state, saved_code, attempts, stopwatch_time, username)

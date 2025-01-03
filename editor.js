@@ -257,7 +257,6 @@ async function saveProgress() {
 
 // Function to send victory state and related data to the backend
 async function victorySend() {
-    try {
         // Check if a JWT token exists in local storage
         if (localStorage.getItem("jwt_token") != null) {
             const token = localStorage.getItem("jwt_token"); // Retrieve the token
@@ -283,31 +282,7 @@ async function victorySend() {
                 },
                 body: JSON.stringify(payload)  // Convert payload to JSON string
             })
-                .then(response => response.json())  // Parse the response JSON
-                .then(data => {
-                    // Handle the response from the backend
-                    if (data.message) {
-                        console.log("State updated successfully:", data.message);
-                        document.getElementById("debug").innerHTML = data.message; // Display success message
-                    } else if (data.error) {
-                        console.error("Error updating state:", data.error);
-                        document.getElementById("debug").innerHTML = data.error; // Display error message
-                    }
-                })
-                .catch(error => {
-                    // Handle network or other errors
-                    console.error("Network error:", error);
-                    document.getElementById("debug").innerHTML = error; // Display network error message
-                });
-        } else {
-            // Notify the user if no JWT token is found in local storage
-            document.getElementById("debug").innerHTML = "No token found";
         }
-    }
-    catch (error) {
-        alert(error);
-    }
-
 }
 
 function victorySequence() {
