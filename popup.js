@@ -1,5 +1,4 @@
 var cameFrom = false;
-var loggedIn = false;
 
 // Open the popup with animation
 document.getElementById("user").addEventListener("click", (event) => {
@@ -23,12 +22,6 @@ document.getElementById("closePopup").addEventListener("click", () => {
     setTimeout(() => {
         popup.style.display = "none";
     }, 300); // Match the transition duration
-
-    if (cameFrom && loggedIn) {
-        document.getElementById("stats").click();
-    }
-    
-
 });
 
 // Close the popup when clicking outside the content
@@ -42,12 +35,6 @@ document.getElementById("mainPopup").addEventListener("click", (event) => {
             popup.style.display = "none";
         }, 300); // Match the transition duration
     }
-
-    if (cameFrom && loggedIn) {
-        document.getElementById("stats").click();
-    }
-    
-
 });
 
 
@@ -313,12 +300,16 @@ async function loginUser(username, password) {
     // Parse the JSON response
     const data = await response.json();
     if (response.ok) {
-        loggedIn = true;
         const token = data.access_token; // Extract the token from the response
         localStorage.clear(); // Clear any existing localStorage data
         localStorage.setItem('jwt_token', token); // Store the token in localStorage
         document.getElementById('lognote').innerHTML = "Successfully Logged into Account";
-        if(!cameFrom) {
+        if (!cameFrom) {
+            window.location.reload();
+        }
+        else {
+            cameFrom = false;
+            sessionStorage.setItem("cameFrom", "true");
             window.location.reload();
         }
     } else {

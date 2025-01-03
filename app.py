@@ -509,8 +509,9 @@ def get_user_data():
                 "time": user[7],
                 "grid": user[8],
                 "code": user[9],
+                "completed": user[11],
             }
-            return jsonify({"time": user_data["time"], "grid": user_data["grid"], "code": user_data["code"]}), 200
+            return jsonify({"time": user_data["time"], "grid": user_data["grid"], "code": user_data["code"], "completed": user_data["completed"]}), 200
 
     except Exception as e:
         # Handle any exceptions that occur

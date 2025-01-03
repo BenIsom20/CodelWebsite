@@ -177,9 +177,10 @@ main:focus:active {
 }
 
 .subNavbar {
+    top: 0px;
     background-color: #333533; /* Dark background color */
     color: #F7F9FB;
-    padding: 10px 20px;
+    padding: 0px 20px;
     position: fixed; /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;

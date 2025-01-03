@@ -16,16 +16,29 @@ async function getUserData() {
     const time = result.time;  // Retrieved stopwatch time
     const code = result.code;  // Retrieved saved code
     const grid = result.grid;  // Retrieved grid state
+    let completed = result.completed;
+    var victory = null;
+    if(completed === 1){
+        victory = true;
+    }
 
     // If all required data is present, save it to local storage and initialize the app
-    if (time && code && grid) {
+    if (time && code && grid && victory) {
         setIndexLocalStorageWithExpiry("stopwatchTime", time);
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
         loadCode();           // Load the saved code into the editor
         startStopwatch();     // Start the stopwatch with the saved time
         loadGridState();      // Restore the grid state
-    } else {
+    } 
+    else if (time && code && grid) {
+        setIndexLocalStorageWithExpiry("savedCode", code);
+        setIndexLocalStorageWithExpiry("gridState", grid);
+        loadCode();           // Load the saved code into the editor
+        startStopwatch();     // Start the stopwatch with the saved time
+        loadGridState();      // Restore the grid state
+    }
+    else {
         // If some data is missing, initialize components with available data
         startStopwatch();     // Start a new stopwatch session
         if (gridData) {
@@ -86,6 +99,11 @@ window.onload = function () {
     } else {
         // If a token is present, retrieve user data from the backend
         getUserData();
+    }
+
+    if(sessionStorage.getItem("cameFrom") === "true"){
+        sessionStorage.setItem("cameFrom", "false");
+        document.getElementById("stats").click();
     }
 }
 

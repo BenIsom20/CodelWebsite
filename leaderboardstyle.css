@@ -218,7 +218,7 @@ span:last-child {
     background-color: #333533;
     /* Dark background color */
     color: white;
-    padding: 10px 20px;
+    padding: 0px 20px;
     position: fixed;
     /* Keeps the navbar at the top of the page */
     width: 100%;
@@ -302,3 +302,20 @@ span:last-child {
     /* Adjust size as needed */
 }
 
+.logo-link {
+    display: inline-block;
+    text-align: center; /* Center the image inside the link */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 20%;
+}
+
+.gifClass {
+    width: auto; /* Keep the aspect ratio */
+    max-width: 75%; /* Adjust width */
+    max-height: 75%; /* Adjust height */
+    background-size: contain; /* Ensure the GIF scales proportionally */
+    background-repeat: no-repeat;
+    display: block; /* Centering adjustments */
+    margin-left: 50px;
+}
