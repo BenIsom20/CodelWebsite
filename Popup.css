@@ -1,6 +1,7 @@
  /* Popup container */
 /* Popup container */
 .popup {
+    z-index: 1200;
     display: none;
     position: fixed;
     top: 0;
@@ -13,6 +14,9 @@
   }
   h2{
     color: #ffe66d;
+  }
+  p{
+    color: #F7F9FB
   }
   
   /* Popup content */
