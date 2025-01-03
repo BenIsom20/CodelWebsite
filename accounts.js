@@ -138,6 +138,7 @@ async function loginUser(username, password) {
         localStorage.clear(); // Clear any existing localStorage data
         localStorage.setItem('jwt_token', token); // Store the token in localStorage
         document.getElementById('lognote').innerHTML = "Successfully Logged into Account";
+        window.location.reload();
     } else {
         document.getElementById('lognote').innerHTML = "Username or Password Incorrect";
     }

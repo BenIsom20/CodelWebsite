@@ -185,6 +185,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
         victorySend(); // Send a victory signal if all tests pass
         victorySequence(); // Display victory message and fireworks
     } else {
+        saveProgress();
         trySequence(); // Display try again message and animation
     }
 });
@@ -224,6 +225,38 @@ function errored(result) {
         return false; // Return false otherwise
     }
 }
+
+// Function to send victory state and related data to the backend
+async function saveProgress() {
+    // Check if a JWT token exists in local storage
+    if (localStorage.getItem("jwt_token") != null) {
+        alert("Token found");
+        const token = localStorage.getItem("jwt_token"); // Retrieve the token
+
+        const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage
+        const timer = getLocalStorageWithExpiry("stopwatchTime"); // Retrieve stopwatch time from localStorage
+        const code = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
+
+        // Prepare the payload with relevant data from local storage
+        const payload = {
+            gridState: grid,  // Grid state data
+            stopwatchTime: timer,  // Stopwatch time
+            savedCode: code,  // Saved code
+            attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
+        };
+
+        // Send a POST request to the backend to update victory state
+        fetch("http://localhost:5000/saveProgress", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",  // Indicate JSON content
+                "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
+            },
+            body: JSON.stringify(payload)  // Convert payload to JSON string
+        })
+    }
+}
+
 
 // Function to send victory state and related data to the backend
 async function victorySend() {

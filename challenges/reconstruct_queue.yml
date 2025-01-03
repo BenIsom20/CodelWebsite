@@ -1,6 +1,6 @@
 challenge:
   name: "Queue Reconstruction by Height"
-  date: "2024-12-31"
+  date: "2025-01-04"
   function:
     name: "reconstruct_queue"
     parameters: ["people"]

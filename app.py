@@ -394,6 +394,44 @@ def victory():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
+# Update the user's state after a victory
+@app.route("/saveProgress", methods=["POST"])
+@jwt_required()  # Protect the route
+def saveProgress():
+    try:
+        # Get the username from the JWT token
+        whatUser = get_jwt_identity()
+        username = whatUser['username']
+
+        # Extract data from the JSON payload in the request
+        data = request.json
+        grid_state = data.get("gridState")
+        stopwatch_time = data.get("stopwatchTime")
+        saved_code = data.get("savedCode")
+        attempts = data.get("attempts")
+
+        # Update the user's record in the database
+        query = """
+            UPDATE users
+            SET curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
+            WHERE username = %s
+        """
+        values = (stopwatch_time, grid_state, saved_code, attempts, username)
+
+        # Execute the query
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        cursor.execute(query, values)
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return jsonify({"message": "User state updated successfully"}), 200
+    except Exception as e:
+        # Handle any exceptions that occur
+        return jsonify({"error": str(e)}), 500
+
 # Delete a user and their associated data
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
@@ -481,7 +519,7 @@ def leaderboard():
         query = """
             SELECT username, attempts, curtimer, streak, wins
             FROM users
-            WHERE attempts > 0 AND curtimer > 0
+            WHERE attempts > 0 AND curtimer > 0 AND completed = 1
             ORDER BY attempts ASC, curtimer ASC
             LIMIT %s OFFSET %s;
         """
