@@ -36,7 +36,7 @@
             <a>
                 <span id="stopwatch"></span>
             </a>
-            <a id = "develop" href="Developers.html" onclick="storeStopwatchTime()" class="logo-link">
+            <a id="develop" href="Developers.html" onclick="storeStopwatchTime()" class="logo-link">
                 <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
             </a>
             <div class="nav-links">
@@ -44,7 +44,8 @@
                         class='bx bxs-bar-chart-alt-2'></i></a>
                 <a id="how" href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
                         class='bx bxs-help-circle'></i></a>
-                <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bx-user-circle'></i></a>
+                <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
+                <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
             </div>
         </div>
     </nav>
@@ -61,14 +62,10 @@
 
 
     <!--Code for input output and buttons-->
-
-    
-
-
     <div class="container mt-4">
-        <div class = "row mt-3">
-            <div class = "but">
-                <button id="submitCode" style = "padding-bottom: 10px;" class="mainbutton">Submit Code</button>
+        <div class="row mt-3">
+            <div class="but">
+                <button id="submitCode" style="padding-bottom: 10px;" class="mainbutton">Submit Code</button>
             </div>
         </div>
         <div class="row">
@@ -78,7 +75,7 @@
         </div>
         <div class="row mt-3">
             <div class="but">
-                <button id="runCode" class="mainbutton" ><i class='bx bx-play'></i> Run</button>
+                <button id="runCode" class="mainbutton"><i class='bx bx-play'></i> Run</button>
             </div>
         </div>
         <div class="row mt-3">
@@ -143,6 +140,29 @@
     </div>
 
 
+    <!-- Popup -->
+    <div id="statsPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+        <div class="popup-content" id="popupContent">
+            <span class="close" id="closeStatsPopup">&times;</span>
+
+            <!-- User Stats -->
+            <div id="userStats" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>User Stats</h2>
+                <div class="stats">
+                    <h4 id="nameStats"></h4>
+                    <p id="statsWins"></p>
+                    <p id="statsStreak"></p>
+                    <p id="statsAllStreak"></p>
+                    <p id="statsTotal"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <!--keep here-->
     <script src="main.js"></script>
@@ -157,8 +177,8 @@
         document.getElementById('develop').addEventListener('click', function (event) {
             smoothTransition(event);
         });
-        
-        
+
+
         function smoothTransition(event) {
             try {
                 event.preventDefault(); // Prevent the default navigation

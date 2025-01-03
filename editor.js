@@ -257,51 +257,57 @@ async function saveProgress() {
 
 // Function to send victory state and related data to the backend
 async function victorySend() {
-    // Check if a JWT token exists in local storage
-    if (localStorage.getItem("jwt_token") != null) {
-        const token = localStorage.getItem("jwt_token"); // Retrieve the token
+    try {
+        // Check if a JWT token exists in local storage
+        if (localStorage.getItem("jwt_token") != null) {
+            const token = localStorage.getItem("jwt_token"); // Retrieve the token
 
-        const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage
-        const timer = getLocalStorageWithExpiry("stopwatchTime"); // Retrieve stopwatch time from localStorage
-        const code = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
+            const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage
+            const timer = getLocalStorageWithExpiry("stopwatchTime"); // Retrieve stopwatch time from localStorage
+            const code = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
 
-        // Prepare the payload with relevant data from local storage
-        const payload = {
-            gridState: grid,  // Grid state data
-            stopwatchTime: timer,  // Stopwatch time
-            savedCode: code,  // Saved code
-            attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
-        };
+            // Prepare the payload with relevant data from local storage
+            const payload = {
+                gridState: grid,  // Grid state data
+                stopwatchTime: timer,  // Stopwatch time
+                savedCode: code,  // Saved code
+                attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
+            };
 
-        // Send a POST request to the backend to update victory state
-        fetch("http://localhost:5000/victory", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",  // Indicate JSON content
-                "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
-            },
-            body: JSON.stringify(payload)  // Convert payload to JSON string
-        })
-            .then(response => response.json())  // Parse the response JSON
-            .then(data => {
-                // Handle the response from the backend
-                if (data.message) {
-                    console.log("State updated successfully:", data.message);
-                    document.getElementById("debug").innerHTML = data.message; // Display success message
-                } else if (data.error) {
-                    console.error("Error updating state:", data.error);
-                    document.getElementById("debug").innerHTML = data.error; // Display error message
-                }
+            // Send a POST request to the backend to update victory state
+            fetch("http://localhost:5000/victory", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",  // Indicate JSON content
+                    "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
+                },
+                body: JSON.stringify(payload)  // Convert payload to JSON string
             })
-            .catch(error => {
-                // Handle network or other errors
-                console.error("Network error:", error);
-                document.getElementById("debug").innerHTML = error; // Display network error message
-            });
-    } else {
-        // Notify the user if no JWT token is found in local storage
-        document.getElementById("debug").innerHTML = "No token found";
+                .then(response => response.json())  // Parse the response JSON
+                .then(data => {
+                    // Handle the response from the backend
+                    if (data.message) {
+                        console.log("State updated successfully:", data.message);
+                        document.getElementById("debug").innerHTML = data.message; // Display success message
+                    } else if (data.error) {
+                        console.error("Error updating state:", data.error);
+                        document.getElementById("debug").innerHTML = data.error; // Display error message
+                    }
+                })
+                .catch(error => {
+                    // Handle network or other errors
+                    console.error("Network error:", error);
+                    document.getElementById("debug").innerHTML = error; // Display network error message
+                });
+        } else {
+            // Notify the user if no JWT token is found in local storage
+            document.getElementById("debug").innerHTML = "No token found";
+        }
     }
+    catch (error) {
+        alert(error);
+    }
+
 }
 
 function victorySequence() {

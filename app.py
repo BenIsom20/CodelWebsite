@@ -375,10 +375,22 @@ def victory():
         # Update the user's record in the database
         query = """
             UPDATE users
-            SET wins = wins + 1, streak = streak + 1, completed = 1, curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
+            SET 
+                wins = wins + 1,
+                streak = streak + 1,
+                completed = 1,
+                curtimer = %s,
+                curgrid = %s,
+                curcode = %s,
+                attempts = %s,
+                totalTime = totalTime + %s,
+                allStreak = CASE 
+                                WHEN streak + 1 > allStreak THEN streak + 1 
+                                ELSE allStreak 
+                            END,
             WHERE username = %s
         """
-        values = (stopwatch_time, grid_state, saved_code, attempts, username)
+        values = (stopwatch_time, grid_state, saved_code, attempts, stopwatch_time, username)
 
         # Execute the query
         connection = mysql.connector.connect(**db_config)
@@ -535,6 +547,44 @@ def leaderboard():
 
         # Return the leaderboard data
         return jsonify({"leaderboard": leaderboard}), 200
+
+    except Exception as e:
+        # Handle any exceptions that occur
+        return jsonify({"error": str(e)}), 500
+
+
+# Retrieve user data from the database
+@app.route("/stats", methods=["GET"])
+@jwt_required()  # Protect the route with JWT token
+def stats():
+    try:
+        # Get the username from the JWT token
+        whatuse = get_jwt_identity()
+        username = whatuse['username']
+
+        # Fetch the user's data from the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if user is None:
+            # Return a default response if no data is found
+            return jsonify({"stats": "none"})
+        else:
+            # Format the user's data into a JSON response
+            user_data = {
+                "username": user[1],
+                "created": user[4],
+                "streak": user[5],
+                "wins": user[6],
+                "allTime": user[12],
+                "allStreak": user[13],
+            }
+            return jsonify({"stats": user_data}), 200
 
     except Exception as e:
         # Handle any exceptions that occur
