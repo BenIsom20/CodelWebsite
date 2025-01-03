@@ -41,10 +41,10 @@ function captureLogin() {
 
 // Function to capture registration details and trigger the registration process
 function captureRegister() {
-    document.getElementById("regusernote").innerHTML="";
-    document.getElementById("regemailnote").innerHTML="";
-    document.getElementById("regpassnote").innerHTML="";
-    document.getElementById("regmatchnote").innerHTML="";
+    document.getElementById("regusernote").innerHTML = "";
+    document.getElementById("regemailnote").innerHTML = "";
+    document.getElementById("regpassnote").innerHTML = "";
+    document.getElementById("regmatchnote").innerHTML = "";
 
     // Retrieve username, password, and email from the registration form
     const username = document.getElementById('regusername').value;
@@ -115,6 +115,7 @@ async function registerUser(username, password, email) {
     const data = await response.json();
     if (response.ok) {
         document.getElementById('regnote').innerHTML = "Successfully Created Account";
+        loginUser(username, password); // Log in the new user
     } else {
         document.getElementById('regnote').innerHTML = "Username or Email Already Exists";
     }
@@ -183,6 +184,7 @@ async function deleteUser(username, password) {
     const data = await response.json();
     if (response.ok) {
         document.getElementById('delnote').innerHTML = "Successfully Deleted Account";
+        logoutUserOnDel(username);
     } else {
         document.getElementById('delnote').innerHTML = "Username or Password Incorrect";
     }
@@ -190,11 +192,41 @@ async function deleteUser(username, password) {
 
 }
 
+async function logoutUserOnDel(paramusername) {
+    const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
+    if (!token) return; // Exit if no token is found
+
+    // Send a GET request to the protected endpoint with the token in the Authorization header
+    const response = await fetch('http://localhost:5000/protected', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+        if(paramusername === data.username){
+            localStorage.clear();
+            window.location.reload();
+        }
+        else{
+
+        }
+    } 
+}
 // Add event listeners to handle button clicks
 document.getElementById("delete").addEventListener("click", captureDelete); // Delete user
 document.getElementById("login").addEventListener("click", captureLogin); // Login user
 document.getElementById("register").addEventListener("click", captureRegister); // Register user
 document.getElementById("logout").addEventListener("click", function () {
-    localStorage.clear(); // Clear localStorage on logout
-    document.getElementById('lognote').innerHTML = "Successfully Logged Out" // Notify user
+    if (localStorage.getItem('jwt_token')) {
+        localStorage.clear();
+        document.getElementById('lognote').innerHTML = "Successfully Logged Out" // Notify user
+        window.location.reload();
+    }
+    else {
+        document.getElementById('lognote').innerHTML = "No Account Logged In" // Notify user
+    }
+
 });

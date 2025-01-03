@@ -210,7 +210,7 @@ span:last-child {
     /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 50px #ffe66d;
+    box-shadow: 0 2px 50px black;
 
 }
 
@@ -223,7 +223,7 @@ span:last-child {
     /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 5px #ffe66d;
+    box-shadow: 0 2px 5px black;
 
 
 }

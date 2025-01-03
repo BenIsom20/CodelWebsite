@@ -32,9 +32,6 @@ function saveCodeAndNotify() {
     setLocalStorageWithExpiry("savedCode", stringUserCode); // Save the code in localStorage 
 }
 
-// Event listener for the "Save Code" button to trigger the saveCode function
-//document.getElementById("saveCode").addEventListener("click", saveCodeAndNotify);
-
 // Event listener for the "User" button to save code and notify
 document.getElementById("user").addEventListener("click", function () {
     saveCodeAndNotify();
@@ -230,7 +227,7 @@ function errored(result) {
 async function saveProgress() {
     // Check if a JWT token exists in local storage
     if (localStorage.getItem("jwt_token") != null) {
-        alert("Token found");
+
         const token = localStorage.getItem("jwt_token"); // Retrieve the token
 
         const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage

@@ -290,7 +290,9 @@ main {
 .head {
     font-weight: bold
 }
-
+#submitCode{
+    margin-bottom: 10px;
+}
 .but{
     justify-content: space-between;
 }
