@@ -21,9 +21,9 @@
         <div class="navbar-container">
             <a id="backtocode" href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
                 CODEL</a>
-                <a id="develop" href="Developers.html" onclick="storeStopwatchTime()" class="logo-link">
-                    <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
-                </a>
+            <a id="develop" href="Developers.html" onclick="storeStopwatchTime()" class="logo-link">
+                <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
+            </a>
             <div class="nav-links">
                 <a id="how" href="How.html" class="navObjects"><i class='bx bxs-help-circle'></i></a>
                 <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
@@ -75,6 +75,8 @@
                 <button id="login">Sign In</button>
                 <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
                 <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
+                <button id="logout">Sign Out</button>
+                <p id="outnote"></p>
             </div>
 
             <!-- Register Form -->
@@ -142,16 +144,16 @@
 
 
         function smoothTransition(event) {
-                event.preventDefault(); // Prevent the default navigation
-                const href = event.currentTarget.href; // Get the target URL
+            event.preventDefault(); // Prevent the default navigation
+            const href = event.currentTarget.href; // Get the target URL
 
-                // Add the fade-out class to the body
-                document.body.classList.add('fade-out');
+            // Add the fade-out class to the body
+            document.body.classList.add('fade-out');
 
-                // Wait for the transition to complete, then navigate
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 300); // Match this duration with your CSS transition time
+            // Wait for the transition to complete, then navigate
+            setTimeout(() => {
+                window.location.href = href;
+            }, 300); // Match this duration with your CSS transition time
         }
     </script>
 
@@ -162,21 +164,21 @@
         const limit = 10; // Number of entries to fetch per request
 
         async function getUsername() {
- 
-                const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
-                if (!token) { return; } // Exit if no token is found
 
-                // Send a GET request to the protected endpoint with the token in the Authorization header
-                const response = await fetch('http://localhost:5000/protected', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    username = data.username;
-                } 
+            const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
+            if (!token) { return; } // Exit if no token is found
+
+            // Send a GET request to the protected endpoint with the token in the Authorization header
+            const response = await fetch('http://localhost:5000/protected', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if (response.ok) {
+                username = data.username;
+            }
         }
         getUsername();
 
@@ -255,6 +257,10 @@
 
         // Load initial leaderboard data on page load
         window.onload = function () {
+            if (sessionStorage.getItem("cameFrom") === "true") {
+                sessionStorage.setItem("cameFrom", "false");
+                document.getElementById("stats").click();
+            }
             loadLeaderboard();
             document.body.classList.add('fade-in');
 

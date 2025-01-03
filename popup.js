@@ -394,11 +394,11 @@ document.getElementById("register").addEventListener("click", captureRegister); 
 document.getElementById("logout").addEventListener("click", function () {
     if (localStorage.getItem('jwt_token')) {
         localStorage.clear();
-        document.getElementById('lognote').innerHTML = "Successfully Logged Out" // Notify user
+        document.getElementById('outnote').innerHTML = "Successfully Logged Out" // Notify user
         window.location.reload();
     }
     else {
-        document.getElementById('lognote').innerHTML = "No Account Logged In" // Notify user
+        document.getElementById('outnote').innerHTML = "No Account Logged In" // Notify user
     }
 
 });

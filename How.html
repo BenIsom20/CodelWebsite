@@ -50,6 +50,8 @@
                 <button id="login">Sign In</button>
                 <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
                 <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
+                <button id="logout">Sign Out</button>
+                <p id="outnote"></p>
             </div>
 
             <!-- Register Form -->
@@ -217,6 +219,10 @@
 
         window.onload = function () {
             document.body.classList.add('fade-in');
+            if (sessionStorage.getItem("cameFrom") === "true") {
+                sessionStorage.setItem("cameFrom", "false");
+                document.getElementById("stats").click();
+            }
         }
     </script>
 
