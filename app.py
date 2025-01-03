@@ -385,7 +385,7 @@ def victory():
                 attempts = %s,
                 totalTime = totalTime + %s,
                 allStreak = CASE 
-                                WHEN streak + 1 > allStreak THEN streak + 1
+                                WHEN streak > allStreak THEN streak
                                 ELSE allStreak
                             END
             WHERE username = %s

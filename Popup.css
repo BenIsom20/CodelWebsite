@@ -1,7 +1,6 @@
  /* Popup container */
 /* Popup container */
 .popup {
-    z-index: 1200;
     display: none;
     position: fixed;
     top: 0;
@@ -30,6 +29,18 @@
     position: relative;
   }
   
+ /* Popup content */
+ .stats-content {
+  background: #333533;
+  padding: 20px;
+  border-radius: 10px;
+  width: 45%;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 5px 5px 15px black(0, 0, 0, 0.3);
+  position: relative;
+}
+
   /* Close button */
   .close {
     position: absolute;

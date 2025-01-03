@@ -64,6 +64,15 @@ tabLinks.forEach(link => {
     });
 });
 
+function formatTime(seconds) {
+    const hrs = Math.floor(seconds / 3600); // Calculate hours
+    const mins = Math.floor((seconds % 3600) / 60); // Calculate remaining minutes
+    const secs = seconds % 60; // Calculate remaining seconds
+
+    // Format as HH:MM:SS with leading zeros
+    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
 // Function to fetch stats
 async function fetchStats() {
     const token = localStorage.getItem("jwt_token");
@@ -79,11 +88,17 @@ async function fetchStats() {
         });
         const data = await response.json();
         if (response.ok) {
-            document.getElementById("nameStats").innerHTML = data.stats.username + ", since " + data.stats.created; // Return stats if the response is successful
+            const createdDate = new Date(data.stats.created);
+            const options = { day: 'numeric', month: 'long', year: 'numeric' }; // Format options
+            const formattedDate = createdDate.toLocaleDateString(undefined, options); // Format date based on locale
+
+            // Update the HTML with a better sentence
+            document.getElementById("nameStats").innerHTML =
+                `${data.stats.username}, joined on ${formattedDate}`; // Return stats if the response is successful
             document.getElementById("statsWins").innerHTML = "🏆 total wins: " + data.stats.wins;
             document.getElementById("statsStreak").innerHTML = "🔥 current streak: " + data.stats.streak;
             document.getElementById("statsAllStreak").innerHTML = "🌟 highest streak: " + data.stats.allStreak;
-            document.getElementById("statsTotal").innerHTML = "⏳ total time spent: " + data.stats.allTime;
+            document.getElementById("statsTotal").innerHTML = "⏳ total time on CODEL: " + formatTime(data.stats.allTime);
             return data.stats;
         } else {
             return null;

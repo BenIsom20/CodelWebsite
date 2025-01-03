@@ -20,12 +20,13 @@
     <!-- CODE FOR THE NAVBAR -->
     <nav class="subNavbar">
         <div class="navbar-container">
-            <a id="backtocode" href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO CODEL</a>
+            <a id="backtocode" href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
+                CODEL</a>
             <div class="nav-links">
                 <a id="leader" href="Leaderboard.html" class="navObjects"><i class='bx bxs-bar-chart-alt-2'></i></a>
                 <a id="how" href="How.html" class="navObjects"><i class='bx bxs-help-circle'></i></a>
                 <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
-                <a id="stats" class = "navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
+                <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
             </div>
         </div>
     </nav>
@@ -90,6 +91,27 @@
         </div>
     </div>
 
+    <!-- Popup -->
+    <div id="statsPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+        <div class="stats-content" id="popupContent">
+            <span class="close" id="closeStatsPopup">&times;</span>
+
+            <!-- User Stats -->
+            <div id="userStats" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>User Stats</h2>
+                <div class="stats">
+                    <h4 id="nameStats"></h4>
+                    <p id="statsWins"></p>
+                    <p id="statsStreak"></p>
+                    <p id="statsAllStreak"></p>
+                    <p id="statsTotal"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.getElementById('leader').addEventListener('click', function (event) {
             smoothTransition(event);
@@ -116,7 +138,7 @@
         }
 
 
-        window.onload = function (){
+        window.onload = function () {
             document.body.classList.add('fade-in');
         }
     </script>

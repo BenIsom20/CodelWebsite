@@ -82,6 +82,26 @@
         </div>
     </div>
 
+    <!-- Popup -->
+    <div id="statsPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+        <div class="stats-content" id="popupContent">
+            <span class="close" id="closeStatsPopup">&times;</span>
+
+            <!-- User Stats -->
+            <div id="userStats" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>User Stats</h2>
+                <div class="stats">
+                    <h4 id="nameStats"></h4>
+                    <p id="statsWins"></p>
+                    <p id="statsStreak"></p>
+                    <p id="statsAllStreak"></p>
+                    <p id="statsTotal"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- EXPLANATION ABOUT HOW TO PLAY CODEL-->
     <main>
