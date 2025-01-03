@@ -17,7 +17,7 @@ function addRow(numTests) {
     for (let i = 1; i <= columnNumber; i++) {
         const rectangle = document.createElement('div');  // Create a new div element for each rectangle
         rectangle.classList.add('rectangle');  // Add the 'rectangle' class for styling
-        rectangle.textContent = `${"Case: "} ${i}`;  // Set the text content to display the test number
+        rectangle.textContent = `${"📋"}`;  // Set the text content to display the test number
         gridContainer.appendChild(rectangle);  // Append the rectangle to the grid container
     }
     amountOfRow++;
@@ -88,7 +88,7 @@ async function initializeColumn() {
             // Add a class to the rectangle for styling
             rectangle.classList.add('rectangle');
             // Set the text content of the rectangle to display the test number
-            rectangle.textContent = `Case: ${i}`;
+            rectangle.textContent = `💼`;
             // Append the rectangle to the grid container
             gridContainer.appendChild(rectangle);
         }

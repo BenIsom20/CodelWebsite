@@ -140,7 +140,6 @@
 
 
         function smoothTransition(event) {
-            try {
                 event.preventDefault(); // Prevent the default navigation
                 const href = event.currentTarget.href; // Get the target URL
 
@@ -151,11 +150,6 @@
                 setTimeout(() => {
                     window.location.href = href;
                 }, 300); // Match this duration with your CSS transition time
-            }
-            catch (error) {
-                alert(error);
-            }
-
         }
     </script>
 
@@ -166,7 +160,7 @@
         const limit = 10; // Number of entries to fetch per request
 
         async function getUsername() {
-            try {
+ 
                 const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
                 if (!token) { return; } // Exit if no token is found
 
@@ -180,14 +174,7 @@
                 const data = await response.json();
                 if (response.ok) {
                     username = data.username;
-                } else {
-                    alert(data.error);
-                }
-            }
-            catch (error) {
-                alert(error);
-            }
-
+                } 
         }
         getUsername();
 
