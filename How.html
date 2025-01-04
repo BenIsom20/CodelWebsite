@@ -22,9 +22,9 @@
         <div class="navbar-container">
             <a id="backtocode" href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
                 CODEL</a>
-            <a id="develop" href="Developers.html" class="logo-link">
+            <div class="logo-link">
                 <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
-            </a>
+            </div>
             <div class="nav-links">
                 <a id="leader" href="Leaderboard.html" class="navObjects"><i class='bx bxs-bar-chart-alt-2'></i></a>
                 <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
@@ -110,78 +110,105 @@
 
     <!-- EXPLANATION ABOUT HOW TO PLAY CODEL-->
     <main>
-        <section class="how-to-play">
-            <h1>How to Play CODEL</h1>
-
-            <p>Welcome to <strong>CODEL</strong>! Every day, you'll be challenged with a new coding task. Whether you're
-                a beginner or an experienced coder, this game will help you practice and improve your Python skills.</p>
+        <div class="how-to-play">
+            <h1 style = "color:#ffe66d">How to Play CODEL</h1>
+            <p>
+                Welcome to <strong>CODEL</strong>! Every day, you'll face a new coding challenge designed to help you
+                practice
+                and improve your Python skills. Whether you're a beginner or an experienced coder, CODEL is a fun way to
+                learn and grow.
+            </p>
 
             <h2 class="head">Objective</h2>
             <p>
-                The goal of the game is to solve the challenge in either the <strong>least amount of time</strong> or
-                the <strong>least number of attempts</strong>.
-                For example:
+                The goal is to solve the challenge in either the <strong>least amount of time</strong> or
+                the <strong>fewest number of attempts</strong>. For example:
+            </p>
             <ul>
-                <li>A solve with <strong>2 attempts</strong> and <strong>10 minutes</strong> would beat a solve with
+                <li>A solve with <strong>2 attempts</strong> and <strong>10 minutes</strong> beats a solve with
                     <strong>3 attempts</strong> and <strong>5 minutes</strong>.
                 </li>
-                <li>However, a solve with <strong>2 attempts</strong> and <strong>5 minutes</strong> would beat a solve
-                    with <strong>2 attempts</strong> and <strong>10 minutes</strong>.</li>
+                <li>However, a solve with <strong>2 attempts</strong> and <strong>5 minutes</strong> beats a solve with
+                    <strong>2 attempts</strong> and <strong>10 minutes</strong>.
+                </li>
             </ul>
-            </p>
 
             <h2 class="head">The Basics</h2>
-
             <h3>1. Daily Challenge</h3>
-            <p>Every day, a new coding challenge will be available. The challenge will appear right below the
-                <strong>CODEL</strong> heading, so you'll always know what you're working on.
+            <p>
+                Each day at midnight, a new coding challenge is available. The challenge description appears below the
+                <strong>CODEL</strong> heading.
             </p>
 
             <h3>2. Write Your Code</h3>
-            <p>Below the challenge description, you'll find an <strong>input box</strong> where you can write your
-                Python code to solve the problem. Use your best coding skills to write a solution. Don't worry if you're
-                unsure; you can always test your code before submitting it!</p>
+            <p>
+                Below the challenge description, you'll find an <strong>input box</strong> to write your Python code.
+                Use your best coding skills to solve the problem. Unsure? Test your code first before submitting!
+            </p>
 
-            <h3>3. Test Your Code</h3>
-            <p>Once you're happy with your code, you have two options:</p>
+            <h3>3. Test and Submit Your Code</h3>
             <ul>
-                <li><strong>Run Code:</strong> If you'd like to test your solution yourself, click the <strong>Run
-                        Code</strong> button. This will run your code and let you see the output right away.</li>
-                <li><strong>Submit Code:</strong> If you're confident your code is correct, click the <strong>Submit
-                        Code</strong> button to submit it for testing.</li>
+                <li><strong>Run Code:</strong> Test your solution by clicking <strong>Run Code</strong>. This runs your
+                    code
+                    and displays the output.</li>
+                <li><strong>Submit Code:</strong> Confident in your solution? Click <strong>Submit Code</strong> to run
+                    your
+                    code against our test cases.</li>
             </ul>
 
-            <h3>4. See How You Did</h3>
-            <p>After you submit your code, the game will run a series of <strong>tests</strong> to check if your
-                solution is correct.</p>
+            <h3>4. See Your Results</h3>
+            <p>
+                After submitting, CODEL runs a series of tests:
+            </p>
             <ul>
-                <li>If <strong>everything works perfectly</strong>, you'll see green squares next to each test —
-                    indicating that you passed all the tests.</li>
-                <li>If any tests fail, you'll see <strong>red squares</strong>. These indicate where your solution
-                    didn't work as expected.</li>
+                <li><strong>Green squares:</strong> Tests passed successfully.</li>
+                <li><strong>Red squares:</strong> Tests failed. Adjust your code and try again.</li>
             </ul>
 
-            <h3>5. What Happens if There’s an Error?</h3>
-            <p>If there is an error in your code (such as a syntax error or an exception), it won't count as a
-                submission. Instead, you'll see an error message telling you what went wrong. Don’t worry, just fix the
-                error and try again!</p>
+            <h3>5. Handling Errors</h3>
+            <p>
+                If your code has an error (e.g., syntax error), it won't count as a submission. You'll see an error
+                message.
+                Fix it and try again!
+            </p>
+
+            <h2 class="head">Signing Into an Account</h2>
+            <p>
+                To save your stats and progress, click the <strong>user icon</strong> in the navigation bar to create an
+                account.
+                Signing in offers these benefits:
+            </p>
+            <ul>
+                <li>View your rank on the <strong>global leaderboard</strong>.</li>
+                <li>Automatically save your progress with each submission.</li>
+                <li>Track detailed stats, including:
+                    <ul>
+                        <li>Total time spent on CODEL</li>
+                        <li>Current streak of consecutive completions</li>
+                        <li>All-time highest streak</li>
+                        <li>Total wins</li>
+                    </ul>
+                </li>
+            </ul>
 
             <h2 class="head">Tips for Success</h2>
             <ul>
-                <li><strong>Test First:</strong> If you're unsure whether your solution works, hit <strong>Run
-                        Code</strong> to check it before you submit.</li>
-                <li><strong>Read the Instructions Carefully:</strong> Make sure you understand the challenge before you
-                    start coding. The more clearly you understand the problem, the easier it will be to solve.</li>
-                <li><strong>Don’t Rush:</strong> Take your time to write clean, efficient code. You have plenty of time
-                    to work on each challenge, so no need to rush.</li>
-                <li><strong>Check Your Output:</strong> When running your code, check the output to make sure it matches
-                    what’s expected. If the output is wrong, adjust your code and test again.</li>
+                <li><strong>Test First:</strong> Use <strong>Run Code</strong> to check your solution before submitting.
+                </li>
+                <li><strong>Understand the Problem:</strong> Carefully read the challenge description to avoid mistakes.
+                </li>
+                <li><strong>Take Your Time:</strong> Focus on writing clean, efficient code.</li>
+                <li><strong>Analyze Your Output:</strong> Ensure your code's output matches expectations before
+                    submitting.</li>
             </ul>
 
             <h2 class="head">Ready to Start?</h2>
-            <p>You’re now ready to start coding! Click 'BACK TO CODEL' in the top bar to begin and see what’s waiting
-                for you today. Good luck, and happy coding!</p>
-        </section>
+            <p>
+                You're all set! Click <strong>'BACK TO CODEL'</strong> in the top bar to begin today's challenge.
+                Good luck, and happy coding!
+            </p>
+        </div>
+
     </main>
     <script>
         // Add an event listener for the 'leader' link
@@ -189,10 +216,6 @@
             smoothTransition(event); // Call smoothTransition when the link is clicked
         });
 
-        // Add an event listener for the 'how' link
-        document.getElementById('how').addEventListener('click', function (event) {
-            smoothTransition(event); // Call smoothTransition when the link is clicked
-        });
 
         // Add an event listener for the 'backtocode' link
         document.getElementById('backtocode').addEventListener('click', function (event) {
