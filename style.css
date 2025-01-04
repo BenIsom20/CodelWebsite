@@ -368,5 +368,13 @@ html {
     min-height: 300px;
 }
 
+#runCode {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+#runCode:hover {
+    color: #61C9A8;
+}
 
   
