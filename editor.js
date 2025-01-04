@@ -44,9 +44,6 @@ document.getElementById("user").addEventListener("click", function () {
 // Event listener for the "Leader" button to save code and notify
 document.getElementById("leader").addEventListener("click", saveCodeAndNotify);
 
-// Event listener for the "Develop" button to save code and notify
-document.getElementById("develop").addEventListener("click", saveCodeAndNotify);
-
 // Event listener for the "How" button to save code and notify
 document.getElementById("how").addEventListener("click", saveCodeAndNotify);
 
