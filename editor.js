@@ -166,25 +166,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
         outputDiv.textContent = "Error in submission: " + error.message;
     }
 
-    // Save the current state of the grid to localStorage
-    const grid = document.getElementById("grid-container");
-    const gridState = Array.from(grid.children).map(child => ({
-        tagName: child.tagName, // HTML tag name
-        textContent: child.textContent, // Text inside the element
-        classList: [...child.classList], // List of CSS classes
-        styles: child.style.cssText, // Inline styles
-        dataset: { ...child.dataset }, // Data attributes
-    }));
-    const jsonGridState = JSON.stringify(gridState);
-    setLocalStorageWithExpiry("gridState", jsonGridState);
-
-    if (victory) {
-        victorySend(); // Send a victory signal if all tests pass
-        victorySequence(); // Display victory message and fireworks
-    } else {
-        saveProgress();
-        trySequence(); // Display try again message and animation
-    }
+    storeGridState(victory); // Save the grid state to localStorage
 });
 
 

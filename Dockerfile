@@ -11,7 +11,12 @@ RUN apt-get update && \
     python3-pip \
     python3-venv \
     curl \
+    tzdata \
     && rm -rf /var/lib/apt/lists/*
+
+# Set the timezone to America/Chicago
+ENV TZ=America/Chicago
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Copy the requirements.txt file into the container
 COPY requirements.txt /app/

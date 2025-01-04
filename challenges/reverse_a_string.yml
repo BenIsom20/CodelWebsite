@@ -10,16 +10,16 @@ challenge:
   cases:
     - prompt: "Reverse a normal string"
       given_data: "\"hello\""
-      expected: "olleh"
+      expected: "\"olleh\""
 
     - prompt: "Reverse an empty string"
       given_data: "\"\""
-      expected: ""
+      expected: "\"\""
 
     - prompt: "Reverse a string with spaces"
       given_data: "\"hello world\""
-      expected: "dlrow olleh"
+      expected: "\"dlrow olleh\""
 
     - prompt: "Reverse a single character string"
       given_data: "\"a\""
-      expected: "a"
+      expected: "\"a\""

@@ -12,6 +12,7 @@ import sys
 from flask_apscheduler import APScheduler
 from pytz import timezone
 from better_profanity import profanity
+from collections.abc import Iterable
 
 app = Flask(__name__)
 # Enable CORS for all routes
@@ -152,63 +153,65 @@ def execute_code():
 def test_code():
     """Route to test the user's code against predefined test cases."""
     try:
-        # Get the code from the request
         data = request.json
         code = data.get("code", "")
 
-        # Get function name from the skeleton
         function_name = current_challenge_function_skeleton['name']
-
         results = {}
-        given_values = []  # To store the given values for each test case
+        given_values = []
 
-        # Loop through each test case
         for case in current_challenge_cases:
-            # Add the given value for the test case
             given_data = case['given_data']
             given_values.append(given_data)
-
             expected = case['expected']
 
-            # Prepare the code to execute, including the function call
+            # Prepare the code to execute
             code_call = f"{function_name}({given_data})"
             full_code = f"""
 {code}
 
-# Call the function and print the result
 result = {code_call}
-# Capture the output
-captured_output.seek(0)  # Move cursor to the beginning of the buffer
-captured_output.truncate(0)  # Clear the content in the buffer
-print(result)  # Print the result
 """
-            # Capture the output using StringIO
             captured_output = io.StringIO()
-            sys.stdout = captured_output  # Redirect stdout to capture print statements
+            sys.stdout = captured_output
 
             try:
-                full_code = full_code.replace("\t", "    ")  # Replace tabs with spaces
-                exec(full_code)  # Execute the user code
+                full_code = full_code.replace("\t", "    ")
+                exec(full_code)
 
-                # Get the captured output and compare with expected
-                actual_output = captured_output.getvalue().strip()
+                actual_output = locals().get("result", None)
 
-                # Check if the output matches the expected result
-                if str(actual_output) == str(expected):
-                    results[case['challenge_case_id']] = f"Success: Expected '{expected}', got '{actual_output}'"
+                # Parse expected and actual values for logical comparison
+                parsed_expected = json.loads(expected)
+                parsed_actual = json.loads(json.dumps(actual_output))
+
+                # Comparison function to handle different types of values
+                def compare_values(expected, actual):
+                    if isinstance(actual, Iterable) and not isinstance(actual, str):
+                        # Compare iterables (lists, tuples, dicts)
+                        return sorted(expected) == sorted(actual)
+                    else:
+                        # Direct comparison for non-iterables
+                        return expected == actual
+
+                # Perform comparison
+                if compare_values(parsed_expected, parsed_actual):
+                    results[case['challenge_case_id']] = "Success"
                 else:
-                    results[case['challenge_case_id']] = f"Failure: Expected '{expected}', got '{actual_output}'"
+                    results[case['challenge_case_id']] = (
+                        f"Failure: Expected {parsed_expected}, got {parsed_actual}"
+                    )
 
             except Exception as e:
+                # Error message should provide more specific feedback on the user's code
                 results[case['challenge_case_id']] = f"Error: {str(e)}"
             finally:
-                sys.stdout = sys.__stdout__  # Reset stdout to default
+                sys.stdout = sys.__stdout__
 
-        # Return the results and given values to the frontend
         return jsonify({
             "numTests": len(results),
             "testList": results,
-            "givenValues": given_values  # Include the given values in the response
+            "givenValues": given_values
         })
 
     except Exception as e:

@@ -10,41 +10,66 @@ let amountOfRow = 0;
 
 // Function to add a new row to the grid
 function addRow(numTests) {
-    const columnNumber = numTests;  // Set the number of columns to match the number of tests
-    const rowNumber = gridContainer.children.length / columnNumber + 1;  // Calculate the current row number (1-based index)
+    const columnNumber = numTests; // Set the number of columns to match the number of tests
+    const rowNumber = Math.floor(gridContainer.children.length / columnNumber) + 1; // Calculate the current row number (1-based index)
 
     // Loop through each column and create a rectangle for each test
     for (let i = 1; i <= columnNumber; i++) {
-        const rectangle = document.createElement('div');  // Create a new div element for each rectangle
-        rectangle.classList.add('rectangle');  // Add the 'rectangle' class for styling
-        rectangle.textContent = `${"📋"}`;  // Set the text content to display the test number
-        gridContainer.appendChild(rectangle);  // Append the rectangle to the grid container
+        const rectangle = document.createElement('div'); // Create a new div element for each rectangle
+        rectangle.classList.add('rectangle'); // Add the 'rectangle' class for styling
+
+        // Create an <img> element for the suitcase icon
+        const suitcaseImage = document.createElement('img');
+        suitcaseImage.src = 'images/greyCase.svg'; // Default to grey suitcase
+        suitcaseImage.alt = 'Suitcase'; // Add an alt attribute for accessibility
+        suitcaseImage.classList.add('suitcase-img'); // Add a class for styling
+
+        // Append the suitcase image to the rectangle
+        rectangle.appendChild(suitcaseImage);
+
+        // Append the rectangle to the grid container
+        gridContainer.appendChild(rectangle);
     }
+
     amountOfRow++;
 }
 
-// Function to color a row based on the results
 function colorRow(stringList, numTests) {
     const rectangles = document.querySelectorAll('.rectangle');  // Get all rectangles in the grid
     const totalColumns = numTests;  // Set the total number of columns in the grid
-    const totalRows = rectangles.length / totalColumns;  // Calculate the total number of rows in the grid
+    const totalRows = Math.floor(rectangles.length / totalColumns);  // Calculate the total number of rows in the grid
 
     // Check if there are still rows to color
     if (currentRowIndex < totalRows) {
-        // Calculate the start and end indices for the current row
+        // Calculate the start index of the current row
         const startIndex = currentRowIndex * totalColumns;
-        const endIndex = startIndex + totalColumns;
 
         // Loop through each result in the stringList and color the corresponding rectangle
         stringList.forEach((result, index) => {
-            if (result.includes("Success")) {
-                // If the result is "Success", add a 'green' class to the corresponding rectangle
-                rectangles[index + startIndex].classList.add('green');
-            } else if (result.includes("Failure") || result.includes("Error")) {
-                // If the result includes "Failure", add a 'red' class to the corresponding rectangle
-                rectangles[index + startIndex].classList.add('red');
-            } else {
-                // If the result is neither "Success" nor contains "Failure", log the unknown value
+            // Ensure we're within the bounds of the current row
+            const rectIndex = startIndex + index;
+            if (rectIndex < rectangles.length) {
+                const rectangle = rectangles[rectIndex];
+
+                if (result.includes("Success")) {
+                    // If the result is "Success", add a 'green' class to the corresponding rectangle
+                    rectangle.classList.add('green');
+
+                    // Change suitcase image to green case
+                    let suitcaseImage = rectangle.querySelector('.suitcase-img');
+                    if (suitcaseImage) {
+                        suitcaseImage.src = 'images/greenCase.svg';  // Change the image
+                    }
+                } else if (result.includes("Failure") || result.includes("Error")) {
+                    // If the result includes "Failure" or "Error", add a 'red' class to the corresponding rectangle
+                    rectangle.classList.add('red');
+
+                    // Change suitcase image to red case
+                    let suitcaseImage = rectangle.querySelector('.suitcase-img');
+                    if (suitcaseImage) {
+                        suitcaseImage.src = 'images/redCase.svg';  // Change the image
+                    }
+                }
             }
         });
 
@@ -63,7 +88,6 @@ async function initializeColumn() {
 
     // Get the output div to display results
     const outputDiv = document.getElementById("output");
-
 
     // Send the code to the backend for execution
     const response = await fetch("http://127.0.0.1:5000/Startup");
@@ -87,8 +111,16 @@ async function initializeColumn() {
             const rectangle = document.createElement('div');
             // Add a class to the rectangle for styling
             rectangle.classList.add('rectangle');
-            // Set the text content of the rectangle to display the test number
-            rectangle.textContent = `💼`;
+
+            // Create an img element for the suitcase image
+            const suitcaseImage = document.createElement('img');
+            suitcaseImage.src = 'images/greyCase.svg';  // Set the image source
+            suitcaseImage.alt = 'Suitcase';           // Set an alt text for accessibility
+            suitcaseImage.classList.add('suitcase-img'); // Add a class for custom styling if needed
+
+            // Append the image to the rectangle
+            rectangle.appendChild(suitcaseImage);
+
             // Append the rectangle to the grid container
             gridContainer.appendChild(rectangle);
         }
@@ -212,16 +244,19 @@ async function fetchTestExplanation() {
     Cookies.set('lastTypingEffectRunDate', currentDate, { expires: 1 }); // Cookie expires in 1 day
 }
 
-function storeGridState() {
+function storeGridState(victory) {
     const grid = document.getElementById("grid-container");
     const gridState = [];
 
     // Loop through each child (rectangle) in the grid
     const children = grid.children;
     for (let child of children) {
+        const suitcaseImage = child.querySelector('.suitcase-img'); // Get the image element inside the rectangle
+        const imageSrc = suitcaseImage ? suitcaseImage.src : '';  // Capture the src of the image (or empty string if no image)
+
         gridState.push({
             tagName: child.tagName, // Save the tag name (e.g., 'DIV')
-            textContent: child.textContent, // Save text content
+            imageSrc: imageSrc, // Store the image src
             classList: [...child.classList], // Save all classes as an array
             styles: child.style.cssText, // Save inline styles as a string
             dataset: { ...child.dataset }, // Save all data-* attributes
@@ -231,6 +266,14 @@ function storeGridState() {
     // Save the array to localStorage
     const jsongridState = JSON.stringify(gridState);
     setGridLocalStorageWithExpiry("gridState", jsongridState);
+
+    if (victory) {
+        victorySend(); // Send a victory signal if all tests pass
+        victorySequence(); // Display victory message and fireworks
+    } else {
+        saveProgress();
+        trySequence(); // Display try again message and animation
+    }
 }
 
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
@@ -264,10 +307,9 @@ async function loadGridState() {
         // Recreate each rectangle based on saved data
         currentRowIndex = savedState.length / numTest - 1; // Set the current row index to the last saved row
 
+        // Recreate each rectangle based on saved data
         savedState.forEach((item) => {
-            // For each item in the saved state, recreate the rectangle element
             const rectangle = document.createElement(item.tagName); // Create element
-            rectangle.textContent = item.textContent; // Set the text content of the rectangle
             rectangle.classList.add(...item.classList); // Add the saved classes to the rectangle
             rectangle.style.cssText = item.styles; // Apply saved styles
 
@@ -276,9 +318,19 @@ async function loadGridState() {
                 rectangle.dataset[key] = value; // Restore data attributes
             }
 
+            // Create and append the image based on the saved imageSrc
+            if (item.imageSrc) {
+                const suitcaseImage = document.createElement('img');
+                suitcaseImage.src = item.imageSrc; // Restore the image src
+                suitcaseImage.alt = 'Suitcase'; // Set an alt text for accessibility
+                suitcaseImage.classList.add('suitcase-img'); // Add class for styling
+                rectangle.appendChild(suitcaseImage); // Append the image to the rectangle
+            }
+
             // Append the recreated rectangle to the grid
             grid.appendChild(rectangle);
         });
+
     }
 
     // Initialize a flag to track if all rectangles in the current row are successful (green)
@@ -330,7 +382,6 @@ async function loadGridState() {
         stopStopwatch(); // Stop the stopwatch (assumed to be a function defined elsewhere)
     }
 }
-
 
 function setGridLocalStorageWithExpiry(key, value) {
     const now = new Date();
