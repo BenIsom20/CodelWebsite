@@ -48,23 +48,26 @@ document.getElementById("leader").addEventListener("click", saveCodeAndNotify);
 document.getElementById("how").addEventListener("click", saveCodeAndNotify);
 
 
-// Function to load the saved code from localStorage when the page is loaded
-function loadCode() {
-    const savedCode = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
-    const parsedCode = JSON.parse(savedCode); // Parse the saved code
-    if (parsedCode) {
-        editor.setValue(parsedCode); // Load the saved code into the editor
+async function fetchSkeletonWithRetry(retries = 10, delay = 50) {
+    for (let i = 0; i < retries; i++) {
+            const response = await fetch("http://127.0.0.1:5000/get_skeleton");
+            if (response.ok) {
+                return await response.json(); // Return parsed skeleton
+            }
+        await new Promise((resolve) => setTimeout(resolve, delay)); // Wait before retrying
     }
+    throw new Error("Failed to fetch skeleton after multiple attempts.");
 }
 
-// Function to fetch and populate skeleton code based on a challenge ID
-async function loadSkeleton() {
-    const response = await fetch(`http://127.0.0.1:5000/get_skeleton`); // Fetch skeleton code from the server
-    if (response.ok) {
-        const skeleton = await response.json(); // Parse the server response
-        const ske = skeleton.skeleton; // Extract the skeleton code
-        editor.setValue(ske); // Populate the editor with the skeleton code
-    }
+async function loadCode() {
+    const code = getLocalStorageWithExpiry("savedCode");
+        if (code === null) {
+            const skeleton = await fetchSkeletonWithRetry(); // Retry fetching skeleton
+            editor.setValue(skeleton.skeleton);
+        } else {
+            const parsedCode = JSON.parse(code);
+            editor.setValue(parsedCode);
+        }
 }
 
 // Event listener for "Run Code" button
@@ -86,14 +89,6 @@ document.getElementById("runCode").addEventListener("click", async function () {
         outputDiv.textContent = result.error; // Display error if any
     } else {
         outputDiv.textContent = result.output || "No output"; // Display output or "No output" if none
-    }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    //runs load skeleton function to load the skeleton code
-    const code = getLocalStorageWithExpiry("savedCode");
-    if (!code) {
-        loadSkeleton();
     }
 });
 
@@ -236,32 +231,32 @@ async function saveProgress() {
 
 // Function to send victory state and related data to the backend
 async function victorySend() {
-        // Check if a JWT token exists in local storage
-        if (localStorage.getItem("jwt_token") != null) {
-            const token = localStorage.getItem("jwt_token"); // Retrieve the token
+    // Check if a JWT token exists in local storage
+    if (localStorage.getItem("jwt_token") != null) {
+        const token = localStorage.getItem("jwt_token"); // Retrieve the token
 
-            const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage
-            const timer = getLocalStorageWithExpiry("stopwatchTime"); // Retrieve stopwatch time from localStorage
-            const code = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
+        const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage
+        const timer = getLocalStorageWithExpiry("stopwatchTime"); // Retrieve stopwatch time from localStorage
+        const code = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
 
-            // Prepare the payload with relevant data from local storage
-            const payload = {
-                gridState: grid,  // Grid state data
-                stopwatchTime: timer,  // Stopwatch time
-                savedCode: code,  // Saved code
-                attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
-            };
+        // Prepare the payload with relevant data from local storage
+        const payload = {
+            gridState: grid,  // Grid state data
+            stopwatchTime: timer,  // Stopwatch time
+            savedCode: code,  // Saved code
+            attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
+        };
 
-            // Send a POST request to the backend to update victory state
-            fetch("http://localhost:5000/victory", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",  // Indicate JSON content
-                    "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
-                },
-                body: JSON.stringify(payload)  // Convert payload to JSON string
-            })
-        }
+        // Send a POST request to the backend to update victory state
+        fetch("http://localhost:5000/victory", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",  // Indicate JSON content
+                "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
+            },
+            body: JSON.stringify(payload)  // Convert payload to JSON string
+        })
+    }
 }
 
 function victorySequence() {

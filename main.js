@@ -46,7 +46,7 @@ async function getUserData() {
         } else {
             initializeColumn();  // Initialize a new column structure if no grid data exists
         }
-        loadCode();           // Load code into the editor (even if it's blank)
+        await loadCode();           // Load code into the editor 
     }
 }
 
@@ -71,7 +71,7 @@ function clearExpiredLocalStorage() {
 
 //ONE SINGULAR ONLOAD FUNCTION -->
 // This function is executed when the window finishes loading
-window.onload = function () {
+window.onload = async function () {
     document.body.classList.add('fade-in');
     clearExpiredLocalStorage(); // Clear expired data from localStorage
 
@@ -95,7 +95,7 @@ window.onload = function () {
         }
 
         // Load the saved code into the editor (or start fresh if none exists)
-        loadCode();
+        await loadCode();
     } else {
         // If a token is present, retrieve user data from the backend
         getUserData();
