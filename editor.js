@@ -48,21 +48,17 @@ document.getElementById("leader").addEventListener("click", saveCodeAndNotify);
 document.getElementById("how").addEventListener("click", saveCodeAndNotify);
 
 
-async function fetchSkeletonWithRetry(retries = 10, delay = 50) {
-    for (let i = 0; i < retries; i++) {
+async function fetchSkeleton() {
             const response = await fetch("http://127.0.0.1:5000/get_skeleton");
             if (response.ok) {
                 return await response.json(); // Return parsed skeleton
             }
-        await new Promise((resolve) => setTimeout(resolve, delay)); // Wait before retrying
-    }
-    throw new Error("Failed to fetch skeleton after multiple attempts.");
 }
 
 async function loadCode() {
-    const code = getLocalStorageWithExpiry("savedCode");
+        const code = getLocalStorageWithExpiry("savedCode");
         if (code === null) {
-            const skeleton = await fetchSkeletonWithRetry(); // Retry fetching skeleton
+            const skeleton = await fetchSkeleton(); // Retry fetching skeleton
             editor.setValue(skeleton.skeleton);
         } else {
             const parsedCode = JSON.parse(code);
