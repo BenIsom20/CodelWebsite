@@ -176,7 +176,7 @@ main:focus:active {
     top: 0px;
     z-index: 1000;   /* Makes sure the navbar stays above other content */
     box-shadow: 0 2px 50px #ffe66d;
-    animation: flicker 4s 1 forwards; /* Play once */
+    /* animation: flicker 4s 1 forwards; Play once */
 }
 
 .subNavbar {
@@ -388,7 +388,7 @@ html {
     max-height: 100px; /* Optional: Limit the maximum height */
 }
 
-@keyframes flicker {
+/* @keyframes flicker {
     0%, 50%, 80% {
         box-shadow: 0px 0px 0px transparent;
     }
@@ -401,4 +401,4 @@ html {
     81.001%, 82%, 83.002% {
         box-shadow: 0px 2px 50px #ffe66d;
     }
-}
+} */
