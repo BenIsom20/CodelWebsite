@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS users (
     curgrid TEXT,
     curcode TEXT,
     attempts INT NOT NULL DEFAULT 0,
-    completed BIT NOT NULL DEFAULT 0,
+    completed TINYINT NOT NULL DEFAULT 0,
     totalTime INT NOT NULL DEFAULT 0,
     allStreak INT NOT NULL DEFAULT 0
 );
