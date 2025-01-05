@@ -26,10 +26,10 @@ var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
 
 editor.setSize("100%", 300); // Set the editor size to 90% width and 300px height
 
-function saveCodeAndNotify() {
+async function saveCodeAndNotify() {
     const userCode = editor.getValue(); // Retrieve the current code from the editor
     const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
-    setLocalStorageWithExpiry("savedCode", stringUserCode); // Save the code in localStorage 
+    await setLocalStorageWithExpiry("savedCode", stringUserCode); // Save the code in localStorage 
 }
 
 // Event listener for the "User" button to save code and notify
@@ -112,7 +112,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
         } else {
             // Save the submitted code to localStorage
             const stringUserCode = JSON.stringify(userCode);
-            setLocalStorageWithExpiry("savedCode", stringUserCode);
+            await setLocalStorageWithExpiry("savedCode", stringUserCode);
 
             // Notify the user of successful submission
             outputDiv.innerHTML = "Code Successfully Submitted";
@@ -274,11 +274,15 @@ function trySequence() {
     });
 }
 
-function setLocalStorageWithExpiry(key, value) {
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
-    const expiryTime = midnight.getTime(); // Get timestamp for midnight
+async function setLocalStorageWithExpiry(key, value) {
+    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight")
+    const info = await response.json();
+    if(response.ok){
+        const date = info.chicago_midnight_utc;
+        const objdate = new Date(date);
+        var expiryTime = objdate.getTime();
 
+    }
     const data = {
         value: value,
         expiry: expiryTime,
