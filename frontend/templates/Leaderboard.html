@@ -9,23 +9,24 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="leaderboardstyle.css">
-    <script src="popup.js" defer></script>
-    <link rel="stylesheet" href="Popup.css">
-
+    <link rel="stylesheet" href="static/css/leaderboardstyle.css">
+    <script src="static/js/popup.js" defer></script>
+    <link rel="stylesheet" href="static/css/Popup.css">
+    <link rel="icon" href="static/images/CodelIcon.png" type="image/png">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
 
 <body>
     <!-- CODE FOR NAVBAR -->
     <nav class="subNavbar">
         <div class="navbar-container">
-            <a id="backtocode" href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
+            <a id="backtocode" href="/" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
                 CODEL</a>
                 <div class="logo-link">
-                    <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
+                    <img class="gifClass" src="static/images/C.gif" alt="Animated Logo" id="logo">
                 </div>
             <div class="nav-links">
-                <a id="how" href="How.html" class="navObjects"><i class='bx bxs-help-circle'></i></a>
+                <a id="how" href="how" class="navObjects"><i class='bx bxs-help-circle'></i></a>
                 <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
                 <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
             </div>
@@ -186,7 +187,7 @@
         async function loadLeaderboard() {
             const loadMoreButton = document.getElementById("load-more");
             loadMoreButton.classList.add("hidden");
-            const response = await fetch(`http://127.0.0.1:5000/leaderboard?offset=${offset}&limit=${limit}`);
+            const response = await fetch(`http://127.0.0.1:5000/getLeaderboard?offset=${offset}&limit=${limit}`);
             const data = await response.json();
 
             if (response.ok) {

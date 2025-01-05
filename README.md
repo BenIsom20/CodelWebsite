@@ -1,3 +1,4 @@
+@ -1,60 +0,0 @@
 # CODEL
 
 **CODEL** is a daily coding challenge game designed to combine learning and fun. Every day at midnight, a new coding prompt is released. Users can type Python code into a provided function skeleton, run their code, or submit it for grading. Submissions are tested against predefined cases, with real-time feedback visualized through a grid: green for passing tests and red for failing ones. The goal is to complete all test cases in the least number of attempts, with time serving as a tiebreaker.

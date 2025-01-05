@@ -267,7 +267,7 @@ function victorySequence() {
         navbar.classList.remove("vic-burst");
     });
     navbar.style.boxShadow = "0 2px 50px #61C9A8ed";
-    logo.src = "images/V.gif?";
+    logo.src = "static/images/V.gif?";
 }
 
 function trySequence() {
