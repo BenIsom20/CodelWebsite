@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import subprocess
-from db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id, get_challenge_by_date, get_challenge_cases_by_date, get_function_skeleton_by_date
+from db.db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id, get_challenge_by_date, get_challenge_cases_by_date, get_function_skeleton_by_date
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import bcrypt
 import mysql.connector
@@ -15,9 +15,21 @@ from pytz import timezone
 from better_profanity import profanity
 from collections.abc import Iterable
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes
 CORS(app)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/how')
+def how():
+    return render_template('How.html')
+
+@app.route('/leaderboard')
+def leaderboard():
+    return render_template('leaderboard.html')
 
 # Setup logging configuration
 logging.basicConfig(level=logging.DEBUG)
@@ -150,6 +162,7 @@ def execute_code():
         # Get the code from the request
         data = request.json
         code = data.get("code", "")
+        code = code.replace("\t", "    ")
 
         # Execute the code using subprocess (Python interpreter)
         process = subprocess.run(
@@ -541,8 +554,8 @@ def get_user_data():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
-@app.route("/leaderboard", methods=["GET"])
-def leaderboard():
+@app.route("/getLeaderboard", methods=["GET"])
+def getLeaderboard():
     try:
         # Get the offset and limit from query parameters (default values if not provided)
         offset = int(request.args.get("offset", 0))  # Default offset is 0

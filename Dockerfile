@@ -18,23 +18,18 @@ RUN apt-get update && \
 ENV TZ=America/Chicago
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Copy the requirements.txt file into the container
-COPY requirements.txt /app/
-
-# Install dependencies from requirements.txt
-RUN pip3 install --no-cache-dir -r /app/requirements.txt
-
 # Create a directory for the Flask app
 WORKDIR /app
 
 # Copy the Flask app into the container
-COPY app.py /app
-COPY db_helper.py /app
-COPY challenges /app
-COPY challenger /app
+COPY backend /app/backend
+COPY frontend /app/frontend
+
+# Install dependencies from requirements.txt
+RUN pip3 install --no-cache-dir -r /app/backend/requirements.txt
 
 # Expose the port that Flask will run on
 EXPOSE 5000
 
 # Run the Flask app when the container starts
-CMD ["python3", "app.py"]
+CMD ["python3", "backend/app.py", "run", "--host=0.0.0.0"]

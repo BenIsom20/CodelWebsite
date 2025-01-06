@@ -20,7 +20,7 @@ function addRow(numTests) {
 
         // Create an <img> element for the suitcase icon
         const suitcaseImage = document.createElement('img');
-        suitcaseImage.src = 'images/greyCase.svg'; // Default to grey suitcase
+        suitcaseImage.src = `/static/images/greyCase${i}.svg`; // Default to grey suitcase
         suitcaseImage.alt = 'Suitcase'; // Add an alt attribute for accessibility
         suitcaseImage.classList.add('suitcase-img'); // Add a class for styling
 
@@ -58,7 +58,7 @@ function colorRow(stringList, numTests) {
                     // Change suitcase image to green case
                     let suitcaseImage = rectangle.querySelector('.suitcase-img');
                     if (suitcaseImage) {
-                        suitcaseImage.src = 'images/greenCase.svg';  // Change the image
+                        suitcaseImage.src = `/static/images/greenCase${index + 1}.svg`;  // Change the image
                     }
                 } else if (result.includes("Failure") || result.includes("Error")) {
                     // If the result includes "Failure" or "Error", add a 'red' class to the corresponding rectangle
@@ -67,7 +67,7 @@ function colorRow(stringList, numTests) {
                     // Change suitcase image to red case
                     let suitcaseImage = rectangle.querySelector('.suitcase-img');
                     if (suitcaseImage) {
-                        suitcaseImage.src = 'images/redCase.svg';  // Change the image
+                        suitcaseImage.src = `/static/images/redCase${index + 1}.svg`;  // Change the image
                     }
                 }
             }
@@ -114,7 +114,7 @@ async function initializeColumn() {
 
             // Create an img element for the suitcase image
             const suitcaseImage = document.createElement('img');
-            suitcaseImage.src = 'images/greyCase.svg';  // Set the image source
+            suitcaseImage.src = `/static/images/greyCase${i}.svg`;  // Set the image source
             suitcaseImage.alt = 'Suitcase';           // Set an alt text for accessibility
             suitcaseImage.classList.add('suitcase-img'); // Add a class for custom styling if needed
 

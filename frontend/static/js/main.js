@@ -69,9 +69,16 @@ function clearExpiredLocalStorage() {
     }
 }
 
-//ONE SINGULAR ONLOAD FUNCTION -->
+// ONE SINGULAR ONLOAD FUNCTION -->
 // This function is executed when the window finishes loading
 window.onload = async function () {
+    // Listen for the pageshow event to handle back navigation or cache restoration
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+
     document.body.classList.add('fade-in');
     clearExpiredLocalStorage(); // Clear expired data from localStorage
 
@@ -106,6 +113,16 @@ window.onload = async function () {
         document.getElementById("stats").click();
     }
 }
+
+window.addEventListener('pageshow', function (event) {
+    if (!sessionStorage.getItem("pageReloaded")) {
+        sessionStorage.setItem("pageReloaded", "true");
+        window.location.reload();
+    } else {
+        sessionStorage.removeItem("pageReloaded");
+    }
+});
+
 
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

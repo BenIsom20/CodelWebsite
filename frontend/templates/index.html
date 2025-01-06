@@ -14,16 +14,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/python/python.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/theme/midnight.min.css">
-    <link rel="stylesheet" href="CodelTheme.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/CodelTheme.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="Popup.css">
-    <script src="editor.js" defer></script>
-    <script src="timer.js" defer></script>
-    <script src="grid.js" defer></script>
-    <script src="popup.js" defer></script>
-    <link rel="icon" href="images\CodelIcon.png" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Popup.css') }}">
+    <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/timer.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/grid.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/popup.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png">
 </head>
 
 
@@ -36,12 +37,12 @@
                 <span id="stopwatch"></span>
             </a>
             <div class="logo-link">
-                <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
+                <img class="gifClass" src="/static/images/C.gif" alt="Animated Logo" id="logo">
             </div>
             <div class="nav-links">
-                <a id="leader" href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime();"><i
+                <a id="leader" href="leaderboard" class="navObjects" onclick="storeStopwatchTime();"><i
                         class='bx bxs-bar-chart-alt-2'></i></a>
-                <a id="how" href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
+                <a id="how" href="how" class="navObjects" onclick="storeStopwatchTime()"><i
                         class='bx bxs-help-circle'></i></a>
                 <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
                 <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
@@ -166,7 +167,6 @@
 
 
     <!--keep here-->
-    <script src="main.js"></script>
     <script>
         document.getElementById('leader').addEventListener('click', function (event) {
             smoothTransition(event);
