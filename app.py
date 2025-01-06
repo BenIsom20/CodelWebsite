@@ -92,7 +92,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 
 # Define a scheduled job with a timezone
-@scheduler.task("cron", id="midnight_job", hour=0, minute=31, timezone=timezone("America/Chicago"))
+@scheduler.task("cron", id="midnight_job", hour=0, minute=0, timezone=timezone("America/Chicago"))
 def midnight_job():
     """Scheduled job to reset the daily challenge and clear user progress."""
     try:
