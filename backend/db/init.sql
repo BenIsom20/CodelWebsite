@@ -47,6 +47,15 @@ CREATE TABLE IF NOT EXISTS users (
     allStreak INT NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS webInfo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    allAttempts INT NOT NULL DEFAULT 0,
+    allTime INT NOT NULL DEFAULT 0,
+    allUsers INT NOT NULL DEFAULT 0
+);
 
-
+-- Insert the initial row with default values (if the row doesn't exist yet)
+INSERT INTO webInfo (allAttempts, allTime, allUsers)
+SELECT 0, 0, 0
+WHERE NOT EXISTS (SELECT 1 FROM webInfo);
 

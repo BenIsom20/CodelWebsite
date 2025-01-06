@@ -23,7 +23,6 @@
     <script src="{{ url_for('static', filename='js/timer.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/grid.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/popup.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png">
 </head>
 
@@ -167,6 +166,7 @@
 
 
     <!--keep here-->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
         document.getElementById('leader').addEventListener('click', function (event) {
             smoothTransition(event);

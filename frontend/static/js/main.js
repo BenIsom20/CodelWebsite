@@ -108,6 +108,7 @@ window.onload = async function () {
         getUserData();
     }
 
+    await delay(500)
     if(sessionStorage.getItem("cameFrom") === "true"){
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
