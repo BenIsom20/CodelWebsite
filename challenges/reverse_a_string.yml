@@ -1,25 +1,25 @@
 challenge:
   name: "Reverse a String"
-  date: "2024-12-29"
+  date: "2025-01-03"
   function:
     name: "reverse_string"
     parameters: ["s"]
   prompt: |
-    "Write a Python function that takes a string as input and returns the string reversed."
+    Write a Python function that takes a string as input and returns the string reversed.
 
   cases:
     - prompt: "Reverse a normal string"
       given_data: "\"hello\""
-      expected: "olleh"
+      expected: "\"olleh\""
 
     - prompt: "Reverse an empty string"
       given_data: "\"\""
-      expected: ""
+      expected: "\"\""
 
     - prompt: "Reverse a string with spaces"
       given_data: "\"hello world\""
-      expected: "dlrow olleh"
+      expected: "\"dlrow olleh\""
 
     - prompt: "Reverse a single character string"
       given_data: "\"a\""
-      expected: "a"
+      expected: "\"a\""

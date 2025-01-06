@@ -3,83 +3,191 @@ body {
     flex-direction: column;
     align-items: center;
     margin:0;
-    background-color: #333; /* Set background to black */
-    color: #39FF14; /* Neon green color for text */
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New; /* Optional: Choose a font */
+    background-color: #333533; /* Set background to black */
+    color: #e5e5e5; /* Neon green color for text */
+    font-family: "Fira Code", monospace; /* Optional: Choose a font */
+    opacity: 0;
+
+}
+/* Keyframes for fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Keyframes for fade-out */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Fade-in animation */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
+}
+
+/* Fade-out animation */
+.fade-out {
+    animation: fadeOut 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
+}
+
+.output {
+    height: 200px;
+    overflow-y: auto; 
+    width: 100%;
+    background-color: #1E1F1E;
+    padding-left: 10px;
 }
 
 .grid {
     display: grid;
-    gap: 10px;
+    row-gap: 20px; /* Reduced gap */
+    column-gap: 120px;
+    margin-bottom: 20px;
+    justify-items: center; /* Centers grid items horizontally */
+    margin-right: 25px; /* Shift the grid to the left by 50px */
     margin-bottom: 20px;
 }
 
 .rectangle {
-    width: 100px;
-    height: 50px;
+    width: 200px;
+    height: 100px;
     /* Rectangular shape */
-    background-color: lightgray;
+    background-color: #333533;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
-    font-size: 16px;
-    border: 1px solid #ccc;
+    font-family: "Fira Code", monospace; /* Optional: Choose a font */
+    font-size: 30px;
+    border: 2px solid #F7F9FB;
     border-radius: 5px;
     text-align: center;
-    color: black;
+    color: #F7F9FB;
 }
 
 .mainbutton {
-    background-color: lightgrey; /* Light gray background */
-    color: black; /* Black text */
-    border: 2px solid black; /* Black border for definition */
+    background-image: linear-gradient(to left, #fceb95 50%, #ffe66d 50%); /* Gradient background */
+    background-size: 200%;
+    color: #333533; /* Black text */
+    border: 0px solid 333533; /* Black border for definition */
     border-radius: 5px; /* Rounded corners */
     padding: 10px 20px; /* Padding for size */
-    font-size: 16px; /* Comfortable font size */
+    font-size: 18px; /* Comfortable font size */
     font-weight: bold; /* Bold text */
     cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+    transition: 0.3s ease-out; /* Smooth hover transition */
     margin-right: 20px;
 }
 
 /* Hover effect */
 .mainbutton:hover {
-    background-color: darkgrey; /* Slightly darker light gray */
-    color: black; /* Keep text color black */
+    background-position: right; /* Slightly darker light gray *//
+}
+
+main:focus:active {
+    padding-top: 4px;
+    padding-left: 4px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    color: #e00000;
 }
 
 .rectangle.green {
-    background-color: green;
-    color: white;
+    color: #F7F9FB;
+    background-color: #61C9A8ed;
+    border: 0px solid;
+    animation: colorRevealGreen 1s;
+}
+
+@keyframes colorRevealGreen {
+    0%{
+        width: 220px;
+        height: 110px;
+        background-color: #333533;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Fira Code", monospace; /* Optional: Choose a font */
+        font-size: 30px;
+        border: 0px solid #F7F9FB;
+        border-radius: 5px;
+        text-align: center;
+        color: #F7F9FB;
+        animation: none;
+    }
+    100%{
+        color: #F7F9FB;
+        background-color: #61C9A8ed;
+        border: 0px solid;
+        width: 200px;
+        height: 100px;
+        animation: none;
+    }
 }
 
 .rectangle.red {
-    background-color: red;
-    color: white;
+    color: #F7F9FB;
+    background-color: #EA526F;
+    border: 0px solid;
+    animation: colorRevealRed 1s;
+}
+
+@keyframes colorRevealRed {
+    0%{
+        width: 220px;
+        height: 110px;
+        background-color: #333533;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Fira Code", monospace; /* Optional: Choose a font */
+        font-size: 30px;
+        border: 0px solid #F7F9FB;
+        border-radius: 5px;
+        text-align: center;
+        color: #F7F9FB;
+    }
+    100%{
+        width: 200px;
+        height: 100px;
+        color: #F7F9FB;
+        background-color: #EA526F;
+        border: 0px solid;
+    }
 }
 
 .mainNavbar {
-    background-color: #333; /* Dark background color */
-    color: white;
-    padding: 10px 20px;
-    position: relative; /* Keeps the navbar at the top of the page */
+    background-color: #333533; /* Dark background color */
+    color: #F7F9FB;
+    padding: 0px 20px;
+    /* position: relative; Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    
+    box-shadow: 0 2px 50px #ffe66d;
+    position: fixed;
+    top: 0px;
+    z-index: 1000;   /* Makes sure the navbar stays above other content */
+    box-shadow: 0 2px 50px #ffe66d;
+    /* animation: flicker 4s 1 forwards; Play once */
 }
 
 .subNavbar {
-    background-color: #333; /* Dark background color */
-    color: white;
-    padding: 10px 20px;
+    top: 0px;
+    background-color: #333533; /* Dark background color */
+    color: #F7F9FB;
+    padding: 0px 20px;
     position: fixed; /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    
-    
+    box-shadow: 0 2px 5px black; 
 }
 
 .navbar-container {
@@ -87,11 +195,42 @@ body {
     justify-content: space-between; /* Ensures "Back to Codel" is on the left and the icons on the right */
     align-items: center;
     width: 100%; /* Make sure it takes up the full width */
-    
+}
+
+.try-burst {
+    animation: tryBurst 1s;
+}
+
+@keyframes tryBurst{
+    0%{
+        box-shadow: 0 2px 50px #ffe66d;
+    }
+    50%{
+        box-shadow: 0 20px 100px #EA526F;
+    }
+    100%{
+        box-shadow: 0 2px 50px #ffe66d;
+    }
+}
+
+.vic-burst {
+    animation: vicBurst 2s;
+}
+
+@keyframes vicBurst{
+    0%{
+        box-shadow: 0 2px 50px #ffe66d;
+    }
+    30%{
+        box-shadow: 0 100px 500px #ffe66d;
+    }
+    55%{
+        box-shadow: 0 2px 50px #61C9A8ed;
+    }
 }
 
 .backButton {
-    color: #39FF14; /* Neon green for text */
+    color: #ffe66d; /* Neon green for text */
     text-decoration: none; /* Remove underline */
     font-size: 18px;
     padding: 5px 10px;
@@ -104,41 +243,162 @@ body {
 }
 
 .navObjects {
-    color: white; /* Icon color */
+    color: #F7F9FB; /* Icon color */
     margin-left: 15px;
     font-size: 30px;
     transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
 .navObjects:hover {
-    background-color: darkgrey;
-    border-color: #ccc;
+    color: #ffe66d;
+    animation: dance 0.6s ease-in-out;
+
 }
 
+.logo-link {
+    display: inline-block;
+    text-align: center; /* Center the image inside the link */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 20%;
+}
+
+/* Define the dance animation */
+@keyframes dance {
+    0% { transform: rotate(0) translateY(0); }
+    15% { transform: rotate(-10deg) translateY(-5px); }
+    50% { transform: rotate(5deg) translateY(2.5px); }
+    75% { transform: rotate(-5deg) translateY(-2px); }
+    100% { transform: rotate(0) translateY(0); }
+  }
+
 .backButton:hover {
-    background-color: darkgrey;
-    border-color: #ccc;
+    animation: dance 0.6s ease-in-out;
 }
 
 main {
     padding: 20px;
-    max-width: 800px;
     margin: 0 auto;
-    padding-top:100px;
+    padding-top:70px;
 }
 
 #stopwatch {
     font-size: 35px;
     
-    
-    border: 2px solid #39FF14;
+    box-shadow: 0 0px 0px #ffe66d;
+    border: 2px solid #ffe66d;
     border-radius: 10px;
 }
 
 .head {
     font-weight: bold
 }
-
+#submitCode{
+    margin-bottom: 10px;
+}
 .but{
     justify-content: space-between;
 }
+
+.aligned-text {
+    text-align: left; /* Ensures a clean left edge */
+    width: 1000px; /* Set a fixed width for the text block */
+    margin: 0; /* Remove extra margin */
+    line-height: 1.6; /* Improve readability */
+    font-family: Arial, sans-serif; /* Optional: consistent font */
+  }
+
+  .centered-container {
+    display: flex;
+    justify-content: center; /* Centers the paragraph block horizontally */
+    align-items: center; /* Optional: centers vertically if needed */
+  }
+
+  /* Apply rounded corners to the CodeMirror editor container */
+#editor {
+    border-radius: 10px;  /* Adjust the radius as needed */
+    overflow: hidden;     /* Ensure content doesn't overflow outside the rounded corners */
+}
+
+/* Optionally, you can also style the actual CodeMirror instance */
+.CodeMirror {
+    border-radius: 10px;  /* Adjust radius for CodeMirror's actual wrapper */
+}
+
+.gifClass {
+    width: auto; /* Keep the aspect ratio */
+    max-width: 75%; /* Adjust width */
+    max-height: 75%; /* Adjust height */
+    background-size: contain; /* Ensure the GIF scales proportionally */
+    background-repeat: no-repeat;
+    display: block; /* Centering adjustments */
+    margin-left: 60px; /* Center horizontally */
+}
+
+.cursor {
+    display: inline-block;
+    font-weight: bold;
+    visibility: visible; /* Keep cursor visible by default */
+    animation: blink 0.7s step-end infinite;
+}
+
+.cursor.blink {
+    visibility: hidden; /* Blink by hiding visibility, not opacity */
+}
+
+@keyframes blink {
+    50% {
+        visibility: hidden;
+    }
+}
+
+
+  /* Apply styles to the entire document */
+html {
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #333533 #1E1F1E; /* Scrollbar thumb and track colors */
+    z-index: 999;
+}
+
+/* For WebKit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.CodeMirror {
+    resize: vertical;
+    min-height: 300px;
+}
+
+#runCode {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+#runCode:hover {
+    color: #61C9A8;
+}
+
+  
+.suitcase-img {
+    width: 40%;  /* Set the width of the image as a percentage of the rectangle's size */
+    height: auto;  /* Maintain aspect ratio */
+    max-width: 100px; /* Optional: Limit the maximum width */
+    max-height: 100px; /* Optional: Limit the maximum height */
+}
+
+/* @keyframes flicker {
+    0%, 50%, 80% {
+        box-shadow: 0px 0px 0px transparent;
+    }
+    75.5%, 83%, 88% {
+        box-shadow: 0px 2px 50px #ffe66d;
+    }
+    75.501%, 82.002%, 83.001%, 83.003% {
+        box-shadow: 0px 0px 0px transparent;
+    }
+    81.001%, 82%, 83.002% {
+        box-shadow: 0px 2px 50px #ffe66d;
+    }
+} */
