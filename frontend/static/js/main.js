@@ -100,7 +100,7 @@ window.onload = async function () {
         } else {
             initializeColumn();  // Initialize a new grid structure if no data is found
         }
-
+        await delay(100);
         // Load the saved code into the editor (or start fresh if none exists)
         await loadCode();
     } else {
@@ -123,6 +123,10 @@ window.addEventListener('pageshow', function (event) {
     }
 });
 
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function reloadGif() {
     const logo = document.getElementById('logo'); // Select the logo element

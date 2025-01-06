@@ -3,7 +3,7 @@ let stopwatchInterval; // Holds the interval ID for the stopwatch
 let isRunning = false; // Flag to track if the stopwatch is currently running
 
 // Function to start the stopwatch
-function startStopwatch() {
+async function startStopwatch() {
     // Try to retrieve the saved time from localStorage (if any)
     const savedTime = getTimerLocalStorageWithExpiry("stopwatchTime");
     if (savedTime) {
@@ -14,12 +14,12 @@ function startStopwatch() {
     // Only start the stopwatch interval if it isn't already running
     if (!isRunning) {
         // Set an interval to increment the stopwatch time every second
-        stopwatchInterval = setInterval(() => {
+        stopwatchInterval = setInterval(async () => {
 
             stopwatchTime++; // Increment the stopwatch time by 1 second
 
             try {
-                setTimerLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
+                await setTimerLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
             }
             catch (error) {
                 alert(error);
@@ -53,10 +53,8 @@ function padZero(time) {
     return time < 10 ? "0" + time : time; // If time is less than 10, add a leading zero
 }
 
-function setTimerLocalStorageWithExpiry(key, value) {
-    const now = new Date();
-    let expiryTime;
-
+async function setTimerLocalStorageWithExpiry(key, value) {
+    var expiryTime;
     // Check if expiration date already exists
     const savedItem = localStorage.getItem(key);
 
@@ -64,13 +62,18 @@ function setTimerLocalStorageWithExpiry(key, value) {
         const item = JSON.parse(savedItem);
         expiryTime = item.expiry; // Use the existing expiry time
     } else {
-        // Set the expiry time to next midnight if it's the first time
-        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() +1); // Next midnight
-        expiryTime = midnight.getTime(); // Get timestamp for midnight
+        const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight")
+        const info = await response.json();
+        if (response.ok) {
+            const date = info.chicago_midnight_utc;
+            const objdate = new Date(date);
+            expiryTime = objdate.getTime();
+        }
     }
+
     const data = {
         value: value,
-        expiry: expiryTime,
+        expiry: expiryTime
     };
     localStorage.setItem(key, JSON.stringify(data)); // Save data with expiry
 }

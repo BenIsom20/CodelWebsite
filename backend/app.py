@@ -10,6 +10,7 @@ import io
 import logging
 import sys
 from flask_apscheduler import APScheduler
+from datetime import datetime, timedelta
 from pytz import timezone
 from better_profanity import profanity
 from collections.abc import Iterable
@@ -79,6 +80,21 @@ def set_current_challenge_function_skeleton_by_date():
     global current_challenge_function_skeleton
     current_challenge_function_skeleton = get_function_skeleton_by_date()
 
+def get_chicago_midnight():
+    # Define the Chicago time zone
+    chicago_tz = timezone('America/Chicago')
+
+    # Get the current time in the Chicago time zone
+    now = datetime.now(chicago_tz)
+
+    # Calculate midnight in Chicago (next day)
+    midnight = datetime(now.year, now.month, now.day) + timedelta(days=1)
+
+    # Convert Chicago midnight to UTC
+    utc_midnight = midnight.astimezone(timezone('UTC'))
+
+    return utc_midnight.isoformat()  # Return as an ISO string
+
 # Configuration for APScheduler
 class Config:
     SCHEDULER_API_ENABLED = True  # Enables the scheduler's API for job management
@@ -134,6 +150,11 @@ def midnight_job():
 
 # Start the scheduler
 scheduler.start()
+
+@app.route('/get_chicago_midnight', methods=['GET'])
+def get_chicago_midnight_api():
+    midnight_utc = get_chicago_midnight()
+    return jsonify({"chicago_midnight_utc": midnight_utc})
 
 @app.route("/run", methods=["POST"])
 def execute_code():

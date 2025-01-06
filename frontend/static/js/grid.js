@@ -244,7 +244,7 @@ async function fetchTestExplanation() {
     Cookies.set('lastTypingEffectRunDate', currentDate, { expires: 1 }); // Cookie expires in 1 day
 }
 
-function storeGridState(victory) {
+async function storeGridState(victory) {
     const grid = document.getElementById("grid-container");
     const gridState = [];
 
@@ -265,7 +265,7 @@ function storeGridState(victory) {
 
     // Save the array to localStorage
     const jsongridState = JSON.stringify(gridState);
-    setGridLocalStorageWithExpiry("gridState", jsongridState);
+    await setGridLocalStorageWithExpiry("gridState", jsongridState);
 
     if (victory) {
         victorySend(); // Send a victory signal if all tests pass
@@ -383,11 +383,16 @@ async function loadGridState() {
     }
 }
 
-function setGridLocalStorageWithExpiry(key, value) {
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
-    const expiryTime = midnight.getTime(); // Get timestamp for midnight
+async function setGridLocalStorageWithExpiry(key, value) {
 
+    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight")
+    const info = await response.json();
+    if(response.ok){
+        const date = info.chicago_midnight_utc;
+        const objdate = new Date(date);
+        var expiryTime = objdate.getTime();
+
+    }
     const data = {
         value: value,
         expiry: expiryTime,
