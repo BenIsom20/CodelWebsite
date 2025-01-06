@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from better_profanity import profanity
 from collections.abc import Iterable
+import os
 
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes
@@ -34,7 +35,8 @@ def leaderboard():
 # Setup logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
-app.config["JWT_SECRET_KEY"] = "changeLater"
+jwt_secret_key = os.getenv("JWT_SECRET_KEY")
+app.config["JWT_SECRET_KEY"] = jwt_secret_key
 jwt = JWTManager(app)
 
 db_config = {
@@ -187,6 +189,7 @@ def execute_code():
 def test_code():
     """Route to test the user's code against predefined test cases."""
     try:
+        compiled = True
         data = request.json
         code = data.get("code", "")
 
@@ -239,9 +242,12 @@ result = {code_call}
             except Exception as e:
                 # Error message should provide more specific feedback on the user's code
                 results[case['challenge_case_id']] = f"Error: {str(e)}"
+                compiled = False
             finally:
                 sys.stdout = sys.__stdout__
-
+                
+        if (compiled):
+            addOneToAllAttempts()
         return jsonify({
             "numTests": len(results),
             "testList": results,
@@ -323,6 +329,7 @@ def register():
         )
         connection.commit()
 
+        addOneToAllUsers()
         return jsonify({"message": "User registered successfully"}), 201
 
     except mysql.connector.Error as err:
@@ -442,6 +449,41 @@ def victory():
     except Exception as e:
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
+
+@app.route("/updateAllTime", methods=["POST"])
+def updateAllTime():
+    data = request.json
+    try:
+        # Connect to the database
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # Update query
+        query = """
+        UPDATE webInfo 
+        SET allTime = allTime + %s
+        """
+        # Use a tuple to pass the parameter
+        values = (data["time_increment"],)  # Ensure 'time_increment' is in your JSON payload
+
+        # Execute the query
+        cursor.execute(query, values)
+
+        # Commit the transaction
+        connection.commit()
+
+        return {"message": "Update successful"}, 200
+
+    except mysql.connector.Error as e:
+        # Handle database errors
+        return {"error": str(e)}, 500
+
+    finally:
+        # Close the cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
 
 # Update the user's state after a victory
 @app.route("/saveProgress", methods=["POST"])
@@ -628,6 +670,65 @@ def stats():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
+def addOneToAllAttempts():
+    try:
+        # Connect to the database
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # Update query
+        query = """
+        UPDATE webInfo
+        SET allAttempts = allAttempts + 1;
+        """
+
+        # Execute the query
+        cursor.execute(query)
+
+        # Commit the transaction
+        connection.commit()
+
+        print("Successfully updated allAttempts.")
+
+    except mysql.connector.Error as e:
+        print(f"Error: {e}")
+    
+    finally:
+        # Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+def addOneToAllUsers():
+    try:
+        # Connect to the database
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # Update query
+        query = """
+        UPDATE webInfo
+        SET allUsers = allUsers + 1;
+        """
+
+        # Execute the query
+        cursor.execute(query)
+
+        # Commit the transaction
+        connection.commit()
+
+        print("Successfully updated allUsers.")
+
+    except mysql.connector.Error as e:
+        print(f"Error: {e}")
+    
+    finally:
+        # Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
 
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":

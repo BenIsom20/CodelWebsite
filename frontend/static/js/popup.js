@@ -1,4 +1,4 @@
-var cameFrom = false;
+let cameFrom = false;
 
 // Open the popup with animation
 document.getElementById("user").addEventListener("click", (event) => {

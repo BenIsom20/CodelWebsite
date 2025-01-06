@@ -255,7 +255,7 @@ async function victorySend() {
     }
 }
 
-function victorySequence() {
+async function victorySequence() {
     const navbar = document.getElementById("mainNavbar");
     const logo = document.getElementById("logo");
     navbar.classList.add("vic-burst");
@@ -264,6 +264,15 @@ function victorySequence() {
     });
     navbar.style.boxShadow = "0 2px 50px #61C9A8ed";
     logo.src = "static/images/V.gif?";
+
+    const time = getLocalStorageWithExpiry("stopwatchTime");
+    const timeDic = { "time_increment" : time}
+    // Send the user's code to the backend via a POST request
+    const response = await fetch("http://127.0.0.1:5000/updateAllTime", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }, // Specify JSON content type
+        body: JSON.stringify(timeDic), // Send the code as a JSON object
+    });
 }
 
 function trySequence() {
