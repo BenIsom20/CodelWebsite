@@ -1,0 +1,93 @@
+/* ================================
+   General Editor Styles
+   ================================*/
+
+/* Main CodeMirror editor area */
+.CodeMirror {
+    background-color: #1E1F1E;
+    /* Dark background for the editor */
+    color: #F7F9FB;
+    /* Light text color for readability */
+    font-family: "Fira Code", monospace;
+    /* Monospace font for code */
+    font-size: 18px;
+    /* Larger font size for better readability */
+    line-height: 1.6;
+    /* Increased line height for better line spacing */
+}
+
+/* ================================
+   Gutter (Line Numbers) Styles
+   ================================*/
+
+/* Gutter area that holds the line numbers */
+.CodeMirror-gutters {
+    background-color: #1E1F1E;
+    /* Gutter background color matching editor */
+    border-right: 0px solid #ffe66d;
+    /* Border color for the right side of the gutter */
+}
+
+/* Line number styling */
+.CodeMirror-linenumber {
+    color: #6d86ff;
+    /* Line number color (light blue) */
+}
+
+/* ================================
+   Active Line & Bracket Highlighting
+   ================================*/
+
+/* Highlight the active line's background */
+.CodeMirror-activeline-background {
+    background: #1E1F1E;
+    /* Same background as the editor for seamless look */
+}
+
+/* Highlight matching brackets */
+.CodeMirror-matchingbracket {
+    color: #98c379;
+    /* Greenish color for matching brackets */
+    font-weight: bold;
+    /* Make the matching bracket bold */
+    text-decoration: underline;
+    /* Underline the matching bracket */
+}
+
+/* ================================
+   Cursor and Selection Styles
+   ================================*/
+
+/* Cursor styling */
+.CodeMirror-cursor {
+    border-left: 3px solid #F7F9FB;
+    /* Light cursor color */
+}
+
+/* ================================
+   Syntax Highlighting Customizations
+   ================================*/
+
+/* Keywords and booleans (e.g., def, if, for, etc.) */
+span.cm-keyword {
+    color: #ffe66d;
+    /* Yellow for keywords */
+}
+
+/* String literals */
+span.cm-string {
+    color: #EA526F;
+    /* red for string literals */
+}
+
+/* Numeric values (e.g., integers, floats) */
+span.cm-number {
+    color: #6d86ff;
+    /* Light blue for numbers */
+}
+
+/* Variables (e.g., function and variable names) */
+span.cm-variable {
+    color: #61C9A8ed;
+    /* Custom greenish color for variables */
+}

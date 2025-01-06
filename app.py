@@ -10,8 +10,10 @@ import io
 import logging
 import sys
 from flask_apscheduler import APScheduler
+from datetime import datetime, timedelta
 from pytz import timezone
 from better_profanity import profanity
+from collections.abc import Iterable
 
 app = Flask(__name__)
 # Enable CORS for all routes
@@ -65,6 +67,21 @@ def set_current_challenge_function_skeleton_by_date():
     """Fetch the function skeleton from the database and set it to the global variable."""
     global current_challenge_function_skeleton
     current_challenge_function_skeleton = get_function_skeleton_by_date()
+
+def get_chicago_midnight():
+    # Define the Chicago time zone
+    chicago_tz = timezone('America/Chicago')
+
+    # Get the current time in the Chicago time zone
+    now = datetime.now(chicago_tz)
+
+    # Calculate midnight in Chicago (next day)
+    midnight = datetime(now.year, now.month, now.day) + timedelta(days=1)
+
+    # Convert Chicago midnight to UTC
+    utc_midnight = midnight.astimezone(timezone('UTC'))
+
+    return utc_midnight.isoformat()  # Return as an ISO string
 
 # Configuration for APScheduler
 class Config:
@@ -122,6 +139,11 @@ def midnight_job():
 # Start the scheduler
 scheduler.start()
 
+@app.route('/get_chicago_midnight', methods=['GET'])
+def get_chicago_midnight_api():
+    midnight_utc = get_chicago_midnight()
+    return jsonify({"chicago_midnight_utc": midnight_utc})
+
 @app.route("/run", methods=["POST"])
 def execute_code():
     try:
@@ -152,63 +174,65 @@ def execute_code():
 def test_code():
     """Route to test the user's code against predefined test cases."""
     try:
-        # Get the code from the request
         data = request.json
         code = data.get("code", "")
 
-        # Get function name from the skeleton
         function_name = current_challenge_function_skeleton['name']
-
         results = {}
-        given_values = []  # To store the given values for each test case
+        given_values = []
 
-        # Loop through each test case
         for case in current_challenge_cases:
-            # Add the given value for the test case
             given_data = case['given_data']
             given_values.append(given_data)
-
             expected = case['expected']
 
-            # Prepare the code to execute, including the function call
+            # Prepare the code to execute
             code_call = f"{function_name}({given_data})"
             full_code = f"""
 {code}
 
-# Call the function and print the result
 result = {code_call}
-# Capture the output
-captured_output.seek(0)  # Move cursor to the beginning of the buffer
-captured_output.truncate(0)  # Clear the content in the buffer
-print(result)  # Print the result
 """
-            # Capture the output using StringIO
             captured_output = io.StringIO()
-            sys.stdout = captured_output  # Redirect stdout to capture print statements
+            sys.stdout = captured_output
 
             try:
-                full_code = full_code.replace("\t", "    ")  # Replace tabs with spaces
-                exec(full_code)  # Execute the user code
+                full_code = full_code.replace("\t", "    ")
+                exec(full_code)
 
-                # Get the captured output and compare with expected
-                actual_output = captured_output.getvalue().strip()
+                actual_output = locals().get("result", None)
 
-                # Check if the output matches the expected result
-                if str(actual_output) == str(expected):
-                    results[case['challenge_case_id']] = f"Success: Expected '{expected}', got '{actual_output}'"
+                # Parse expected and actual values for logical comparison
+                parsed_expected = json.loads(expected)
+                parsed_actual = json.loads(json.dumps(actual_output))
+
+                # Comparison function to handle different types of values
+                def compare_values(expected, actual):
+                    if isinstance(actual, Iterable) and not isinstance(actual, str):
+                        # Compare iterables (lists, tuples, dicts)
+                        return sorted(expected) == sorted(actual)
+                    else:
+                        # Direct comparison for non-iterables
+                        return expected == actual
+
+                # Perform comparison
+                if compare_values(parsed_expected, parsed_actual):
+                    results[case['challenge_case_id']] = "Success"
                 else:
-                    results[case['challenge_case_id']] = f"Failure: Expected '{expected}', got '{actual_output}'"
+                    results[case['challenge_case_id']] = (
+                        f"Failure: Expected {parsed_expected}, got {parsed_actual}"
+                    )
 
             except Exception as e:
+                # Error message should provide more specific feedback on the user's code
                 results[case['challenge_case_id']] = f"Error: {str(e)}"
             finally:
-                sys.stdout = sys.__stdout__  # Reset stdout to default
+                sys.stdout = sys.__stdout__
 
-        # Return the results and given values to the frontend
         return jsonify({
             "numTests": len(results),
             "testList": results,
-            "givenValues": given_values  # Include the given values in the response
+            "givenValues": given_values
         })
 
     except Exception as e:
@@ -222,8 +246,7 @@ def Startup():
     set_current_challenge_function_skeleton_by_date()
    
     # Explanation for the test
-    descriptions = {
-        "Question": current_challenge["prompt"],
+    tests = {
         **{
             f"Case {i + 1}": 
             f"Case {i + 1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"
@@ -232,13 +255,14 @@ def Startup():
     }
 
     explanation = ""
-    for value in descriptions.values():
+    for value in tests.values():
         explanation += value + "<br>" 
     # Add the value to the total
 
     return jsonify({
-        "explanation": explanation,
-        "Array": len(descriptions)-1
+        "prompt": current_challenge["prompt"],
+        "Cases": tests,
+        "Array": len(tests)
     })
 
 @app.route('/get_skeleton', methods=['GET'])
@@ -342,7 +366,7 @@ def protected():
     try:
         # Get the current user's identity from the JWT token
         current_user = get_jwt_identity()
-        return jsonify({"message": f"Hello, {current_user['username']}!"}), 200
+        return jsonify({"username": current_user['username']}), 200
     except:
         # Handle invalid or missing tokens
         return jsonify({"error": "Invalid token"}), 401
@@ -375,7 +399,57 @@ def victory():
         # Update the user's record in the database
         query = """
             UPDATE users
-            SET wins = wins + 1, streak = streak + 1, completed = 1, curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
+            SET 
+                wins = wins + 1, 
+                streak = streak + 1, 
+                completed = 1, 
+                curtimer = %s, 
+                curgrid = %s, 
+                curcode = %s, 
+                attempts = %s,
+                totalTime = totalTime + %s,
+                allStreak = CASE 
+                                WHEN streak > allStreak THEN streak
+                                ELSE allStreak
+                            END
+            WHERE username = %s
+        """
+        values = (stopwatch_time, grid_state, saved_code, attempts, stopwatch_time, username)
+
+        # Execute the query
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        cursor.execute(query, values)
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return jsonify({"message": "User state updated successfully"}), 200
+    except Exception as e:
+        # Handle any exceptions that occur
+        return jsonify({"error": str(e)}), 500
+
+# Update the user's state after a victory
+@app.route("/saveProgress", methods=["POST"])
+@jwt_required()  # Protect the route
+def saveProgress():
+    try:
+        # Get the username from the JWT token
+        whatUser = get_jwt_identity()
+        username = whatUser['username']
+
+        # Extract data from the JSON payload in the request
+        data = request.json
+        grid_state = data.get("gridState")
+        stopwatch_time = data.get("stopwatchTime")
+        saved_code = data.get("savedCode")
+        attempts = data.get("attempts")
+
+        # Update the user's record in the database
+        query = """
+            UPDATE users
+            SET curtimer = %s, curgrid = %s, curcode = %s, attempts = %s
             WHERE username = %s
         """
         values = (stopwatch_time, grid_state, saved_code, attempts, username)
@@ -459,8 +533,9 @@ def get_user_data():
                 "time": user[7],
                 "grid": user[8],
                 "code": user[9],
+                "completed": user[11],
             }
-            return jsonify({"time": user_data["time"], "grid": user_data["grid"], "code": user_data["code"]}), 200
+            return jsonify({"time": user_data["time"], "grid": user_data["grid"], "code": user_data["code"], "completed": user_data["completed"]}), 200
 
     except Exception as e:
         # Handle any exceptions that occur
@@ -479,9 +554,9 @@ def leaderboard():
 
         # Query with LIMIT and OFFSET for pagination
         query = """
-            SELECT username, attempts, curtimer, wins
+            SELECT username, attempts, curtimer, streak, wins
             FROM users
-            WHERE attempts > 0 AND curtimer > 0
+            WHERE attempts > 0 AND curtimer > 0 AND completed = 1
             ORDER BY attempts ASC, curtimer ASC
             LIMIT %s OFFSET %s;
         """
@@ -489,7 +564,7 @@ def leaderboard():
         results = cursor.fetchall()
 
         # Format the results into a JSON response
-        leaderboard = [{"username": row[0], "attempts": row[1], "time": row[2], "wins": row[3]} for row in results]
+        leaderboard = [{"username": row[0], "attempts": row[1], "time": row[2], "streak": row[3], "wins": row[4]} for row in results]
 
         # Close the cursor and connection
         cursor.close()
@@ -497,6 +572,44 @@ def leaderboard():
 
         # Return the leaderboard data
         return jsonify({"leaderboard": leaderboard}), 200
+
+    except Exception as e:
+        # Handle any exceptions that occur
+        return jsonify({"error": str(e)}), 500
+
+
+# Retrieve user data from the database
+@app.route("/stats", methods=["GET"])
+@jwt_required()  # Protect the route with JWT token
+def stats():
+    try:
+        # Get the username from the JWT token
+        whatuse = get_jwt_identity()
+        username = whatuse['username']
+
+        # Fetch the user's data from the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if user is None:
+            # Return a default response if no data is found
+            return jsonify({"stats": "none"})
+        else:
+            # Format the user's data into a JSON response
+            user_data = {
+                "username": user[1],
+                "created": user[4],
+                "streak": user[5],
+                "wins": user[6],
+                "allTime": user[12],
+                "allStreak": user[13],
+            }
+            return jsonify({"stats": user_data}), 200
 
     except Exception as e:
         # Handle any exceptions that occur

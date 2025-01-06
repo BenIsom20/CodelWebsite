@@ -8,11 +8,18 @@ def load_challenge_data(yaml_file):
     with open(yaml_file, 'r') as file:
         return yaml.safe_load(file)
 
-# Function to generate the function skeleton based on name and parameters
-def generate_function_skeleton(function_name, parameters):
+# Function to generate the function skeleton based on name, parameters, and cases
+def generate_function_skeleton(function_name, parameters, cases):
     param_str = ', '.join(parameters)  # Join parameters with commas for the function signature
-    skeleton = f"# CODE HERE\n\ndef {function_name}({param_str}):\n    pass"  # Function skeleton template
+    
+    # Create a string for each case in the format: Case 1: description
+    case_str = "\n".join([f"# Case {i+1}: {case['prompt']} ({case['given_data']} -> {case['expected']})"
+                         for i, case in enumerate(cases)])
+
+    # Function skeleton template with added cases
+    skeleton = f"# CODE HERE\n{case_str}\ndef {function_name}({param_str}):\n    pass"
     return skeleton
+
 
 # Function to insert data into the database
 def insert_challenge_data(challenge_data):
@@ -58,7 +65,8 @@ def insert_challenge_data(challenge_data):
     # Generate function skeleton and insert it into function_skeletons table
     function_name = challenge['function']['name']
     parameters = challenge['function']['parameters']
-    skeleton = generate_function_skeleton(function_name, parameters)
+    cases = challenge['cases']  # Pass cases to the skeleton generator
+    skeleton = generate_function_skeleton(function_name, parameters, cases)
 
     cursor.execute(""" 
         INSERT INTO function_skeletons (challenge_id, name, parameters, skeleton)

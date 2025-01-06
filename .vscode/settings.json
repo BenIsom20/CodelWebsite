@@ -1,3 +1,4 @@
 {
-    "sqltools.connections": []
+    "sqltools.connections": [],
+    "svg.preview.background": "editor"
 }

@@ -7,9 +7,11 @@
     <title>Codel Leaderboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="leaderboardstyle.css">
+    <script src="popup.js" defer></script>
+    <link rel="stylesheet" href="Popup.css">
 
 </head>
 
@@ -17,41 +19,173 @@
     <!-- CODE FOR NAVBAR -->
     <nav class="subNavbar">
         <div class="navbar-container">
-            <a href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO CODEL</a>
+            <a id="backtocode" href="index.html" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
+                CODEL</a>
+                <div class="logo-link">
+                    <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
+                </div>
             <div class="nav-links">
-                <a href="Developers.html" class="navObjects"><i class='bx bxs-bulb'></i></i></a>
-                <a href="How.html" class="navObjects"><i class='bx bxs-help-circle'></i></a>
-                <a id="user" href="accounts.html" class="navObjects"><i class='bx bx-user-circle'></i></a>
-
+                <a id="how" href="How.html" class="navObjects"><i class='bx bxs-help-circle'></i></a>
+                <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
+                <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
             </div>
         </div>
     </nav>
 
+
+
     <!-- CODE FOR THE LEADERBOARD-->
     <main>
         <div class="leaderboard-container">
-            <h1>Codel Leaderboard</h1>
+            <h1>CODEL Leaderboard</h1>
             <div class="leaderboard-table">
                 <div class="leaderboard-header">
-                    <span>#</span>
-                    <span>Username</span>
-                    <span>Attempts</span>
-                    <span>Time (s)</span>
-                    <span>Wins</span>
+                    <span>Rank <span class="emoji">🏅</span></span>
+                    <span>Username <span class="emoji">👤</span></span>
+                    <span>Attempts <span class="emoji">🎯</span></span>
+                    <span>Time (s) <span class="emoji">⏱️</span></span>
+                    <span>Streak <span class="emoji">🔥</span></span>
+                    <span>Wins <span class="emoji">🏆</span></span>
                 </div>
                 <div id="leaderboard-entries">
                     <!-- Leaderboard rows will be dynamically added here -->
                 </div>
             </div>
         </div>
-        <button id="load-more" class="btn btn-primary">Load More</button>
+        <div style="display: block; width: 100%; text-align: center;">
+            <button id="load-more">Load More</button>
+        </div>
+
     </main>
+
+    <!-- Popup -->
+    <div id="mainPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+        <div class="popup-content">
+            <span class="close" id="closePopup">&times;</span>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Sign In</h2>
+                <input id="logusername" type="text" placeholder="Username">
+                <p id="placeholder"></p>
+                <input class="inputs" id="logpassword" type="password" placeholder="Password">
+                <p id="lognote"></p>
+                <button id="login">Sign In</button>
+                <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
+                <button id="logout">Sign Out</button>
+                <p id="outnote"></p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Create an Account</h2>
+                <input id="regusername" type="text" placeholder="Username">
+                <p id="regusernote"></p>
+                <input id="regemail" type="text" placeholder="Email">
+                <p id="regemailnote"></p>
+                <input id="regpassword" type="password" placeholder="Password">
+                <p id="regpassnote"></p>
+                <input id="regpasswordconf" type="password" placeholder="Confirm Password">
+                <p id="regmatchnote"></p>
+                <button id="register">Create Account</button>
+                <p id="regnote"></p>
+                <p class="tab-link" data-target="loginForm">Already have an account?<br> Sign In</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
+            </div>
+
+            <!-- Delete Account Form -->
+            <div id="deleteForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Delete Your Account</h2>
+                <p>Are you sure you want to delete your account? This action is irreversible.</p>
+                <input id="delusername" type="text" placeholder="Username">
+                <input id="delpassword" type="password" placeholder="Password">
+                <p id="delnote"></p>
+                <button id="delete" style="background-color: red; color: white;">Delete Account</button>
+                <p class="tab-link" data-target="loginForm">Sign In</p>
+                <p class="tab-link" data-target="registerForm">Create Account</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div id="statsPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+        <div class="stats-content" id="popupContent">
+            <span class="close" id="closeStatsPopup">&times;</span>
+
+            <!-- User Stats -->
+            <div id="userStats" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>User Stats</h2>
+                <div class="stats">
+                    <h4 id="nameStats"></h4>
+                    <p id="statsWins"></p>
+                    <p id="statsStreak"></p>
+                    <p id="statsAllStreak"></p>
+                    <p id="statsTotal"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+
+        document.getElementById('how').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
+        document.getElementById('backtocode').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
+
+
+        function smoothTransition(event) {
+            event.preventDefault(); // Prevent the default navigation
+            const href = event.currentTarget.href; // Get the target URL
+
+            // Add the fade-out class to the body
+            document.body.classList.add('fade-out');
+
+            // Wait for the transition to complete, then navigate
+            setTimeout(() => {
+                window.location.href = href;
+            }, 300); // Match this duration with your CSS transition time
+        }
+    </script>
+
+    <script>
+
+        var username = "";
         let offset = 0; // Start offset
         const limit = 10; // Number of entries to fetch per request
 
+        async function getUsername() {
+
+            const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
+            if (!token) { return; } // Exit if no token is found
+
+            // Send a GET request to the protected endpoint with the token in the Authorization header
+            const response = await fetch('http://localhost:5000/protected', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if (response.ok) {
+                username = data.username;
+            }
+        }
+        getUsername();
+
         // Function to load leaderboard entries
         async function loadLeaderboard() {
+            const loadMoreButton = document.getElementById("load-more");
+            loadMoreButton.classList.add("hidden");
             const response = await fetch(`http://127.0.0.1:5000/leaderboard?offset=${offset}&limit=${limit}`);
             const data = await response.json();
 
@@ -61,15 +195,48 @@
 
                 leaderboardData.forEach((entry, index) => {
                     const row = document.createElement("div");
-                    row.classList.add("leaderboard-row");
-                    row.innerHTML = `
-                <span>${offset + index + 1}</span>
-                <span>${entry.username}</span>
-                <span>${entry.attempts}</span>
-                <span>${entry.time}s</span>
-                <span>${entry.wins}</span>
-            `;
-                    leaderboardEntries.appendChild(row);
+                    var user = entry.username;
+                    let rank = offset + index + 1;
+                    if (entry.username.length > 13) {
+                        user = user.substring(0, 13) + "...";
+                    }
+
+                    if (rank == 1) {
+                        rank += " 🥇"
+                    }
+                    if (rank == 2) {
+                        rank += " 🥈"
+                    }
+                    if (rank == 3) {
+                        rank += " 🥉"
+                    }
+
+                    if (entry.username == username) {
+                        rank += "  YOU ";
+                        row.classList.add("user-row");
+                        row.style.animationDelay = `${index * 0.07}s`;
+                        row.innerHTML = `
+                            <span>${rank}</span>
+                            <span>${user}</span>
+                            <span>${entry.attempts}</span>
+                            <span>${entry.time}s</span>
+                            <span>${entry.streak}</span>
+                            <span>${entry.wins}</span>
+                             `;
+                        leaderboardEntries.appendChild(row);
+                    } else {
+                        row.classList.add("leaderboard-row");
+                        row.style.animationDelay = `${index * 0.07}s`;
+                        row.innerHTML = `
+                            <span>${rank}</span>
+                            <span>${user}</span>
+                            <span>${entry.attempts}</span>
+                            <span>${entry.time}s</span>
+                            <span>${entry.streak}</span>
+                            <span>${entry.wins}</span>
+                             `;
+                        leaderboardEntries.appendChild(row);
+                    }
                 });
 
                 // Increment offset for the next batch
@@ -78,12 +245,26 @@
                 // Hide the "Load More" button if no more data
                 if (leaderboardData.length < limit) {
                     document.getElementById("load-more").style.display = "none";
+                } else {
+                    // Wait for the last row's animation to finish, then fade in the button
+                    const lastRowDelay = 1; // Total delay for the last row
+                    setTimeout(() => {
+                        loadMoreButton.classList.add("show");
+                    }, lastRowDelay * 1000); // Include animation duration
                 }
             }
         }
 
         // Load initial leaderboard data on page load
-        window.onload = loadLeaderboard;
+        window.onload = function () {
+            if (sessionStorage.getItem("cameFrom") === "true") {
+                sessionStorage.setItem("cameFrom", "false");
+                document.getElementById("stats").click();
+            }
+            loadLeaderboard();
+            document.body.classList.add('fade-in');
+
+        }
 
         // Attach click event to the "Load More" button
         document.getElementById("load-more").addEventListener("click", loadLeaderboard);

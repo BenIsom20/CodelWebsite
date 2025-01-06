@@ -14,37 +14,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/python/python.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/theme/midnight.min.css">
+    <link rel="stylesheet" href="CodelTheme.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+    <link rel="stylesheet" href="Popup.css">
     <script src="editor.js" defer></script>
     <script src="timer.js" defer></script>
     <script src="grid.js" defer></script>
-
-
-
-
+    <script src="popup.js" defer></script>
+    <link rel="icon" href="images\CodelIcon.png" type="image/png">
 </head>
 
 
 <!-- NAVBAR CODE -->
 
 <body>
-    <nav class="mainNavbar">
+    <nav class="mainNavbar" id="mainNavbar">
         <div class="navbar-container">
             <a>
                 <span id="stopwatch"></span>
             </a>
+            <div class="logo-link">
+                <img class="gifClass" src="images/C.gif" alt="Animated Logo" id="logo">
+            </div>
             <div class="nav-links">
                 <a id="leader" href="Leaderboard.html" class="navObjects" onclick="storeStopwatchTime();"><i
                         class='bx bxs-bar-chart-alt-2'></i></a>
-                <a id="develop" href="Developers.html" class="navObjects" onclick="storeStopwatchTime()"><i
-                        class='bx bxs-bulb'></i></i></a>
                 <a id="how" href="How.html" class="navObjects" onclick="storeStopwatchTime()"><i
                         class='bx bxs-help-circle'></i></a>
-                <a id="user" href="accounts.html" class="navObjects" onclick="storeStopwatchTime()"><i
-                        class='bx bx-user-circle'></i></a>
+                <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
+                <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
             </div>
         </div>
     </nav>
@@ -53,16 +53,20 @@
 
 
     <!-- Challenge and title code-->
-    <h1 style="text-align: center; padding-top:20px">CODEL</h1>
-    <div>
-        <p id="Question" style="text-align: center;"></p>
-    </div>
+    <p id="Question" style="text-align: center; padding-top: 150px; width: 60%; padding-bottom: 25px; font-size: 30px">
+    </p>
+
     <div id="grid-container" class="grid"></div>
 
 
 
     <!--Code for input output and buttons-->
     <div class="container mt-4">
+        <div class="row mt-3">
+            <div class="but">
+                <button id="submitCode" style="padding-bottom: 10px;" class="mainbutton">Submit Code</button>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <textarea id="editor" class="form-control" style="align-items: center;"></textarea>
@@ -70,97 +74,149 @@
         </div>
         <div class="row mt-3">
             <div class="but">
-                <button id="runCode" class="mainbutton">Run Code</button>
-                <button id="submitCode" class="mainbutton">Submit Code</button>
-                <button id="saveCode" class="mainbutton">Save Code</button>
+                <i id="runCode" class='bx bx-play'></i>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col">
-                <div id="output" class="bg-dark text-light p-3" style="height: 200px; overflow-y: auto; width: 90%;">
+                <div id="output" class="output">
                     Console output</div>
             </div>
         </div>
     </div>
     <button id="resetButton" class="mainbutton">Reset</button>
 
+    <!-- Popup -->
+    <div id="mainPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+        <div class="popup-content">
+            <span class="close" id="closePopup">&times;</span>
 
-    <!-- JAVASCRIPT CODE -->
+            <!-- Login Form -->
+            <div id="loginForm" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Sign In</h2>
+                <input id="logusername" type="text" placeholder="Username">
+                <p id="placeholder"></p>
+                <input class="inputs" id="logpassword" type="password" placeholder="Password">
+                <p id="lognote"></p>
+                <button id="login">Sign In</button>
+                <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
+                <button id="logout">Sign Out</button>
+                <p id="outnote"></p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Create an Account</h2>
+                <input id="regusername" type="text" placeholder="Username">
+                <p id="regusernote"></p>
+                <input id="regemail" type="text" placeholder="Email">
+                <p id="regemailnote"></p>
+                <input id="regpassword" type="password" placeholder="Password">
+                <p id="regpassnote"></p>
+                <input id="regpasswordconf" type="password" placeholder="Confirm Password">
+                <p id="regmatchnote"></p>
+                <button id="register">Create Account</button>
+                <p id="regnote"></p>
+                <p class="tab-link" data-target="loginForm">Already have an account?<br> Sign In</p>
+                <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
+            </div>
+
+            <!-- Delete Account Form -->
+            <div id="deleteForm" class="tab-content"
+                style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>Delete Your Account</h2>
+                <p>Are you sure you want to delete your account? This action is irreversible.</p>
+                <input id="delusername" type="text" placeholder="Username">
+                <input id="delpassword" type="password" placeholder="Password">
+                <p id="delnote"></p>
+                <button id="delete" style="background-color: red; color: white;">Delete Account</button>
+                <p class="tab-link" data-target="loginForm">Sign In</p>
+                <p class="tab-link" data-target="registerForm">Create Account</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Popup -->
+    <div id="statsPopup" class="popup"
+        style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
+        <div class="stats-content" id="popupContent">
+            <span class="close" id="closeStatsPopup">&times;</span>
+
+            <!-- User Stats -->
+            <div id="userStats" class="tab-content active"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2>User Stats</h2>
+                <div class="stats">
+                    <h4 id="nameStats"></h4>
+                    <p id="statsWins"></p>
+                    <p id="statsStreak"></p>
+                    <p id="statsAllStreak"></p>
+                    <p id="statsTotal"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--keep here-->
+    <script src="main.js"></script>
     <script>
-        // Function to retrieve user data from the backend and initialize the application state
-        async function getUserData() {
-            // Retrieve JWT token and grid state from local storage
-            const token = localStorage.getItem("jwt_token");
-            const gridData = localStorage.getItem("gridState");
+        document.getElementById('leader').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
 
-            // Send a GET request to the backend to fetch user data
-            const response = await fetch("http://127.0.0.1:5000/get_user_data", {
-                method: "GET",  // GET method is used to retrieve data from the server
-                headers: { 'Authorization': `Bearer ${token}` },  // Include the token for authorization
-            });
+        document.getElementById('how').addEventListener('click', function (event) {
+            smoothTransition(event);
+        });
 
-            // Parse the JSON response from the backend
-            const result = await response.json();
-            const time = result.time;  // Retrieved stopwatch time
-            const code = result.code;  // Retrieved saved code
-            const grid = result.grid;  // Retrieved grid state
 
-            // If all required data is present, save it to local storage and initialize the app
-            if (time && code && grid) {
-                localStorage.setItem("stopwatchTime", time);
-                localStorage.setItem("savedCode", code);
-                localStorage.setItem("gridState", grid);
-                loadCode();           // Load the saved code into the editor
-                startStopwatch();     // Start the stopwatch with the saved time
-                loadGridState();      // Restore the grid state
-            } else {
-                // If some data is missing, initialize components with available data
-                startStopwatch();     // Start a new stopwatch session
-                if (gridData) {
-                    loadGridState();  // Restore grid state if available
-                } else {
-                    initializeColumn();  // Initialize a new column structure if no grid data exists
-                }
-                loadCode();           // Load code into the editor (even if it's blank)
+        function smoothTransition(event) {
+            try {
+                event.preventDefault(); // Prevent the default navigation
+                const href = event.currentTarget.href; // Get the target URL
+
+                // Add the fade-out class to the body
+                document.body.classList.remove('fade-in');
+                document.body.classList.add('fade-out');
+
+                // Wait for the transition to complete, then navigate
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300); // Match this duration with your CSS transition time
             }
-        }
-
-        //ONE SINGULAR ONLOAD FUNCTION -->
-        // This function is executed when the window finishes loading
-        window.onload = function () {
-            // Fetch and display test explanation (assumes fetchTestExplanation is defined elsewhere)
-            fetchTestExplanation();
-
-            // Retrieve the JWT token and grid state from local storage
-            const token = localStorage.getItem("jwt_token");
-            const gridData = localStorage.getItem("gridState");
-
-            // Check if the token exists in local storage
-            if (!token) {
-                // If no token is found, start the stopwatch
-                startStopwatch();
-
-                // Check if grid state exists in local storage
-                if (gridData) {
-                    loadGridState();  // Load the saved grid state
-                } else {
-                    initializeColumn();  // Initialize a new grid structure if no data is found
-                }
-
-                // Load the saved code into the editor (or start fresh if none exists)
-                loadCode();
-            } else {
-                // If a token is present, retrieve user data from the backend
-                getUserData();
+            catch (error) {
+                alert(error);
             }
-        }
 
-        // Function to reset the state by clearing localStorage and reloading the page
-        function resetState() {
-            localStorage.clear(); // Clear all data from localStorage
-            location.reload(); // Reload the page to reset everything
         }
-        document.getElementById("resetButton").addEventListener("click", resetState);
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function playGif(gifclass) {
+                const gif = $(gifclass);
+                gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
+            }
+            const seenGif = Cookies.get('seenGif');
+            if (!seenGif) {
+                $('.hack6-loading-wrapper').css('display', 'flex');
+                playGif('.hack6-gif');
+                typer.js
+                Cookies.set('seenGif', true, { expires: 1 });
+
+                setTimeout(() => {
+                    $('.hack6-loading-wrapper').fadeOut(500);
+                }, 3000)
+            }
+        })
     </script>
 </body>
 
