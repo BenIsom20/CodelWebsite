@@ -36,7 +36,7 @@ def leaderboard():
 logging.basicConfig(level=logging.DEBUG)
 
 jwt_secret_key = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_SECRET_KEY"] = jwt_secret_key
+app.config["JWT_SECRET_KEY"] = "change later"
 jwt = JWTManager(app)
 
 db_config = {
@@ -370,7 +370,7 @@ def login():
         access_token = create_access_token(identity={"user_id": user[0], "username": username})
         return jsonify({"access_token": access_token}), 200
 
-    except mysql.connector.Error as err:
+    except Exception as err:
         # Handle any database errors
         return jsonify({"error": f"Database error: {err}"}), 500
     finally:

@@ -1,19 +1,30 @@
+/*================
+Global Styles
+==========*/
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin:0;
-    background-color: #333533; /* Set background to black */
-    color: #e5e5e5; /* Neon green color for text */
-    font-family: "Fira Code", monospace; /* Optional: Choose a font */
+    margin: 0;
+    background-color: #333533;
+    /* Set background to black */
+    color: #e5e5e5;
+    /* Neon green color for text */
+    font-family: "Fira Code", monospace;
+    /* Optional: Choose a font */
     opacity: 0;
-
 }
+
+/*================
+Keyframe Animations
+==========*/
+
 /* Keyframes for fade-in */
 @keyframes fadeIn {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -24,39 +35,55 @@ body {
     from {
         opacity: 1;
     }
+
     to {
         opacity: 0;
     }
 }
 
+/*================
+Animation Classes
+==========*/
+
 /* Fade-in animation */
 .fade-in {
-    animation: fadeIn 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
+    animation: fadeIn 0.3s ease-in-out forwards;
+    /* Animation lasts 0.3s */
 }
 
 /* Fade-out animation */
 .fade-out {
-    animation: fadeOut 0.3s ease-in-out forwards; /* Animation lasts 0.5s */
+    animation: fadeOut 0.3s ease-in-out forwards;
+    /* Animation lasts 0.3s */
 }
 
+/*================
+Layout Styles
+==========*/
+
+/* Output container */
 .output {
     height: 200px;
-    overflow-y: auto; 
+    overflow-y: auto;
     width: 100%;
     background-color: #1E1F1E;
     padding-left: 10px;
 }
 
+/* Grid layout for items */
 .grid {
     display: grid;
-    row-gap: 20px; /* Reduced gap */
+    row-gap: 20px;
+    /* Reduced gap */
     column-gap: 120px;
     margin-bottom: 20px;
-    justify-items: center; /* Centers grid items horizontally */
-    margin-right: 25px; /* Shift the grid to the left by 50px */
-    margin-bottom: 20px;
+    justify-items: center;
+    /* Centers grid items horizontally */
+    margin-right: 25px;
+    /* Shift the grid to the left by 50px */
 }
 
+/* Rectangle style for boxes */
 .rectangle {
     width: 200px;
     height: 100px;
@@ -65,7 +92,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Fira Code", monospace; /* Optional: Choose a font */
+    font-family: "Fira Code", monospace;
+    /* Optional: Choose a font */
     font-size: 30px;
     border: 2px solid #F7F9FB;
     border-radius: 5px;
@@ -73,25 +101,41 @@ body {
     color: #F7F9FB;
 }
 
+/*================
+Button Styles
+==========*/
+
+/* Main button style */
 .mainbutton {
-    background-image: linear-gradient(to left, #fceb95 50%, #ffe66d 50%); /* Gradient background */
+    background-image: linear-gradient(to left, #fceb95 50%, #ffe66d 50%);
+    /* Gradient background */
     background-size: 200%;
-    color: #333533; /* Black text */
-    border: 0px solid 333533; /* Black border for definition */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding for size */
-    font-size: 18px; /* Comfortable font size */
-    font-weight: bold; /* Bold text */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: 0.3s ease-out; /* Smooth hover transition */
+    color: #333533;
+    /* Black text */
+    border: 0px solid 333533;
+    /* Black border for definition */
+    border-radius: 5px;
+    /* Rounded corners */
+    padding: 10px 20px;
+    /* Padding for size */
+    font-size: 18px;
+    /* Comfortable font size */
+    font-weight: bold;
+    /* Bold text */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    transition: 0.3s ease-out;
+    /* Smooth hover transition */
     margin-right: 20px;
 }
 
-/* Hover effect */
+/* Hover effect for main button */
 .mainbutton:hover {
-    background-position: right; /* Slightly darker light gray *//
+    background-position: right;
+    /* Slightly darker light gray */
 }
 
+/* Main button active state */
 main:focus:active {
     padding-top: 4px;
     padding-left: 4px;
@@ -100,6 +144,11 @@ main:focus:active {
     color: #e00000;
 }
 
+/*================
+Rectangle Color Animations
+==========*/
+
+/* Green rectangle style */
 .rectangle.green {
     color: #F7F9FB;
     background-color: #61C9A8ed;
@@ -107,15 +156,16 @@ main:focus:active {
     animation: colorRevealGreen 1s;
 }
 
+/* Keyframes for green rectangle color reveal */
 @keyframes colorRevealGreen {
-    0%{
+    0% {
         width: 220px;
         height: 110px;
         background-color: #333533;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-family: "Fira Code", monospace; /* Optional: Choose a font */
+        font-family: "Fira Code", monospace;
         font-size: 30px;
         border: 0px solid #F7F9FB;
         border-radius: 5px;
@@ -123,16 +173,16 @@ main:focus:active {
         color: #F7F9FB;
         animation: none;
     }
-    100%{
+
+    100% {
         color: #F7F9FB;
         background-color: #61C9A8ed;
-        border: 0px solid;
         width: 200px;
         height: 100px;
-        animation: none;
     }
 }
 
+/* Red rectangle style */
 .rectangle.red {
     color: #F7F9FB;
     background-color: #EA526F;
@@ -140,265 +190,384 @@ main:focus:active {
     animation: colorRevealRed 1s;
 }
 
+/* Keyframes for red rectangle color reveal */
 @keyframes colorRevealRed {
-    0%{
+    0% {
         width: 220px;
         height: 110px;
         background-color: #333533;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-family: "Fira Code", monospace; /* Optional: Choose a font */
+        font-family: "Fira Code", monospace;
         font-size: 30px;
         border: 0px solid #F7F9FB;
         border-radius: 5px;
         text-align: center;
         color: #F7F9FB;
     }
-    100%{
+
+    100% {
         width: 200px;
         height: 100px;
         color: #F7F9FB;
         background-color: #EA526F;
-        border: 0px solid;
     }
 }
 
+/*================
+Navbar Styles
+==========*/
+
+/* Main Navbar style */
 .mainNavbar {
-    background-color: #333533; /* Dark background color */
+    background-color: #333533;
+    /* Dark background color */
     color: #F7F9FB;
     padding: 0px 20px;
-    /* position: relative; Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
     box-shadow: 0 2px 50px #ffe66d;
     position: fixed;
     top: 0px;
-    z-index: 1000;   /* Makes sure the navbar stays above other content */
-    box-shadow: 0 2px 50px #ffe66d;
-    /* animation: flicker 4s 1 forwards; Play once */
+    z-index: 1000;
+    /* Makes sure the navbar stays above other content */
 }
 
+/* Sub Navbar style */
 .subNavbar {
     top: 0px;
-    background-color: #333533; /* Dark background color */
+    background-color: #333533;
+    /* Dark background color */
     color: #F7F9FB;
     padding: 0px 20px;
-    position: fixed; /* Keeps the navbar at the top of the page */
+    position: fixed;
+    /* Keeps the navbar at the top of the page */
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 5px black; 
+    box-shadow: 0 2px 5px black;
 }
 
+/* Navbar container style */
 .navbar-container {
     display: flex;
-    justify-content: space-between; /* Ensures "Back to Codel" is on the left and the icons on the right */
+    justify-content: space-between;
+    /* Ensures "Back to Codel" is on the left and icons on the right */
     align-items: center;
-    width: 100%; /* Make sure it takes up the full width */
+    width: 100%;
 }
 
+/*================
+Animation Burst Effects
+==========*/
+
+/* Try burst animation */
 .try-burst {
     animation: tryBurst 1s;
 }
 
-@keyframes tryBurst{
-    0%{
+/* Keyframes for try burst effect */
+@keyframes tryBurst {
+    0% {
         box-shadow: 0 2px 50px #ffe66d;
     }
-    50%{
+
+    50% {
         box-shadow: 0 20px 100px #EA526F;
     }
-    100%{
+
+    100% {
         box-shadow: 0 2px 50px #ffe66d;
     }
 }
 
+/* Victory burst animation */
 .vic-burst {
     animation: vicBurst 2s;
 }
 
-@keyframes vicBurst{
-    0%{
+/* Keyframes for victory burst effect */
+@keyframes vicBurst {
+    0% {
         box-shadow: 0 2px 50px #ffe66d;
     }
-    30%{
+
+    30% {
         box-shadow: 0 100px 500px #ffe66d;
     }
-    55%{
+
+    55% {
         box-shadow: 0 2px 50px #61C9A8ed;
     }
 }
 
+/*================
+Button Styles
+==========*/
+
+/* Back button style */
 .backButton {
-    color: #ffe66d; /* Neon green for text */
-    text-decoration: none; /* Remove underline */
+    color: #ffe66d;
+    /* Neon green for text */
+    text-decoration: none;
+    /* Remove underline */
     font-size: 18px;
     padding: 5px 10px;
     transition: color 0.3s ease;
 }
 
-.nav-links {
-    display: flex; /* Use flex to arrange the icons */
-    justify-content: flex-end; /* Align items to the right */
+/* Hover effect for back button */
+.backButton:hover {
+    animation: dance 0.6s ease-in-out;
 }
 
+/*================
+Navigation Styles
+==========*/
+
+/* Navigation links container */
+.nav-links {
+    display: flex;
+    /* Use flex to arrange the icons */
+    justify-content: flex-end;
+    /* Align items to the right */
+}
+
+/* Navigation objects (icons) style */
 .navObjects {
-    color: #F7F9FB; /* Icon color */
+    color: #F7F9FB;
+    /* Icon color */
     margin-left: 15px;
     font-size: 30px;
     transition: background-color 0.3s ease;
     cursor: pointer;
 }
 
+/* Hover effect for navigation objects */
 .navObjects:hover {
     color: #ffe66d;
     animation: dance 0.6s ease-in-out;
-
 }
 
+/* Logo link container */
 .logo-link {
     display: inline-block;
-    text-align: center; /* Center the image inside the link */
+    text-align: center;
+    /* Center the image inside the link */
     padding-top: 10px;
     padding-bottom: 10px;
     width: 20%;
 }
 
+/*================
+Animation Styles
+==========*/
+
 /* Define the dance animation */
 @keyframes dance {
-    0% { transform: rotate(0) translateY(0); }
-    15% { transform: rotate(-10deg) translateY(-5px); }
-    50% { transform: rotate(5deg) translateY(2.5px); }
-    75% { transform: rotate(-5deg) translateY(-2px); }
-    100% { transform: rotate(0) translateY(0); }
-  }
+    0% {
+        transform: rotate(0) translateY(0);
+    }
 
-.backButton:hover {
-    animation: dance 0.6s ease-in-out;
+    15% {
+        transform: rotate(-10deg) translateY(-5px);
+    }
+
+    50% {
+        transform: rotate(5deg) translateY(2.5px);
+    }
+
+    75% {
+        transform: rotate(-5deg) translateY(-2px);
+    }
+
+    100% {
+        transform: rotate(0) translateY(0);
+    }
 }
 
+/*================
+Main Layout Styles
+==========*/
+
+/* Main container style */
 main {
     padding: 20px;
     margin: 0 auto;
-    padding-top:70px;
+    padding-top: 70px;
 }
 
+/* Stopwatch style */
 #stopwatch {
     font-size: 35px;
-    
     box-shadow: 0 0px 0px #ffe66d;
     border: 2px solid #ffe66d;
     border-radius: 10px;
 }
 
+/* Headings style */
 .head {
-    font-weight: bold
+    font-weight: bold;
 }
-#submitCode{
+
+/* Submit button style */
+#submitCode {
     margin-bottom: 10px;
 }
-.but{
+
+/* Button container style */
+.but {
     justify-content: space-between;
 }
 
+/*================
+Text Styles
+==========*/
+
+/* Aligned text container */
 .aligned-text {
-    text-align: left; /* Ensures a clean left edge */
-    width: 1000px; /* Set a fixed width for the text block */
-    margin: 0; /* Remove extra margin */
-    line-height: 1.6; /* Improve readability */
-    font-family: Arial, sans-serif; /* Optional: consistent font */
-  }
+    text-align: left;
+    /* Ensures a clean left edge */
+    width: 1000px;
+    /* Set a fixed width for the text block */
+    margin: 0;
+    /* Remove extra margin */
+    line-height: 1.6;
+    /* Improve readability */
+    font-family: Arial, sans-serif;
+    /* Optional: consistent font */
+}
 
-  .centered-container {
+/* Centered container style */
+.centered-container {
     display: flex;
-    justify-content: center; /* Centers the paragraph block horizontally */
-    align-items: center; /* Optional: centers vertically if needed */
-  }
+    justify-content: center;
+    /* Centers the paragraph block horizontally */
+    align-items: center;
+    /* Optional: centers vertically if needed */
+}
 
-  /* Apply rounded corners to the CodeMirror editor container */
+/*================
+CodeMirror Styles
+==========*/
+
+/* Apply rounded corners to the CodeMirror editor container */
 #editor {
-    border-radius: 10px;  /* Adjust the radius as needed */
-    overflow: hidden;     /* Ensure content doesn't overflow outside the rounded corners */
+    border-radius: 10px;
+    /* Adjust the radius as needed */
+    overflow: hidden;
+    /* Ensure content doesn't overflow outside the rounded corners */
 }
 
-/* Optionally, you can also style the actual CodeMirror instance */
+/* Style for CodeMirror instance */
 .CodeMirror {
-    border-radius: 10px;  /* Adjust radius for CodeMirror's actual wrapper */
+    border-radius: 10px;
+    /* Adjust radius for CodeMirror's actual wrapper */
 }
 
+/*================
+GIF Styles
+==========*/
+
+/* GIF styling */
 .gifClass {
-    width: auto; /* Keep the aspect ratio */
-    max-width: 75%; /* Adjust width */
-    max-height: 75%; /* Adjust height */
-    background-size: contain; /* Ensure the GIF scales proportionally */
+    width: auto;
+    /* Keep the aspect ratio */
+    max-width: 75%;
+    /* Adjust width */
+    max-height: 75%;
+    /* Adjust height */
+    background-size: contain;
+    /* Ensure the GIF scales proportionally */
     background-repeat: no-repeat;
-    display: block; /* Centering adjustments */
-    margin-left: 60px; /* Center horizontally */
+    display: block;
+    /* Centering adjustments */
+    margin-left: 60px;
+    /* Center horizontally */
 }
 
+/*================
+Cursor Styles
+==========*/
+
+/* Cursor style */
 .cursor {
     display: inline-block;
     font-weight: bold;
-    visibility: visible; /* Keep cursor visible by default */
+    visibility: visible;
+    /* Keep cursor visible by default */
     animation: blink 0.7s step-end infinite;
 }
 
+/* Blinking cursor effect */
 .cursor.blink {
-    visibility: hidden; /* Blink by hiding visibility, not opacity */
+    visibility: hidden;
+    /* Blink by hiding visibility, not opacity */
 }
 
+/* Keyframes for blinking effect */
 @keyframes blink {
     50% {
         visibility: hidden;
     }
 }
 
+/*================
+Scrollbar Styles
+==========*/
 
-  /* Apply styles to the entire document */
+/* Apply styles to the entire document */
 html {
-    scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: #333533 #1E1F1E; /* Scrollbar thumb and track colors */
+    scrollbar-width: thin;
+    /* For Firefox */
+    scrollbar-color: #333533 #1E1F1E;
+    /* Scrollbar thumb and track colors */
     z-index: 999;
 }
 
 /* For WebKit-based browsers (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+    width: 8px;
+    /* Width of the scrollbar */
 }
 
+/*================
+CodeMirror Resizing Styles
+==========*/
+
+/* CodeMirror resizing */
 .CodeMirror {
     resize: vertical;
     min-height: 300px;
 }
 
+/*================
+Run Code Button Styles
+==========*/
+
+/* Run code button style */
 #runCode {
     cursor: pointer;
     font-size: 30px;
 }
 
+/* Hover effect for run code button */
 #runCode:hover {
     color: #61C9A8;
 }
 
-  
-.suitcase-img {
-    width: 40%;  /* Set the width of the image as a percentage of the rectangle's size */
-    height: auto;  /* Maintain aspect ratio */
-    max-width: 100px; /* Optional: Limit the maximum width */
-    max-height: 100px; /* Optional: Limit the maximum height */
-}
+/*================
+Image Styles
+==========*/
 
-/* @keyframes flicker {
-    0%, 50%, 80% {
-        box-shadow: 0px 0px 0px transparent;
-    }
-    75.5%, 83%, 88% {
-        box-shadow: 0px 2px 50px #ffe66d;
-    }
-    75.501%, 82.002%, 83.001%, 83.003% {
-        box-shadow: 0px 0px 0px transparent;
-    }
-    81.001%, 82%, 83.002% {
-        box-shadow: 0px 2px 50px #ffe66d;
-    }
-} */
+/* Suitcase image style */
+.suitcase-img {
+    width: 40%;
+    /* Set the width of the image as a percentage of the rectangle's size */
+    height: auto;
+    /* Maintain aspect ratio */
+    max-width: 100px;
+    /* Optional: Limit the maximum width */
+    max-height: 100px;
+    /* Optional: Limit the maximum height */
+}

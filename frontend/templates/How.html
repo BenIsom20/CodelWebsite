@@ -1,10 +1,8 @@
-<!--THIS IS THE "HOW TO" PAGE HTML-->
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- Needed imports -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to play Codel</title>
@@ -13,13 +11,14 @@
     <link rel="stylesheet" href="static/css/style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="static/js/popup.js" defer></script>
-    <link rel="stylesheet" href="static/css/Popup.css">
+    <link rel="stylesheet" href="static/css/popup.css">
     <link rel="icon" href="static/images/CodelIcon.png" type="image/png">
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/how.js') }}"></script>
 </head>
 
 <body>
-    <!-- CODE FOR NAVBAR -->
+    <!-- Code for navbar -->
     <nav class="subNavbar">
         <div class="navbar-container">
             <a id="backtocode" href="/" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
@@ -35,7 +34,7 @@
         </div>
     </nav>
 
-    <!-- Popup -->
+    <!-- Account Popup -->
     <div id="mainPopup" class="popup"
         style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
         <div class="popup-content">
@@ -47,7 +46,7 @@
                 <h2>Sign In</h2>
                 <input id="logusername" type="text" placeholder="Username">
                 <p id="placeholder"></p>
-                <input class="inputs" id="logpassword" type="password" placeholder="Password">
+                <input id="logpassword" type="password" placeholder="Password">
                 <p id="lognote"></p>
                 <button id="login">Sign In</button>
                 <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
@@ -89,7 +88,7 @@
         </div>
     </div>
 
-    <!-- Popup -->
+    <!-- Stats Popup -->
     <div id="statsPopup" class="popup"
         style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
         <div class="stats-content" id="popupContent">
@@ -110,10 +109,10 @@
         </div>
     </div>
 
-    <!-- EXPLANATION ABOUT HOW TO PLAY CODEL-->
+    <!-- Explination how to play-->
     <main>
         <div class="how-to-play">
-            <h1 style = "color:#ffe66d; padding-top: 15px;">How to Play CODEL</h1>
+            <h1 style="color:#ffe66d; padding-top: 15px;">How to Play CODEL</h1>
             <p>
                 Welcome to <strong>CODEL</strong>! Every day, you'll face a new coding challenge designed to help you
                 practice
@@ -212,44 +211,6 @@
         </div>
 
     </main>
-    <script>
-        // Add an event listener for the 'leader' link
-        document.getElementById('leader').addEventListener('click', function (event) {
-            smoothTransition(event); // Call smoothTransition when the link is clicked
-        });
-
-
-        // Add an event listener for the 'backtocode' link
-        document.getElementById('backtocode').addEventListener('click', function (event) {
-            smoothTransition(event); // Call smoothTransition when the link is clicked
-        });
-
-        // Function for smooth transition to the next page
-        function smoothTransition(event) {
-            event.preventDefault(); // Prevent the default behavior of the link (e.g., immediate navigation)
-            const href = event.currentTarget.href; // Get the URL of the link that was clicked
-
-            document.body.classList.remove('fade-in'); // Remove the 'fade-in' class from the body (if present)
-            document.body.classList.add('fade-out'); // Add the 'fade-out' class to trigger the fade-out animation
-
-            // Wait for the CSS transition to complete, then navigate to the new page
-            setTimeout(() => {
-                window.location.href = href; // Navigate to the link's URL
-            }, 300); // Ensure this duration matches the CSS transition duration for smooth effect
-        }
-
-        // Add the 'fade-in' class to the body when the page loads
-        window.onload = function () {
-            document.body.classList.add('fade-in'); // Trigger the fade-in animation when the page is loaded
-
-            // Check if the user is returning from stats page
-            if (sessionStorage.getItem("cameFrom") === "true") {
-                sessionStorage.setItem("cameFrom", "false"); // Reset the flag in sessionStorage
-                document.getElementById("stats").click(); // Simulate a click on the 'stats' element
-            }
-        };
-
-    </script>
 
 </body>
 
