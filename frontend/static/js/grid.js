@@ -89,7 +89,7 @@ async function initializeColumn() {
     const outputDiv = document.getElementById("output");
 
     // Send the code to the backend for execution
-    const response = await fetch(`http://${publicIp}:5000/Startup`);
+    const response = await fetch(`http://${publicIp}/Startup`);
     const result = await response.json();
 
     // After receiving the result, use the numTests property to create rectangles in the grid
@@ -140,14 +140,14 @@ async function fetchTestExplanation() {
     const lastRunDate = Cookies.get('lastTypingEffectRunDate');
 
     // Fetch question data
-    const response = await fetch(`http://${publicIp}:5000/Startup`);
+    const response = await fetch(`http://${publicIp}/Startup`);
     const data = await response.json();
     var txt = data.prompt; // Get the prompt from the fetched data
 
     if (localStorage.getItem('jwt_token')) {
         try {
             const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
-            const response2 = await fetch(`http://${publicIp}:5000/protected`, {
+            const response2 = await fetch(`http://${publicIp}/protected`, {
                 // Send a GET request to the protected endpoint with the token in the Authorization header
                 method: 'GET',
                 headers: {
@@ -164,7 +164,7 @@ async function fetchTestExplanation() {
             }
         } catch (error) {
             // If there's an error fetching the username, log the error
-            alert(error);
+            // alert(error);
         }
     } else {
         // If the user is not logged in, append a generic greeting to the question prompt
@@ -279,7 +279,7 @@ async function storeGridState(victory) {
 async function loadGridState() {
 
     // Fetch the number of tests from the server (assumed to be related to the grid)
-    const response = await fetch(`http://${publicIp}:5000/Startup`);
+    const response = await fetch(`http://${publicIp}/Startup`);
     const result = await response.json();
 
     // After receiving the result, use the numTests property to determine how many columns to create in the grid
@@ -384,7 +384,7 @@ async function loadGridState() {
 
 async function setGridLocalStorageWithExpiry(key, value) {
 
-    const response = await fetch(`http://${publicIp}:5000/get_chicago_midnight`)
+    const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
     const info = await response.json();
     if(response.ok){
         const date = info.chicago_midnight_utc;

@@ -19,6 +19,7 @@ def get_challenge_by_id(challenge_id):
     connection = None  # Initialize connection to None
     try:
         connection = mysql.connector.connect(**db_config)
+        print("connected to " + connection)
         cursor = connection.cursor()
 
         # Query to fetch the challenge by ID

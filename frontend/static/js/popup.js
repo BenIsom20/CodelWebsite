@@ -82,7 +82,7 @@ async function fetchStats() {
         return null; // Indicate no stats are available
     }
     try {
-        const response = await fetch("http://localhost:5000/stats", {
+        const response = await fetch(`http://${publicIp}/stats`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -267,7 +267,7 @@ function captureDelete() {
 // Function to register a new user
 async function registerUser(username, password, email) {
     // Send a POST request to the registration endpoint
-    const response = await fetch(`http://${publicIp}:5000/register`, {
+    const response = await fetch(`http://${publicIp}/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -288,7 +288,7 @@ async function registerUser(username, password, email) {
 // Function to log in an existing user
 async function loginUser(username, password) {
     // Send a POST request to the login endpoint
-    const response = await fetch(`http://${publicIp}:5000/login`, {
+    const response = await fetch(`http://${publicIp}/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -322,7 +322,7 @@ async function accessProtectedRoute() {
     if (!token) return; // Exit if no token is found
 
     // Send a GET request to the protected endpoint with the token in the Authorization header
-    const response = await fetch('http://localhost:5000/protected', {
+    const response = await fetch(`http://${publicIp}/protected`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -344,7 +344,7 @@ async function deleteUser(username, password) {
     }
     const payload = { username, password };
     // Send a POST request to the delete user endpoint
-    const response = await fetch('http://localhost:5000/delete_user', {
+    const response = await fetch(`http://${publicIp}/delete_user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -368,7 +368,7 @@ async function logoutUserOnDel(paramusername) {
     if (!token) return; // Exit if no token is found
 
     // Send a GET request to the protected endpoint with the token in the Authorization header
-    const response = await fetch('http://localhost:5000/protected', {
+    const response = await fetch(`http://${publicIp}/protected`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`

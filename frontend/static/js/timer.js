@@ -22,7 +22,7 @@ async function startStopwatch() {
                 await setTimerLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
             }
             catch (error) {
-                alert(error);
+                // alert(error);
             }
 
             updateStopwatchDisplay(); // Update the display with the new time
@@ -62,7 +62,7 @@ async function setTimerLocalStorageWithExpiry(key, value) {
         const item = JSON.parse(savedItem);
         expiryTime = item.expiry; // Use the existing expiry time
     } else {
-        const response = await fetch(`http://${publicIp}:5000/get_chicago_midnight`)
+        const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
         const info = await response.json();
         if (response.ok) {
             const date = info.chicago_midnight_utc;

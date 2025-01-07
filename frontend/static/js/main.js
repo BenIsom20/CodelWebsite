@@ -1,4 +1,4 @@
-let publicIp = "127.0.0.1"
+let publicIp = "54.210.148.116"
 
 // Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {
@@ -7,7 +7,7 @@ async function getUserData() {
 
     const gridData = getIndexLocalStorageWithExpiry("gridState");
     // Send a GET request to the backend to fetch user data
-    const response = await fetch(`http://${publicIp}:5000/get_user_data`, {
+    const response = await fetch(`http://${publicIp}/get_user_data`, {
         method: "GET",  // GET method is used to retrieve data from the server
         headers: { 'Authorization': `Bearer ${token}` },  // Include the token for authorization
     });
