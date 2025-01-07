@@ -7,6 +7,7 @@ import bcrypt
 import mysql.connector
 import json
 import io
+import os
 import logging
 import sys
 from flask_apscheduler import APScheduler
@@ -34,14 +35,20 @@ def leaderboard():
 # Setup logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
-app.config["JWT_SECRET_KEY"] = "changeLater"
+jwt_secret_key = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = jwt_secret_key
 jwt = JWTManager(app)
 
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USERNAME')
+db_password = os.getenv('DB_PASSWORD')
+db_database = os.getenv('DB_NAME')
+
 db_config = {
-    'host': 'db', # change this to the name of my db container if using docker
-    'user': 'devuser', 
-    'password': 'devpass',
-    'database': 'qsdb' #database name
+    'host': db_host, 
+    'user': db_user, 
+    'password': db_password,
+    'database': db_database #database name
 }
 
 # Global variable for storing the current challenge
@@ -631,5 +638,7 @@ def stats():
 
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    # Fetch the port from the environment, with a default value if not set
+    port = int(os.environ.get('PORT', 5000))  # Default port 5000
+    app.run(debug=True, host="0.0.0.0", port=port)
 

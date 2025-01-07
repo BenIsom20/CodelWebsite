@@ -190,7 +190,6 @@ function captureLogin() {
     const password = document.getElementById("logpassword").value;
 
     // Retrieve username and password from the login form
-
     // Call the loginUser function to handle login
     if (username && password) {
         loginUser(username, password);
@@ -268,7 +267,7 @@ function captureDelete() {
 // Function to register a new user
 async function registerUser(username, password, email) {
     // Send a POST request to the registration endpoint
-    const response = await fetch('http://localhost:5000/register', {
+    const response = await fetch(`http://${publicIp}:5000/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -289,14 +288,14 @@ async function registerUser(username, password, email) {
 // Function to log in an existing user
 async function loginUser(username, password) {
     // Send a POST request to the login endpoint
-    const response = await fetch('http://localhost:5000/login', {
+    const response = await fetch(`http://${publicIp}:5000/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ username, password })
     });
-
+    
     // Parse the JSON response
     const data = await response.json();
     if (response.ok) {

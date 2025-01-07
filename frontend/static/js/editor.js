@@ -49,7 +49,7 @@ document.getElementById("how").addEventListener("click", saveCodeAndNotify);
 
 
 async function fetchSkeleton() {
-            const response = await fetch("http://127.0.0.1:5000/get_skeleton");
+            const response = await fetch(`http://${publicIp}:5000/get_skeleton`);
             if (response.ok) {
                 return await response.json(); // Return parsed skeleton
             }
@@ -71,7 +71,7 @@ document.getElementById("runCode").addEventListener("click", async function () {
     const userCode = editor.getValue(); // Get the code from CodeMirror editor
     const outputDiv = document.getElementById("output"); // Output div where results will be displayed
     // Send code to backend for execution via a POST request
-    const response = await fetch("http://127.0.0.1:5000/run", {
+    const response = await fetch(`http:/${publicIp}/:5000/run`, {
         method: "POST", // HTTP method is POST
         headers: { "Content-Type": "application/json" }, // Set request headers for JSON content
         body: JSON.stringify({ code: userCode }), // Send the code as JSON in the body
@@ -97,7 +97,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
 
     try {
         // Send the user's code to the backend via a POST request
-        const response = await fetch("http://127.0.0.1:5000/test", {
+        const response = await fetch(`http://${publicIp}:5000/test`, {
             method: "POST",
             headers: { "Content-Type": "application/json" }, // Specify JSON content type
             body: JSON.stringify({ code: userCode }), // Send the code as a JSON object
@@ -213,7 +213,7 @@ async function saveProgress() {
         };
 
         // Send a POST request to the backend to update victory state
-        fetch("http://localhost:5000/saveProgress", {
+        fetch(`http://${window.publicId}:5000/saveProgress`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",  // Indicate JSON content
@@ -244,7 +244,7 @@ async function victorySend() {
         };
 
         // Send a POST request to the backend to update victory state
-        fetch("http://localhost:5000/victory", {
+        fetch(`http://${publicIp}:5000/victory`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",  // Indicate JSON content
@@ -275,7 +275,7 @@ function trySequence() {
 }
 
 async function setLocalStorageWithExpiry(key, value) {
-    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight")
+    const response = await fetch(`http://${publicIp}:5000/get_chicago_midnight`)
     const info = await response.json();
     if(response.ok){
         const date = info.chicago_midnight_utc;
