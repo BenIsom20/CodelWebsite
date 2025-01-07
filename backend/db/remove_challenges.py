@@ -9,12 +9,14 @@ def remove_challenge(challenge_id):
     db_password = os.getenv('DB_PASSWORD')
     db_database = os.getenv('DB_NAME')
 
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    # Create a connection to the MySQL database
+    conn = mysql.connector.connect(
+        host=db_host, 
+        user=db_user, 
+        password=db_password,
+        database=db_database  # Use actual database name
+    )
+    
     cursor = conn.cursor()
 
     # Check if the challenge exists in the database
@@ -62,12 +64,14 @@ def list_challenges():
     db_password = os.getenv('DB_PASSWORD')
     db_database = os.getenv('DB_NAME')
 
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    # Create a connection to the MySQL database
+    conn = mysql.connector.connect(
+        host=db_host, 
+        user=db_user, 
+        password=db_password,
+        database=db_database  # Use actual database name
+    )
+    
     cursor = conn.cursor()
 
     # Get a list of all challenge IDs and names
@@ -93,12 +97,14 @@ def remove_all():
     db_password = os.getenv('DB_PASSWORD')
     db_database = os.getenv('DB_NAME')
 
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    # Create a connection to the MySQL database
+    conn = mysql.connector.connect(
+        host=db_host, 
+        user=db_user, 
+        password=db_password,
+        database=db_database  # Use actual database name
+    )
+    
     cursor = conn.cursor()
 
     # Get a list of all challenge IDs to remove

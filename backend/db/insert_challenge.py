@@ -28,12 +28,14 @@ def insert_challenge_data(challenge_data):
     db_password = os.getenv('DB_PASSWORD')
     db_database = os.getenv('DB_NAME')
 
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    # Create a connection to the MySQL database
+    conn = mysql.connector.connect(
+        host=db_host, 
+        user=db_user, 
+        password=db_password,
+        database=db_database  # Use actual database name
+    )
+    
     cursor = conn.cursor()
 
     # Insert challenge data
@@ -111,12 +113,14 @@ def list_challenges():
     db_password = os.getenv('DB_PASSWORD')
     db_database = os.getenv('DB_NAME')
 
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    # Create a connection to the MySQL database
+    conn = mysql.connector.connect(
+        host=db_host, 
+        user=db_user, 
+        password=db_password,
+        database=db_database  # Use actual database name
+    )
+    
     cursor = conn.cursor()
 
     # Get a list of all challenge IDs and names
@@ -142,12 +146,14 @@ def list_challenges_to_add():
     db_password = os.getenv('DB_PASSWORD')
     db_database = os.getenv('DB_NAME')
 
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    # Create a connection to the MySQL database
+    conn = mysql.connector.connect(
+        host=db_host, 
+        user=db_user, 
+        password=db_password,
+        database=db_database  # Use actual database name
+    )
+    
     cursor = conn.cursor()
 
     # Fetch challenge names already in the database
