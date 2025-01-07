@@ -1,14 +1,20 @@
 import mysql.connector
+import os
 
 # Function to remove a challenge from the database
 def remove_challenge(challenge_id):
     # Database connection
-    conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
-    )
+    db_host = os.getenv('DB_HOST')
+    db_user = os.getenv('DB_USERNAME')
+    db_password = os.getenv('DB_PASSWORD')
+    db_database = os.getenv('DB_NAME')
+
+    conn = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     cursor = conn.cursor()
 
     # Check if the challenge exists in the database
@@ -51,12 +57,17 @@ def remove_challenge(challenge_id):
 # Function to list available challenges in the database
 def list_challenges():
     # Database connection
-    conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
-    )
+    db_host = os.getenv('DB_HOST')
+    db_user = os.getenv('DB_USERNAME')
+    db_password = os.getenv('DB_PASSWORD')
+    db_database = os.getenv('DB_NAME')
+
+    conn = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     cursor = conn.cursor()
 
     # Get a list of all challenge IDs and names
@@ -77,12 +88,17 @@ def list_challenges():
 # Function to remove all challenges from the database
 def remove_all():
     # Database connection
-    conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
-    )
+    db_host = os.getenv('DB_HOST')
+    db_user = os.getenv('DB_USERNAME')
+    db_password = os.getenv('DB_PASSWORD')
+    db_database = os.getenv('DB_NAME')
+
+    conn = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     cursor = conn.cursor()
 
     # Get a list of all challenge IDs to remove

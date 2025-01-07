@@ -1,12 +1,17 @@
 import mysql.connector
+import os
 from datetime import datetime
 
-# Database connection parameters
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USERNAME')
+db_password = os.getenv('DB_PASSWORD')
+db_database = os.getenv('DB_NAME')
+
 db_config = {
-    'host': 'db',  # Or the name of your DB container if using Docker
-    'user': 'devuser',  # The user you set in docker-compose.yml
-    'password': 'devpass',  # The password you set in docker-compose.yml
-    'database': 'qsdb'  # Your database name
+    'host': db_host, 
+    'user': db_user, 
+    'password': db_password,
+    'database': db_database #database name
 }
 
 def get_challenge_by_id(challenge_id):

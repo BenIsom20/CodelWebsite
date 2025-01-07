@@ -170,7 +170,7 @@
             if (!token) { return; } // Exit if no token is found
 
             // Send a GET request to the protected endpoint with the token in the Authorization header
-            const response = await fetch('http://localhost:5000/protected', {
+            const response = await fetch(`http://${publicIp}:5000/protected`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -187,7 +187,7 @@
         async function loadLeaderboard() {
             const loadMoreButton = document.getElementById("load-more");
             loadMoreButton.classList.add("hidden");
-            const response = await fetch(`http://127.0.0.1:5000/getLeaderboard?offset=${offset}&limit=${limit}`);
+            const response = await fetch(`http://${publicIp}:5000/getLeaderboard?offset=${offset}&limit=${limit}`);
             const data = await response.json();
 
             if (response.ok) {
