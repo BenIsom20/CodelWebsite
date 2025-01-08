@@ -1,4 +1,4 @@
-let publicIp = "54.210.148.116"
+let publicIp = "127.0.0.1:5000"
 
 // Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {
@@ -73,12 +73,6 @@ function clearExpiredLocalStorage() {
 // ONE SINGULAR ONLOAD FUNCTION -->
 // This function is executed when the window finishes loading
 window.onload = async function () {
-    // Listen for the pageshow event to handle back navigation or cache restoration
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted) {
-            window.location.reload();
-        }
-    });
 
     document.body.classList.add('fade-in');
     clearExpiredLocalStorage(); // Clear expired data from localStorage

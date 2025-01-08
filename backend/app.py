@@ -15,6 +15,19 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from better_profanity import profanity
 from collections.abc import Iterable
+from secretload import get_secret
+
+get_secret('db_name')
+get_secret('db_username')
+get_secret('db_password')
+get_secret('db_host')
+get_secret('jwt_key')
+
+db_host = os.getenv('db_name')
+db_user = os.getenv('db_username')
+db_password = os.getenv('db_password')
+db_database = os.getenv('db_host')
+jwt_secret_key = os.getenv('jwt_key')
 
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes
@@ -35,14 +48,9 @@ def leaderboard():
 # Setup logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
-jwt_secret_key = os.getenv('JWT_SECRET_KEY')
 app.config["JWT_SECRET_KEY"] = jwt_secret_key
 jwt = JWTManager(app)
 
-db_host = os.getenv('DB_HOST')
-db_user = os.getenv('DB_USERNAME')
-db_password = os.getenv('DB_PASSWORD')
-db_database = os.getenv('DB_NAME')
 
 db_config = {
     'host': db_host, 

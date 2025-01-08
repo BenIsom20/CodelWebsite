@@ -277,7 +277,6 @@ async function storeGridState(victory) {
 
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
 async function loadGridState() {
-
     // Fetch the number of tests from the server (assumed to be related to the grid)
     const response = await fetch(`http://${publicIp}/Startup`);
     const result = await response.json();
