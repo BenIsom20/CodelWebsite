@@ -199,21 +199,21 @@ function smoothTransition(event) {
     }
 }
 
-// animation for on first visit of website in logo and prompt
-$(document).ready(function () {
-    function playGif(gifclass) {
-        const gif = $(gifclass);
-        gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
-    }
-    const seenGif = Cookies.get('seenGif');
-    if (!seenGif) {
-        $('.hack6-loading-wrapper').css('display', 'flex');
-        playGif('.hack6-gif');
-        typer.js
-        Cookies.set('seenGif', true, { expires: 1 });
+// // animation for on first visit of website in logo and prompt
+// $(document).ready(function () {
+//     function playGif(gifclass) {
+//         const gif = $(gifclass);
+//         gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
+//     }
+//     const seenGif = Cookies.get('seenGif');
+//     if (!seenGif) {
+//         $('.hack6-loading-wrapper').css('display', 'flex');
+//         playGif('.hack6-gif');
+//         typer.js
+//         Cookies.set('seenGif', true, { expires: 1 });
 
-        setTimeout(() => {
-            $('.hack6-loading-wrapper').fadeOut(500);
-        }, 3000)
-    }
-})
+//         setTimeout(() => {
+//             $('.hack6-loading-wrapper').fadeOut(500);
+//         }, 3000)
+//     }
+// })

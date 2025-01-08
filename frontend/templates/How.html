@@ -13,23 +13,22 @@
     <script src="static/js/popup.js" defer></script>
     <link rel="stylesheet" href="static/css/popup.css">
     <link rel="icon" href="static/images/CodelIcon.png" type="image/png">
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/how.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/how.js') }}" defer></script>
 </head>
 
 <body>
     <!-- Code for navbar -->
     <nav class="subNavbar">
         <div class="navbar-container">
-            <a id="backtocode" href="/" class="backButton" onclick="startStopwatch(); loadCode();">BACK TO
+            <a id="backtocode" href="/" class="backButton">BACK TO
                 CODEL</a>
             <div class="logo-link">
                 <img class="gifClass" src="static/images/C.gif" alt="Animated Logo" id="logo">
             </div>
             <div class="nav-links">
                 <a id="leader" href="leaderboard" class="navObjects"><i class='bx bxs-bar-chart-alt-2'></i></a>
-                <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
-                <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
+                <a id="user" class="navObjects" ><i class='bx bxs-user-circle'></i></a>
+                <a id="stats" class="navObjects"><i class='bx bxs-medal'></i></a>
             </div>
         </div>
     </nav>

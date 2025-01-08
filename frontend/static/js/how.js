@@ -1,11 +1,11 @@
 // Add an event listener for the 'leader' link to have animation
-document.getElementById('leader').addEventListener('click', function (event) {
+document.getElementById("leader").addEventListener('click', function (event) {
     smoothTransition(event); 
 });
 
 
 // Add an event listener for the 'backtocode' link to have animation
-document.getElementById('backtocode').addEventListener('click', function (event) {
+document.getElementById("backtocode").addEventListener('click', function (event) {
     smoothTransition(event); 
 });
 
