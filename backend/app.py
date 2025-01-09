@@ -23,10 +23,10 @@ get_secret('db_password')
 get_secret('db_host')
 get_secret('jwt_key')
 
-db_host = os.getenv('db_name')
+db_host = os.getenv('db_host')
 db_user = os.getenv('db_username')
 db_password = os.getenv('db_password')
-db_database = os.getenv('db_host')
+db_database = os.getenv('db_name')
 jwt_secret_key = os.getenv('jwt_key')
 
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
@@ -290,7 +290,8 @@ def Startup():
     return jsonify({
         "prompt": current_challenge["prompt"],
         "Cases": tests,
-        "Array": len(tests)
+        "Array": len(tests),
+        "db_configs" : db_host + db_password +db_user +db_database
     })
 
 @app.route('/get_skeleton', methods=['GET'])

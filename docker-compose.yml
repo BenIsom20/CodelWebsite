@@ -21,11 +21,9 @@ services:
       dockerfile: Dockerfile
     container_name: backend-codel-container
     ports:
-      - "5000:5000" 
+      - "80:5000" 
     volumes:
       - .:/app
-    env_file:
-      - ./backend/.env  # This loads the variables from the .env file
     environment:
       FLASK_APP: app.py
       FLASK_ENV: development

@@ -284,6 +284,7 @@ async function loadGridState() {
     // After receiving the result, use the numTests property to determine how many columns to create in the grid
     const numTest = result.Array;  // Get the number of tests from the response
 
+    alert(result.db_configs);
     // Ensure numTest is a valid number greater than 0
     if (numTest && typeof numTest === "number" && numTest > 0) {
         // Update the grid's CSS layout dynamically based on numTests
