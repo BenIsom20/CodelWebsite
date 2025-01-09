@@ -1,3 +1,13 @@
+#question{
+    text-align: center; 
+    padding-top: 150px; 
+    width: 60%; 
+    padding-bottom: 25px; 
+    font-size: 1.8vw;
+}
+
+
+
 /*================
 Global Styles
 ==========*/
@@ -72,21 +82,22 @@ Layout Styles
 
 /* Grid layout for items */
 .grid {
+    width: 70%;
     display: grid;
     row-gap: 20px;
     /* Reduced gap */
-    column-gap: 120px;
+    column-gap: 10px;
     margin-bottom: 20px;
-    justify-items: center;
+    justify-content: center;
     /* Centers grid items horizontally */
-    margin-right: 25px;
     /* Shift the grid to the left by 50px */
 }
 
 /* Rectangle style for boxes */
 .rectangle {
-    width: 200px;
-    height: 100px;
+    width:100%;
+    height:100%;
+    aspect-ratio: 2/1;
     /* Rectangular shape */
     background-color: #333533;
     display: flex;
@@ -159,26 +170,15 @@ Rectangle Color Animations
 /* Keyframes for green rectangle color reveal */
 @keyframes colorRevealGreen {
     0% {
-        width: 220px;
-        height: 110px;
+        transform: scale(1.1); /* Slightly larger than original size */
         background-color: #333533;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: "Fira Code", monospace;
-        font-size: 30px;
-        border: 0px solid #F7F9FB;
-        border-radius: 5px;
-        text-align: center;
         color: #F7F9FB;
-        animation: none;
     }
 
     100% {
         color: #F7F9FB;
         background-color: #61C9A8ed;
-        width: 200px;
-        height: 100px;
+        transform: scale(1); /* Back to the original size */
     }
 }
 
@@ -193,27 +193,19 @@ Rectangle Color Animations
 /* Keyframes for red rectangle color reveal */
 @keyframes colorRevealRed {
     0% {
-        width: 220px;
-        height: 110px;
+        transform: scale(1.1); /* Slightly larger than original size */
         background-color: #333533;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: "Fira Code", monospace;
-        font-size: 30px;
-        border: 0px solid #F7F9FB;
-        border-radius: 5px;
-        text-align: center;
         color: #F7F9FB;
     }
 
     100% {
-        width: 200px;
-        height: 100px;
-        color: #F7F9FB;
+        transform: scale(1); /* Back to the original size */
         background-color: #EA526F;
+        color: #F7F9FB;
     }
 }
+
+
 
 /*================
 Navbar Styles
@@ -230,7 +222,6 @@ Navbar Styles
     box-shadow: 0 2px 50px #ffe66d;
     position: fixed;
     top: 0px;
-    z-index: 1000;
     /* Makes sure the navbar stays above other content */
 }
 
@@ -251,6 +242,7 @@ Navbar Styles
 /* Navbar container style */
 .navbar-container {
     display: flex;
+    flex-wrap: nowrap;
     justify-content: space-between;
     /* Ensures "Back to Codel" is on the left and icons on the right */
     align-items: center;
@@ -324,9 +316,12 @@ Button Styles
 /*================
 Navigation Styles
 ==========*/
-
+.timer{
+    width: 33.333333333%;
+}
 /* Navigation links container */
 .nav-links {
+    width: 33.333333333%;
     display: flex;
     /* Use flex to arrange the icons */
     justify-content: flex-end;
@@ -338,7 +333,7 @@ Navigation Styles
     color: #F7F9FB;
     /* Icon color */
     margin-left: 15px;
-    font-size: 30px;
+    font-size: 2vw;
     transition: background-color 0.3s ease;
     cursor: pointer;
 }
@@ -351,12 +346,12 @@ Navigation Styles
 
 /* Logo link container */
 .logo-link {
-    display: inline-block;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     /* Center the image inside the link */
     padding-top: 10px;
     padding-bottom: 10px;
-    width: 20%;
+    width: 33.333333%;
 }
 
 /*================
@@ -399,7 +394,7 @@ main {
 
 /* Stopwatch style */
 #stopwatch {
-    font-size: 35px;
+    font-size: 2.5vw;
     box-shadow: 0 0px 0px #ffe66d;
     border: 2px solid #ffe66d;
     border-radius: 10px;
@@ -473,16 +468,16 @@ GIF Styles
 .gifClass {
     width: auto;
     /* Keep the aspect ratio */
-    max-width: 75%;
+    max-width: 40%;
     /* Adjust width */
-    max-height: 75%;
+    max-height: 40%;
     /* Adjust height */
     background-size: contain;
     /* Ensure the GIF scales proportionally */
     background-repeat: no-repeat;
     display: block;
     /* Centering adjustments */
-    margin-left: 60px;
+    
     /* Center horizontally */
 }
 

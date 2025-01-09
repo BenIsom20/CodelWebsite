@@ -84,7 +84,9 @@ async function initializeColumn() {
         // Update the grid's CSS layout dynamically based on numTests
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
-            gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;  // Update grid layout for columns
+            gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
+            const height = gridElement.offsetWidth/numTest - numTest*10;
+            gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
 
         // Create the rectangles (one for each test) and add them to the grid container
@@ -257,7 +259,9 @@ async function loadGridState() {
         // Update the grid's CSS layout dynamically based on numTests
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
-            gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;
+            gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
+            const height = gridElement.offsetWidth/numTest - numTest*10;
+            gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
     }
 
