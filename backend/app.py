@@ -15,7 +15,6 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from better_profanity import profanity
 from collections.abc import Iterable
-from secretload import get_secret
 
 db_host = os.getenv('MYSQL_HOST')
 db_user = os.getenv('MYSQL_USER')
@@ -283,7 +282,7 @@ def Startup():
     return jsonify({
         "prompt": current_challenge["prompt"],
         "Cases": tests,
-        "Array": len(tests),
+        "Array": len(tests)
     })
 
 @app.route('/get_skeleton', methods=['GET'])
@@ -639,7 +638,5 @@ def stats():
 
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":
-    # Fetch the port from the environment, with a default value if not set
-    port = int(os.environ.get('PORT', 5000))  # Default port 5000
-    app.run(debug=True, host="0.0.0.0", port=port)
+    app.run(debug=True, host="0.0.0.0", port=5000)
 
