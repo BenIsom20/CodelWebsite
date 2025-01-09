@@ -1,4 +1,4 @@
-let publicIp = "54.210.148.116"
+let publicIp = "44.201.228.74"
 
 // Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {
