@@ -17,7 +17,7 @@ db_database = os.getenv('MYSQL_DATABASE')
 
 
 db_config = {
-    'host': "db", 
+    'host': db_host, 
     'user': db_user, 
     'password': db_password,
     'database': db_database #database name

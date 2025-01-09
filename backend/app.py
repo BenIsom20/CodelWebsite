@@ -17,19 +17,11 @@ from better_profanity import profanity
 from collections.abc import Iterable
 from secretload import get_secret
 
-# get_secret('database_secrets')
-# get_secret('jwt_key')
-
-# db_host = os.getenv('db_host')
-# db_user = os.getenv('db_username')
-# db_password = os.getenv('db_pass')
-# db_database = os.getenv('db_name')
-# jwt_secret_key = os.getenv('jwt_key')
-
 db_host = os.getenv('MYSQL_HOST')
 db_user = os.getenv('MYSQL_USER')
 db_password = os.getenv('MYSQL_PASSWORD')
 db_database = os.getenv('MYSQL_DATABASE')
+jwt_secret_key = os.getenv('FWT_TOKEN')
 
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes
@@ -50,11 +42,11 @@ def leaderboard():
 # Setup logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
-app.config["JWT_SECRET_KEY"] = "changeLater"
+app.config["JWT_SECRET_KEY"] = jwt_secret_key
 jwt = JWTManager(app)
 
 db_config = {
-    'host': "db", 
+    'host': db_host, 
     'user': db_user, 
     'password': db_password,
     'database': db_database #database name

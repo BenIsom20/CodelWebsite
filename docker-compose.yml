@@ -27,6 +27,7 @@ services:
     environment:
       FLASK_APP: app.py
       FLASK_ENV: development
+      FWT_TOKEN: ${FWT_TOKEN}
       MYSQL_HOST: ${MYSQL_HOST}  # Ensure that the backend knows where the DB is
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
