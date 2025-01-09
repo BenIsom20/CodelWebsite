@@ -23,10 +23,10 @@ def generate_function_skeleton(function_name, parameters, cases):
 
 # Function to insert data into the database
 def insert_challenge_data(challenge_data):
-    db_host = os.getenv('DB_HOST')
-    db_user = os.getenv('DB_USERNAME')
-    db_password = os.getenv('DB_PASSWORD')
-    db_database = os.getenv('DB_NAME')
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
 
     # Create a connection to the MySQL database
     conn = mysql.connector.connect(
@@ -108,10 +108,10 @@ def insert_all():
 
 # Function to list available challenges in the database
 def list_challenges():
-    db_host = os.getenv('DB_HOST')
-    db_user = os.getenv('DB_USERNAME')
-    db_password = os.getenv('DB_PASSWORD')
-    db_database = os.getenv('DB_NAME')
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
 
     # Create a connection to the MySQL database
     conn = mysql.connector.connect(
@@ -141,10 +141,11 @@ def list_challenges():
 # Function to list challenges that can be added (exist in YAML files but not in the database)
 def list_challenges_to_add():
     #Database Connection
-    db_host = os.getenv('DB_HOST')
-    db_user = os.getenv('DB_USERNAME')
-    db_password = os.getenv('DB_PASSWORD')
-    db_database = os.getenv('DB_NAME')
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
 
     # Create a connection to the MySQL database
     conn = mysql.connector.connect(

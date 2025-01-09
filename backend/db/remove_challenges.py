@@ -4,10 +4,11 @@ import os
 # Function to remove a challenge from the database
 def remove_challenge(challenge_id):
     # Database connection
-    db_host = os.getenv('DB_HOST')
-    db_user = os.getenv('DB_USERNAME')
-    db_password = os.getenv('DB_PASSWORD')
-    db_database = os.getenv('DB_NAME')
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
 
     # Create a connection to the MySQL database
     conn = mysql.connector.connect(
@@ -59,10 +60,10 @@ def remove_challenge(challenge_id):
 # Function to list available challenges in the database
 def list_challenges():
     # Database connection
-    db_host = os.getenv('DB_HOST')
-    db_user = os.getenv('DB_USERNAME')
-    db_password = os.getenv('DB_PASSWORD')
-    db_database = os.getenv('DB_NAME')
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
 
     # Create a connection to the MySQL database
     conn = mysql.connector.connect(
@@ -92,10 +93,10 @@ def list_challenges():
 # Function to remove all challenges from the database
 def remove_all():
     # Database connection
-    db_host = os.getenv('DB_HOST')
-    db_user = os.getenv('DB_USERNAME')
-    db_password = os.getenv('DB_PASSWORD')
-    db_database = os.getenv('DB_NAME')
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
 
     # Create a connection to the MySQL database
     conn = mysql.connector.connect(
