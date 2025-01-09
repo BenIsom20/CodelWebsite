@@ -5,10 +5,10 @@ services:
     image: mysql:8.0
     container_name: mysql-codel-container
     environment:
-      MYSQL_ROOT_PASSWORD: devrootpass
-      MYSQL_DATABASE: qsdb
-      MYSQL_USER: devuser
-      MYSQL_PASSWORD: devpass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -27,10 +27,10 @@ services:
     environment:
       FLASK_APP: app.py
       FLASK_ENV: development
-      MYSQL_HOST: db  # Ensure that the backend knows where the DB is
-      MYSQL_USER: devuser
-      MYSQL_PASSWORD: devpass
-      MYSQL_DATABASE: qsdb
+      MYSQL_HOST: ${MYSQL_HOST}  # Ensure that the backend knows where the DB is
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
       - db  # Ensures backend waits for db service to start before running
 

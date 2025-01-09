@@ -3,12 +3,18 @@ import os
 from datetime import datetime
 from secretload import get_secret
 
-get_secret('database_secrets')
+# get_secret('database_secrets')
 
-db_host = os.getenv('db_host')
-db_user = os.getenv('db_username')
-db_password = os.getenv('db_password')
-db_database = os.getenv('db_name')
+# db_host = os.getenv('db_host')
+# db_user = os.getenv('db_username')
+# db_password = os.getenv('db_pass')
+# db_database = os.getenv('db_name')
+
+db_host = os.getenv('MYSQL_HOST')
+db_host = os.getenv('MYSQL_USER')
+db_host = os.getenv('{MYSQL_PASSWORD}')
+db_host = os.getenv('MYSQL_DATABASE')
+
 
 db_config = {
     'host': "db", 
