@@ -12,7 +12,7 @@ from secretload import get_secret
 
 db_host = os.getenv('MYSQL_HOST')
 db_host = os.getenv('MYSQL_USER')
-db_host = os.getenv('{MYSQL_PASSWORD}')
+db_host = os.getenv('MYSQL_PASSWORD')
 db_host = os.getenv('MYSQL_DATABASE')
 
 

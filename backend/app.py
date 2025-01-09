@@ -28,7 +28,7 @@ from secretload import get_secret
 
 db_host = os.getenv('MYSQL_HOST')
 db_host = os.getenv('MYSQL_USER')
-db_host = os.getenv('{MYSQL_PASSWORD}')
+db_host = os.getenv('MYSQL_PASSWORD')
 db_host = os.getenv('MYSQL_DATABASE')
 
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
