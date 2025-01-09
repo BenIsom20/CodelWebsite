@@ -11,7 +11,7 @@ db_password = os.getenv('db_password')
 db_database = os.getenv('db_name')
 
 db_config = {
-    'host': db_host, 
+    'host': "db", 
     'user': db_user, 
     'password': db_password,
     'database': db_database #database name
