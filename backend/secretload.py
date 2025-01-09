@@ -24,6 +24,6 @@ def get_secret(secret_name):
         raise e
 
     secret = get_secret_value_response['SecretString']
-    secret=json.load(secret)
-    for key, value in secret.item():os.environ[key] = value
+    secret=json.loads(secret)
+    for key, value in secret.items():os.environ[key] = value
 

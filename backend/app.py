@@ -17,10 +17,7 @@ from better_profanity import profanity
 from collections.abc import Iterable
 from secretload import get_secret
 
-get_secret('db_name')
-get_secret('db_username')
-get_secret('db_password')
-get_secret('db_host')
+get_secret('database_secrets')
 get_secret('jwt_key')
 
 db_host = os.getenv('db_host')
@@ -291,7 +288,6 @@ def Startup():
         "prompt": current_challenge["prompt"],
         "Cases": tests,
         "Array": len(tests),
-        "db_configs" : db_host + db_password +db_user +db_database
     })
 
 @app.route('/get_skeleton', methods=['GET'])

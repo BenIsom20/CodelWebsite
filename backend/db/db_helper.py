@@ -3,10 +3,7 @@ import os
 from datetime import datetime
 from secretload import get_secret
 
-get_secret('db_name')
-get_secret('db_username')
-get_secret('db_password')
-get_secret('db_host')
+get_secret('database_secrets')
 
 db_host = os.getenv('db_host')
 db_user = os.getenv('db_username')
