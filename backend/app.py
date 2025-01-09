@@ -27,9 +27,9 @@ from secretload import get_secret
 # jwt_secret_key = os.getenv('jwt_key')
 
 db_host = os.getenv('MYSQL_HOST')
-db_host = os.getenv('MYSQL_USER')
-db_host = os.getenv('MYSQL_PASSWORD')
-db_host = os.getenv('MYSQL_DATABASE')
+db_user = os.getenv('MYSQL_USER')
+db_password = os.getenv('MYSQL_PASSWORD')
+db_database = os.getenv('MYSQL_DATABASE')
 
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes

@@ -11,9 +11,9 @@ from secretload import get_secret
 # db_database = os.getenv('db_name')
 
 db_host = os.getenv('MYSQL_HOST')
-db_host = os.getenv('MYSQL_USER')
-db_host = os.getenv('MYSQL_PASSWORD')
-db_host = os.getenv('MYSQL_DATABASE')
+db_user = os.getenv('MYSQL_USER')
+db_password = os.getenv('MYSQL_PASSWORD')
+db_database = os.getenv('MYSQL_DATABASE')
 
 
 db_config = {
