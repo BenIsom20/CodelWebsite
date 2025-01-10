@@ -32,4 +32,4 @@ RUN pip3 install --no-cache-dir -r /app/backend/requirements.txt
 EXPOSE 5000
 
 # Run the Flask app when the container starts
-CMD ["python3", "backend/app.py", "run", "--host=0.0.0.0"]
+CMD ["gunicorn" . "wsgi:app". "b". "0.0.0.0:5000"]
