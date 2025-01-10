@@ -1,53 +1,50 @@
 // JAVASCRIPT CODE FOR ALL CODEMIRROR ITEMS
+
+// Global attempt counter
 var attempt = 0;
+
 // Initialize CodeMirror editor with Python syntax highlighting and other settings
 var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
-    mode: "text/x-python",          // Set the mode to Python for syntax highlighting
-    theme: "CodelTheme",             // Set the theme for the editor
-    lineNumbers: true,              // Enable line numbers
-    lineWrapping: true,             // Enable line wrapping for long lines
-    matchBrackets: true,            // Highlight matching brackets
-    autoCloseBrackets: true,        // Automatically close brackets
-    indentUnit: 4,                  // Set the indentation size to 4 spaces
-    indentWithTabs: true,          // Use tabs instead of spaces for indentation
-    tabSize: 4,                     // Display tabs as 4 spaces wide
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // Add gutters for line numbers and folding
-    foldGutter: true,              // Enable code folding
-    styleActiveLine: true,         // Highlight the active line
-    highlightSelectionMatches: {   // Highlight all matching selections
+    mode: "text/x-python",
+    theme: "CodelTheme",
+    lineNumbers: true,
+    lineWrapping: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    indentUnit: 4,
+    indentWithTabs: true,
+    tabSize: 4,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    foldGutter: true,
+    styleActiveLine: true,
+    highlightSelectionMatches: {
         showToken: true,
         annotateScrollbar: true
     },
-    readOnly: false,               // Set to true if the editor should be read-only
-    autofocus: true,               // Automatically focus on the editor when the page loads
-    cursorBlinkRate: 530,          // Set cursor blink rate
-    viewportMargin: Infinity,      // Ensure the editor renders all lines (useful for long files)
+    readOnly: false,
+    autofocus: true,
+    cursorBlinkRate: 530,
+    viewportMargin: Infinity,
 });
 
-editor.setSize("100%", 300); // Set the editor size to 90% width and 300px height
+editor.setSize("100%", 300); // Set the editor size
 
-async function saveCodeAndNotify() {
-    const userCode = editor.getValue(); // Retrieve the current code from the editor
-    const stringUserCode = JSON.stringify(userCode); // Convert the code to a JSON string
-    await setLocalStorageWithExpiry("savedCode", stringUserCode); // Save the code in localStorage 
+
+// Save code to localStorage with an expiry and notify user.
+async function saveCode() {
+    const userCode = editor.getValue();
+    const stringUserCode = JSON.stringify(userCode);
+    await setLocalStorageWithExpiry("savedCode", stringUserCode);
 }
 
-// Event listener for the "User" button to save code and notify
-document.getElementById("user").addEventListener("click", function () {
-    saveCodeAndNotify();
-    document.getElementById("mainPopup").style.display = "flex";
+// Event listener for the "Leader" button to save code
+document.getElementById("leader").addEventListener("click", saveCode);
 
-    // Default to Login form
-    document.querySelector(".tab-link[data-target='loginForm']").click();
-});
-
-// Event listener for the "Leader" button to save code and notify
-document.getElementById("leader").addEventListener("click", saveCodeAndNotify);
-
-// Event listener for the "How" button to save code and notify
-document.getElementById("how").addEventListener("click", saveCodeAndNotify);
+// Event listener for the "How" button to save code
+document.getElementById("how").addEventListener("click", saveCode);
 
 
+// Fetch code skeleton from the backend.
 async function fetchSkeleton() {
             const response = await fetch(`http://${publicIp}/get_skeleton`);
             if (response.ok) {
@@ -55,52 +52,54 @@ async function fetchSkeleton() {
             }
 }
 
+// Load code from localStorage or fetch skeleton if not found.
 async function loadCode() {
-        const code = getLocalStorageWithExpiry("savedCode");
-        if (code === null) {
-            const skeleton = await fetchSkeleton(); // Retry fetching skeleton
-            editor.setValue(skeleton.skeleton);
-        } else {
+    // checks if there is already code saved and if not then loads the skeleton
+    const code = getLocalStorageWithExpiry("savedCode");
+    if (code === null) {
+        const skeleton = await fetchSkeleton();
+        editor.setValue(skeleton.skeleton);
+    } else {
             const parsedCode = JSON.parse(code);
             editor.setValue(parsedCode);
-        }
+    }
 }
 
 // Event listener for "Run Code" button
 document.getElementById("runCode").addEventListener("click", async function () {
-    const userCode = editor.getValue(); // Get the code from CodeMirror editor
-    const outputDiv = document.getElementById("output"); // Output div where results will be displayed
-    // Send code to backend for execution via a POST request
+    // Gets the code currently in the editor and sends it to backend for execution
+    const userCode = editor.getValue();
+    const outputDiv = document.getElementById("output");
     const response = await fetch(`http:/${publicIp}/run`, {
-        method: "POST", // HTTP method is POST
-        headers: { "Content-Type": "application/json" }, // Set request headers for JSON content
-        body: JSON.stringify({ code: userCode }), // Send the code as JSON in the body
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: userCode }),
     });
 
     // Parse the response from the backend
     const result = await response.json();
-
-    // Check if there is an error in the response
     if (result.error && result.error.length > 0) {
-        outputDiv.textContent = result.error; // Display error if any
+        // Check response for error in ran code and display if so
+        outputDiv.textContent = result.error;
     } else {
-        outputDiv.textContent = result.output || "No output"; // Display output or "No output" if none
+        // Display output or "No output" if none
+        outputDiv.textContent = result.output || "No output";
     }
 });
 
 // Event listener for the "Submit Code" button
 document.getElementById("submitCode").addEventListener("click", async function () {
-    attempt++; // Increment the attempt counter
-    var victory = false; // Track if the user achieves victory
-    const userCode = editor.getValue(); // Get the user's code from the editor
-    const outputDiv = document.getElementById("output"); // Div to display results or messages
-
+    // tracks an attempt and gets the code in editor to send to backend for tests
+    attempt++;
+    var victory = false;
+    const userCode = editor.getValue();
+    const outputDiv = document.getElementById("output");
     try {
         // Send the user's code to the backend via a POST request
         const response = await fetch(`http://${publicIp}/test`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" }, // Specify JSON content type
-            body: JSON.stringify({ code: userCode }), // Send the code as a JSON object
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code: userCode }),
         });
 
         // Parse the JSON response from the backend
@@ -117,10 +116,10 @@ document.getElementById("submitCode").addEventListener("click", async function (
             // Notify the user of successful submission
             outputDiv.innerHTML = "Code Successfully Submitted";
 
-            // Extract test results and related data
-            const resultsArray = Object.values(result.testList); // Test outcomes
-            const givenValues = result.givenValues; // Input values for the tests
-            const numTests = result.numTests; // Total number of tests
+            // Extract test results and outcomes
+            const resultsArray = Object.values(result.testList);
+            const givenValues = result.givenValues;
+            const numTests = result.numTests;
 
             // Display detailed test results
             let resultDetails = "<h3>Test Results:</h3><ul>";
@@ -150,13 +149,10 @@ document.getElementById("submitCode").addEventListener("click", async function (
             }
         }
     } catch (error) {
-        // Handle errors during the fetch or server communication
-        outputDiv.textContent = "Error in submission: " + error.message;
+        // no use right now may set up loggin in future
     }
-
     storeGridState(victory); // Save the grid state to localStorage
 });
-
 
 // Function to check if all tests passed
 function victoryCheck(resultsArray) {
@@ -178,84 +174,84 @@ function victoryCheck(resultsArray) {
 // Function to check if a test case failed
 function failed(result) {
     if (result.includes("Failure")) {
-        return true; // Return true if "Failure" is found in the result
+        return true;
     } else {
-        return false; // Return false otherwise
+        return false;
     }
 }
 
 // Function to check if a test case errored
 function errored(result) {
     if (result.includes("Error")) {
-        return true; // Return true if "Error" is found in the result
+        return true;
     } else {
-        return false; // Return false otherwise
+        return false;
     }
 }
 
 // Function to send victory state and related data to the backend
 async function saveProgress() {
-    // Check if a JWT token exists in local storage
+    // Check user is signed in 
     if (localStorage.getItem("jwt_token") != null) {
-
-        const token = localStorage.getItem("jwt_token"); // Retrieve the token
-
-        const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage
-        const timer = getLocalStorageWithExpiry("stopwatchTime"); // Retrieve stopwatch time from localStorage
-        const code = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
+        // get stored data
+        const token = localStorage.getItem("jwt_token");
+        const grid = getLocalStorageWithExpiry("gridState");
+        const timer = getLocalStorageWithExpiry("stopwatchTime");
+        const code = getLocalStorageWithExpiry("savedCode");
 
         // Prepare the payload with relevant data from local storage
         const payload = {
-            gridState: grid,  // Grid state data
-            stopwatchTime: timer,  // Stopwatch time
-            savedCode: code,  // Saved code
-            attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
+            gridState: grid,
+            stopwatchTime: timer,
+            savedCode: code,
+            attempts: attempt
         };
 
         // Send a POST request to the backend to update victory state
-        fetch(`http://${window.publicId}/saveProgress`, {
+        fetch(`http://${publicIp}/saveProgress`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",  // Indicate JSON content
-                "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(payload)  // Convert payload to JSON string
+            body: JSON.stringify(payload)
         })
     }
 }
 
-
 // Function to send victory state and related data to the backend
 async function victorySend() {
-    // Check if a JWT token exists in local storage
+    // Check if user is signed in
     if (localStorage.getItem("jwt_token") != null) {
-        const token = localStorage.getItem("jwt_token"); // Retrieve the token
-
-        const grid = getLocalStorageWithExpiry("gridState"); // Retrieve grid state from localStorage
-        const timer = getLocalStorageWithExpiry("stopwatchTime"); // Retrieve stopwatch time from localStorage
-        const code = getLocalStorageWithExpiry("savedCode"); // Retrieve saved code from localStorage
+        // get data to send
+        const token = localStorage.getItem("jwt_token");
+        const grid = getLocalStorageWithExpiry("gridState");
+        const timer = getLocalStorageWithExpiry("stopwatchTime");
+        const code = getLocalStorageWithExpiry("savedCode");
 
         // Prepare the payload with relevant data from local storage
         const payload = {
-            gridState: grid,  // Grid state data
-            stopwatchTime: timer,  // Stopwatch time
-            savedCode: code,  // Saved code
-            attempts: attempt  // Number of attempts (ensure 'attempt' is defined globally)
+            gridState: grid,
+            stopwatchTime: timer,
+            savedCode: code,
+            attempts: attempt
         };
 
         // Send a POST request to the backend to update victory state
         fetch(`http://${publicIp}/victory`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",  // Indicate JSON content
-                "Authorization": `Bearer ${token}`  // Include JWT token in the Authorization header
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(payload)  // Convert payload to JSON string
+            body: JSON.stringify(payload)
         })
     }
 }
 
-function victorySequence() {
+// Function for animation when user wins and updates total time on codel
+async function victorySequence() {
+    // Animation for victory
     const navbar = document.getElementById("mainNavbar");
     const logo = document.getElementById("logo");
     navbar.classList.add("vic-burst");
@@ -264,9 +260,20 @@ function victorySequence() {
     });
     navbar.style.boxShadow = "0 2px 50px #61C9A8ed";
     logo.src = "static/images/V.gif?";
+    const time = getLocalStorageWithExpiry("stopwatchTime");
+    const timeDic = { "time_increment": time }
+
+    // Send the user's code to the backend via a POST request to update total time
+    const response = await fetch("http://127.0.0.1:5000/updateAllTime", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(timeDic),
+    });
 }
 
+// Funciton for animation when user attempts and does not win
 function trySequence() {
+    // Animation for try
     const navbar = document.getElementById("mainNavbar");
     navbar.classList.add("try-burst");
     navbar.addEventListener("animationend", function () {
@@ -274,10 +281,11 @@ function trySequence() {
     });
 }
 
+// Function to set to the local storage with expiration date at midnight chicago time
 async function setLocalStorageWithExpiry(key, value) {
     const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
     const info = await response.json();
-    if(response.ok){
+    if (response.ok) {
         const date = info.chicago_midnight_utc;
         const objdate = new Date(date);
         var expiryTime = objdate.getTime();
@@ -291,20 +299,17 @@ async function setLocalStorageWithExpiry(key, value) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
+// Function to pull from local storage and check if expired or not and only return if not expired
 function getLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
-
     if (!itemStr) {
-        return null; // No data found
+        return null;
     }
-
     const item = JSON.parse(itemStr);
     const now = new Date().getTime();
-
     if (now > item.expiry) {
         localStorage.removeItem(key); // Clear expired data
         return null; // Indicate that the data is expired
     }
-
     return item.value; // Return the valid data
 }

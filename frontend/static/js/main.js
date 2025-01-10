@@ -2,8 +2,8 @@ let publicIp = "44.201.228.74"
 
 // Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {
-    // Retrieve JWT token and grid state from local storage
-    const token = localStorage.getItem("jwt_token");
+    const token = localStorage.getItem("jwt_token"); // Retrieve JWT token
+    const gridData = getIndexLocalStorageWithExpiry("gridState"); // Retrieve grid state
 
     const gridData = getIndexLocalStorageWithExpiry("gridState");
     // Send a GET request to the backend to fetch user data
@@ -12,176 +12,204 @@ async function getUserData() {
         headers: { 'Authorization': `Bearer ${token}` },  // Include the token for authorization
     });
 
-    // Parse the JSON response from the backend
-    const result = await response.json();
-    const time = result.time;  // Retrieved stopwatch time
-    const code = result.code;  // Retrieved saved code
-    const grid = result.grid;  // Retrieved grid state
-    let completed = result.completed;
-    var victory = null;
-    if(completed === 1){
-        victory = true;
-    }
+    const result = await response.json(); // Parse JSON response
+    const { time, code, grid, completed } = result; // Destructure result
 
-    // If all required data is present, save it to local storage and initialize the app
+    // Determine victory state
+    const victory = completed === 1 ? true : null;
+
     if (time && code && grid && victory) {
+
+        // Save data to local storage and initialize components for completed state
         setIndexLocalStorageWithExpiry("stopwatchTime", time);
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
-        loadCode();           // Load the saved code into the editor
-        startStopwatch();     // Start the stopwatch with the saved time
-        loadGridState();      // Restore the grid state
-    } 
-    else if (time && code && grid) {
+        
+        loadCode();
+        startStopwatch();
+        loadGridState();
+    } else if (time && code && grid) {
+        // Save data for ongoing work
+        if(!sessionStorage.getItem("alreadyLoaded")){
+            setIndexLocalStorageWithExpiry("stopwatchTime", time);
+        }
+        sessionStorage.setItem("alreadyLoaded", "yes");
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
-        loadCode();           // Load the saved code into the editor
-        startStopwatch();     // Start the stopwatch with the saved time
-        loadGridState();      // Restore the grid state
-    }
-    else {
-        // If some data is missing, initialize components with available data
-        startStopwatch();     // Start a new stopwatch session
+        await delay(100);
+        loadCode();
+        startStopwatch();
+        loadGridState();
+    } else {
+        // Initialize new session if no valid data exists
+        startStopwatch();
         if (gridData) {
-            loadGridState();  // Restore grid state if available
+            loadGridState();
         } else {
-            initializeColumn();  // Initialize a new column structure if no grid data exists
+            initializeColumn();
         }
-        await loadCode();           // Load code into the editor 
+        await delay(100);
+        await loadCode();
     }
 }
 
+// Clears items in localStorage that have passed their expiration date.
+// Ensures stale data does not persist and affect application behavior.
 function clearExpiredLocalStorage() {
     const now = new Date().getTime();
-
     for (let key in localStorage) {
         if (localStorage.hasOwnProperty(key)) {
             const itemStr = localStorage.getItem(key);
             try {
                 const item = JSON.parse(itemStr);
-
                 if (item && item.expiry && now > item.expiry) {
-                    localStorage.removeItem(key); // Remove only expired items
+                    localStorage.removeItem(key);
                 }
             } catch (e) {
-                // If parsing fails, ignore (likely non-expiry-related data)
+                // Catch and ignore JSON parsing errors (e.g., for non-expirable items)
             }
         }
     }
 }
 
-// ONE SINGULAR ONLOAD FUNCTION -->
-// This function is executed when the window finishes loading
+// Sets up the application when the window finishes loading.
+// Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
 
-    document.body.classList.add('fade-in');
-    clearExpiredLocalStorage(); // Clear expired data from localStorage
+    document.body.classList.add('fade-in'); // Add fade-in effect
+    clearExpiredLocalStorage(); // Remove expired localStorage data
+    fetchTestExplanation(); // Fetch and display test explanation
 
-    // Fetch and display test explanation (assumes fetchTestExplanation is defined elsewhere)
-    fetchTestExplanation();
-
-    // Retrieve the JWT token and grid state from local storage
     const token = localStorage.getItem("jwt_token");
     const gridData = getIndexLocalStorageWithExpiry("gridState");
 
-    // Check if the token exists in local storage
     if (!token) {
-        // If no token is found, start the stopwatch
+        // Initialize state for unauthenticated users
         startStopwatch();
-
-        // Check if grid state exists in local storage
         if (gridData) {
-            loadGridState();  // Load the saved grid state
+            loadGridState();
         } else {
-            initializeColumn();  // Initialize a new grid structure if no data is found
+            initializeColumn();
         }
         await delay(100);
-        // Load the saved code into the editor (or start fresh if none exists)
         await loadCode();
     } else {
-        // If a token is present, retrieve user data from the backend
-        getUserData();
+        // Retrieve and initialize user data
+        await getUserData();
     }
 
-    if(sessionStorage.getItem("cameFrom") === "true"){
+    // Handle post-login state restoration
+    await delay(500);
+    if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
-}
+};
 
-window.addEventListener('pageshow', function (event) {
-    if (!sessionStorage.getItem("pageReloaded")) {
-        sessionStorage.setItem("pageReloaded", "true");
-        window.location.reload();
-    } else {
-        sessionStorage.removeItem("pageReloaded");
-    }
-});
-
-
+// Creates a delay for a specified number of milliseconds.
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// Reloads the logo image to prevent caching issues.
 function reloadGif() {
-    const logo = document.getElementById('logo'); // Select the logo element
-    const currentSrc = logo.src.split('?')[0]; // Remove any existing query string
-    const newSrc = currentSrc + '?t=' + new Date().getTime(); // Add a timestamp as a query string to force reload
-    logo.src = newSrc; // Reassign the src to trigger reload
+    const logo = document.getElementById('logo');
+    const currentSrc = logo.src.split('?')[0];
+    const newSrc = `${currentSrc}?t=${new Date().getTime()}`;
+    logo.src = newSrc;
 }
 
-// Call this when clearing storage or cookies
+// Clears all data in localStorage and cookies, and reloads the page.
 function clearLocalStorageAndCookies() {
-    localStorage.clear(); // Clear local storage
-    document.cookie = ""; // Clear cookies (simplified, for demonstration)
-    reloadGif(); // Force the GIF to reload without flicker
+    localStorage.clear();
+    document.cookie = ""; // Simplified cookie clearing
+    reloadGif();
 }
 
-// Function to reset the state by clearing localStorage and reloading the page
+// Resets the application by clearing localStorage, cookies, and reloading the page.
 function resetState() {
-    // Clear all cookies
-    const cookies = document.cookie.split(";"); // Get all cookies as an array
-    reloadGif(); // Force the GIF to reload without flicker
+    const cookies = document.cookie.split(";");
+    reloadGif();
     for (let cookie of cookies) {
-        const name = cookie.split("=")[0].trim(); // Extract cookie name
-        // Set the cookie to expire in the past to delete it
+        const name = cookie.split("=")[0].trim();
         document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
     }
-
-    // Clear all localStorage
-    localStorage.clear(); // Clear all data from localStorage
-    location.reload(); // Reload the page to reset everything
+    localStorage.clear();
+    sessionStorage.clear();
+    location.reload();
 }
 document.getElementById("resetButton").addEventListener("click", resetState);
 
-function setIndexLocalStorageWithExpiry(key, value) {
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Next midnight
-    const expiryTime = midnight.getTime(); // Get timestamp for midnight
+// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
+async function setIndexLocalStorageWithExpiry(key, value) {
+    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight");
+    const info = await response.json();
 
-    const data = {
-        value: value,
-        expiry: expiryTime,
-    };
+    if (response.ok) {
+        const date = info.chicago_midnight_utc;
+        const expiryTime = new Date(date).getTime();
 
-    localStorage.setItem(key, JSON.stringify(data));
+        const data = { value, expiry: expiryTime };
+        localStorage.setItem(key, JSON.stringify(data));
+    }
 }
 
+// Retrieves a value from localStorage if it has not expired.
 function getIndexLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
-
-    if (!itemStr) {
-        return null; // No data found
-    }
+    if (!itemStr) return null;
 
     const item = JSON.parse(itemStr);
     const now = new Date().getTime();
 
     if (now > item.expiry) {
-        localStorage.removeItem(key); // Clear expired data
-        return null; // Indicate that the data is expired
+        localStorage.removeItem(key);
+        return null;
     }
-
-    return item.value; // Return the valid data
+    return item.value;
 }
 
+// Event listener to make animation when going away from page
+document.getElementById('leader').addEventListener('click', function (event) {
+    smoothTransition(event);
+});
+
+// Event listener to make animation when going away from page
+document.getElementById('how').addEventListener('click', function (event) {
+    smoothTransition(event);
+});
+
+// Function to make a smooth transition
+function smoothTransition(event) {
+    try {
+        event.preventDefault();
+        const href = event.currentTarget.href;
+        document.body.classList.remove('fade-in');
+        document.body.classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = href;
+        }, 300); 
+    }
+    catch (error) {
+        // empty might set up logging later 
+    }
+}
+
+// // animation for on first visit of website in logo and prompt
+// $(document).ready(function () {
+//     function playGif(gifclass) {
+//         const gif = $(gifclass);
+//         gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
+//     }
+//     const seenGif = Cookies.get('seenGif');
+//     if (!seenGif) {
+//         $('.hack6-loading-wrapper').css('display', 'flex');
+//         playGif('.hack6-gif');
+//         typer.js
+//         Cookies.set('seenGif', true, { expires: 1 });
+
+//         setTimeout(() => {
+//             $('.hack6-loading-wrapper').fadeOut(500);
+//         }, 3000)
+//     }
+// })

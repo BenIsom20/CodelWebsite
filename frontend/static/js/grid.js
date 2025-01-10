@@ -5,43 +5,40 @@ const gridContainer = document.getElementById('grid-container');  // The contain
 const addRowButton = document.getElementById('submitCode');  // Button to trigger adding a new row
 const colorRowButton = document.getElementById('color-row-button');  // Button to trigger coloring the current row
 
-let currentRowIndex = 0;  // Keeps track of the current row index that should be colored
+// Global variables for the current row to be colored and the amount of rows
+let currentRowIndex = 0;
 let amountOfRow = 0;
 
 // Function to add a new row to the grid
 function addRow(numTests) {
-    const columnNumber = numTests; // Set the number of columns to match the number of tests
-    const rowNumber = Math.floor(gridContainer.children.length / columnNumber) + 1; // Calculate the current row number (1-based index)
+    const columnNumber = numTests;
+    const rowNumber = Math.floor(gridContainer.children.length / columnNumber) + 1;
 
     // Loop through each column and create a rectangle for each test
     for (let i = 1; i <= columnNumber; i++) {
-        const rectangle = document.createElement('div'); // Create a new div element for each rectangle
-        rectangle.classList.add('rectangle'); // Add the 'rectangle' class for styling
+        const rectangle = document.createElement('div');
+        rectangle.classList.add('rectangle');
 
         // Create an <img> element for the suitcase icon
         const suitcaseImage = document.createElement('img');
-        suitcaseImage.src = `/static/images/greyCase${i}.svg`; // Default to grey suitcase
-        suitcaseImage.alt = 'Suitcase'; // Add an alt attribute for accessibility
-        suitcaseImage.classList.add('suitcase-img'); // Add a class for styling
-
-        // Append the suitcase image to the rectangle
+        suitcaseImage.src = `/static/images/greyCase${i}.svg`;
+        suitcaseImage.alt = 'Suitcase';
+        suitcaseImage.classList.add('suitcase-img');
         rectangle.appendChild(suitcaseImage);
 
         // Append the rectangle to the grid container
         gridContainer.appendChild(rectangle);
     }
-
     amountOfRow++;
 }
 
+// Function to color the next row corresponding to the results of the tests
 function colorRow(stringList, numTests) {
-    const rectangles = document.querySelectorAll('.rectangle');  // Get all rectangles in the grid
-    const totalColumns = numTests;  // Set the total number of columns in the grid
-    const totalRows = Math.floor(rectangles.length / totalColumns);  // Calculate the total number of rows in the grid
+    const rectangles = document.querySelectorAll('.rectangle');
+    const totalColumns = numTests;
+    const totalRows = Math.floor(rectangles.length / totalColumns);
 
-    // Check if there are still rows to color
     if (currentRowIndex < totalRows) {
-        // Calculate the start index of the current row
         const startIndex = currentRowIndex * totalColumns;
 
         // Loop through each result in the stringList and color the corresponding rectangle
@@ -50,7 +47,6 @@ function colorRow(stringList, numTests) {
             const rectIndex = startIndex + index;
             if (rectIndex < rectangles.length) {
                 const rectangle = rectangles[rectIndex];
-
                 if (result.includes("Success")) {
                     // If the result is "Success", add a 'green' class to the corresponding rectangle
                     rectangle.classList.add('green');
@@ -58,7 +54,7 @@ function colorRow(stringList, numTests) {
                     // Change suitcase image to green case
                     let suitcaseImage = rectangle.querySelector('.suitcase-img');
                     if (suitcaseImage) {
-                        suitcaseImage.src = `/static/images/greenCase${index + 1}.svg`;  // Change the image
+                        suitcaseImage.src = `/static/images/greenCase${index + 1}.svg`;
                     }
                 } else if (result.includes("Failure") || result.includes("Error")) {
                     // If the result includes "Failure" or "Error", add a 'red' class to the corresponding rectangle
@@ -67,76 +63,57 @@ function colorRow(stringList, numTests) {
                     // Change suitcase image to red case
                     let suitcaseImage = rectangle.querySelector('.suitcase-img');
                     if (suitcaseImage) {
-                        suitcaseImage.src = `/static/images/redCase${index + 1}.svg`;  // Change the image
+                        suitcaseImage.src = `/static/images/redCase${index + 1}.svg`;
                     }
                 }
             }
         });
-
-        // Increment the row index to move to the next row for the next time colorRow is called
         currentRowIndex++;
     }
 }
 
 // Asynchronous function to initialize the grid and send code for execution
 async function initializeColumn() {
-    // Ensure the gridContainer exists before trying to add elements to it
-    if (!gridContainer) {
-        return;  // Exit the function if grid container is not available
-    }
-
-    // Get the output div to display results
-    const outputDiv = document.getElementById("output");
-
     // Send the code to the backend for execution
     const response = await fetch(`http://${publicIp}/Startup`);
     const result = await response.json();
 
     // After receiving the result, use the numTests property to create rectangles in the grid
-    const numTest = result.Array;  // Get the number of tests from the response
-
-    // Ensure numTest is a valid number greater than 0
-    if (numTest && typeof numTest === "number" && numTest > 0) {
+    const numTest = result.Array;
+    if (numTest) {
         // Update the grid's CSS layout dynamically based on numTests
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
-            // Set the number of columns in the grid dynamically
-            gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;  // Update grid layout for columns
+            gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
+            const height = gridElement.offsetWidth/numTest - numTest*10;
+            gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
 
         // Create the rectangles (one for each test) and add them to the grid container
         for (let i = 1; i <= numTest; i++) {
-            // Create a new div element for each rectangle
             const rectangle = document.createElement('div');
-            // Add a class to the rectangle for styling
             rectangle.classList.add('rectangle');
 
             // Create an img element for the suitcase image
             const suitcaseImage = document.createElement('img');
-            suitcaseImage.src = `/static/images/greyCase${i}.svg`;  // Set the image source
-            suitcaseImage.alt = 'Suitcase';           // Set an alt text for accessibility
-            suitcaseImage.classList.add('suitcase-img'); // Add a class for custom styling if needed
-
-            // Append the image to the rectangle
+            suitcaseImage.src = `/static/images/greyCase${i}.svg`;
+            suitcaseImage.alt = 'Suitcase';
+            suitcaseImage.classList.add('suitcase-img');
             rectangle.appendChild(suitcaseImage);
 
             // Append the rectangle to the grid container
             gridContainer.appendChild(rectangle);
         }
     } else {
-        // Log an error if numTest is not valid
+        // not used may set up logging in the future
     }
-
     amountOfRow++;
 }
 
+// Function to fetch from backend what the challenge prompt is
 async function fetchTestExplanation() {
-    const questionElement = document.getElementById("Question");
-
-    // Get the current date in "YYYY-MM-DD" format
+    const questionElement = document.getElementById("question");
     const currentDate = new Date().toISOString().split('T')[0];
-
-    // Get the stored cookie date (if exists)
     const lastRunDate = Cookies.get('lastTypingEffectRunDate');
 
     // Fetch question data
@@ -144,9 +121,10 @@ async function fetchTestExplanation() {
     const data = await response.json();
     var txt = data.prompt; // Get the prompt from the fetched data
 
+    // checks for logged in user to change prompt to have their name
     if (localStorage.getItem('jwt_token')) {
         try {
-            const token = localStorage.getItem('jwt_token'); // Retrieve the token from localStorage
+            const token = localStorage.getItem('jwt_token');
             const response2 = await fetch(`http://${publicIp}/protected`, {
                 // Send a GET request to the protected endpoint with the token in the Authorization header
                 method: 'GET',
@@ -156,15 +134,11 @@ async function fetchTestExplanation() {
             });
             const usernameDict = await response2.json();
             const username = usernameDict.username;
-
-            // Check if the user is logged in and add a greeting to the question prompt
             if (response2.ok && username) {
-                // If the user is logged in, append Hello 'username' to the question prompt
                 txt = `Hello ${username}, ${txt}`;
             }
         } catch (error) {
-            // If there's an error fetching the username, log the error
-            // alert(error);
+            // empty for right now may add logging in future
         }
     } else {
         // If the user is not logged in, append a generic greeting to the question prompt
@@ -177,25 +151,24 @@ async function fetchTestExplanation() {
         questionElement.innerHTML = txt;
         return;
     }
-
-    // Set the question prompt (this will initialize the text for the typing effect)
-    questionElement.innerHTML = "<span id='typed-text'></span><span class='cursor'>|</span>"; // Separate the cursor and typed-text container
-
+    // Otherwise runs the animation for first load
+    questionElement.innerHTML = "<span id='typed-text'></span><span class='cursor'>|</span>";
     let i = 0;
-    const sentencePause = 1000; // Pause duration after each sentence
+    const sentencePause = 1000;
     let typingTimeout;
 
     // Function to generate a random speed between 30 and 100
     function getRandomSpeed() {
-        return Math.floor(Math.random() * (30 - 10 + 1)) + 20; // Random speed between 10 and 30
+        return Math.floor(Math.random() * (30 - 10 + 1)) + 20;
     }
 
     // Function to toggle cursor blink (only on '|')
     function toggleCursorBlink() {
         const cursor = document.querySelector(".cursor");
-        cursor.classList.toggle("blink"); // Toggle blink class on the cursor (|)
+        cursor.classList.toggle("blink");
     }
 
+    // Function to make animation of typing prompt
     function typeWriter() {
         // Check if there's more text to type
         if (i < txt.length) {
@@ -205,37 +178,32 @@ async function fetchTestExplanation() {
 
             // Add the blinking cursor (|)
             const cursor = document.querySelector(".cursor");
-            cursor.style.visibility = "visible"; // Ensure cursor is visible
+            cursor.style.visibility = "visible";
 
-            // Get the current character
             const currentChar = txt.charAt(i);
 
-            // Print the character first, then handle punctuation logic
-            typedText.innerHTML = txt.substring(0, i + 1); // Add current character
+            typedText.innerHTML = txt.substring(0, i + 1);
 
             if (currentChar === '.' || currentChar === '?' || currentChar === '!') {
                 // Pause after punctuation, then blink cursor
                 typingTimeout = setTimeout(() => {
-                    toggleCursorBlink(); // Start blinking the cursor
-                    // Pause before continuing the typing effect
+                    toggleCursorBlink();
                     typingTimeout = setTimeout(typeWriter, sentencePause);
-                }, sentencePause); // Pause duration after punctuation
+                }, sentencePause);
             } else {
-                // Continue typing with random speed
                 typingTimeout = setTimeout(typeWriter, getRandomSpeed());
             }
 
-            i++; // Increment to next character
+            i++;
         } else {
             // After typing completes, stop blinking and remove the cursor
             const cursor = document.querySelector(".cursor");
-            cursor.classList.remove("blink"); // Stop blinking
+            cursor.classList.remove("blink");
             setTimeout(() => {
-                cursor.style.visibility = "hidden"; // Hide cursor completely after the typing is done
-            }, 500); // Wait for a moment before hiding the cursor
+                cursor.style.visibility = "hidden";
+            }, 500);
         }
     }
-
     // Start the typing effect
     typeWriter();
 
@@ -243,22 +211,23 @@ async function fetchTestExplanation() {
     Cookies.set('lastTypingEffectRunDate', currentDate, { expires: 1 }); // Cookie expires in 1 day
 }
 
+// Function that stores what the current state of the grid to local storage
 async function storeGridState(victory) {
     const grid = document.getElementById("grid-container");
     const gridState = [];
 
-    // Loop through each child (rectangle) in the grid
+    // Loop through each child (rectangle) in the grid and store each
     const children = grid.children;
     for (let child of children) {
-        const suitcaseImage = child.querySelector('.suitcase-img'); // Get the image element inside the rectangle
-        const imageSrc = suitcaseImage ? suitcaseImage.src : '';  // Capture the src of the image (or empty string if no image)
+        const suitcaseImage = child.querySelector('.suitcase-img');
+        const imageSrc = suitcaseImage ? suitcaseImage.src : '';
 
         gridState.push({
-            tagName: child.tagName, // Save the tag name (e.g., 'DIV')
-            imageSrc: imageSrc, // Store the image src
-            classList: [...child.classList], // Save all classes as an array
-            styles: child.style.cssText, // Save inline styles as a string
-            dataset: { ...child.dataset }, // Save all data-* attributes
+            tagName: child.tagName,
+            imageSrc: imageSrc,
+            classList: [...child.classList],
+            styles: child.style.cssText,
+            dataset: { ...child.dataset },
         });
     }
 
@@ -266,12 +235,13 @@ async function storeGridState(victory) {
     const jsongridState = JSON.stringify(gridState);
     await setGridLocalStorageWithExpiry("gridState", jsongridState);
 
+    // checks if there was a victory to corresponding animations and what data to send to the backend
     if (victory) {
-        victorySend(); // Send a victory signal if all tests pass
-        victorySequence(); // Display victory message and fireworks
+        victorySend(); // Function to send victory data to backend
+        victorySequence(); // Animation upon victory
     } else {
-        saveProgress();
-        trySequence(); // Display try again message and animation
+        saveProgress(); // Function to send attempt data to backend
+        trySequence(); // Animaiton upon partial attempt
     }
 }
 
@@ -282,15 +252,15 @@ async function loadGridState() {
     const result = await response.json();
 
     // After receiving the result, use the numTests property to determine how many columns to create in the grid
-    const numTest = result.Array;  // Get the number of tests from the response
+    const numTest = result.Array;
 
-    // Ensure numTest is a valid number greater than 0
-    if (numTest && typeof numTest === "number" && numTest > 0) {
+    if (numTest) {
         // Update the grid's CSS layout dynamically based on numTests
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
-            // Set the number of columns in the grid dynamically using the numTest value
-            gridElement.style.gridTemplateColumns = `repeat(${numTest}, 100px)`;
+            gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
+            const height = gridElement.offsetWidth/numTest - numTest*10;
+            gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
     }
 
@@ -300,35 +270,28 @@ async function loadGridState() {
     // Check if the saved state is valid and is an array
     if (savedState && Array.isArray(savedState)) {
         const grid = document.getElementById("grid-container");
-        grid.innerHTML = ""; // Clear the grid before reloading
+        grid.innerHTML = "";
 
         // Recreate each rectangle based on saved data
-        currentRowIndex = savedState.length / numTest - 1; // Set the current row index to the last saved row
-
-        // Recreate each rectangle based on saved data
+        currentRowIndex = savedState.length / numTest - 1;
         savedState.forEach((item) => {
-            const rectangle = document.createElement(item.tagName); // Create element
-            rectangle.classList.add(...item.classList); // Add the saved classes to the rectangle
-            rectangle.style.cssText = item.styles; // Apply saved styles
-
-            // Restore data-* attributes from the saved state
+            const rectangle = document.createElement(item.tagName);
+            rectangle.classList.add(...item.classList);
+            rectangle.style.cssText = item.styles;
             for (const [key, value] of Object.entries(item.dataset)) {
-                rectangle.dataset[key] = value; // Restore data attributes
+                rectangle.dataset[key] = value;
             }
-
-            // Create and append the image based on the saved imageSrc
             if (item.imageSrc) {
                 const suitcaseImage = document.createElement('img');
-                suitcaseImage.src = item.imageSrc; // Restore the image src
-                suitcaseImage.alt = 'Suitcase'; // Set an alt text for accessibility
-                suitcaseImage.classList.add('suitcase-img'); // Add class for styling
-                rectangle.appendChild(suitcaseImage); // Append the image to the rectangle
+                suitcaseImage.src = item.imageSrc;
+                suitcaseImage.alt = 'Suitcase';
+                suitcaseImage.classList.add('suitcase-img');
+                rectangle.appendChild(suitcaseImage);
             }
 
             // Append the recreated rectangle to the grid
             grid.appendChild(rectangle);
         });
-
     }
 
     // Initialize a flag to track if all rectangles in the current row are successful (green)
@@ -347,23 +310,9 @@ async function loadGridState() {
     const startIndex = newCurrentRow * totalColumns;
     const endIndex = startIndex + totalColumns;
 
-    // Ensure there are enough rectangles in the grid to match the current row
-    if (rectangles.length < endIndex) {
-        // If not enough rectangles exist, log an error and return false
-        return false; // Return false if there aren't enough rectangles
-    }
-
-    // Loop through each rectangle in the current row
+    // Loop through each rectangle in the current row to check if all pass
     for (let i = startIndex; i < endIndex; i++) {
         const rectangle = rectangles[i];
-
-        // Check if the rectangle exists at the current index
-        if (!rectangle) {
-            // If the rectangle is undefined, log an error and return false
-
-            return false;
-        }
-
         // Check if the rectangle has the 'green' class
         if (!rectangle.classList.contains('green')) {
             // If any rectangle is not green, set fail to true
@@ -376,16 +325,17 @@ async function loadGridState() {
         // Disable the submit button and stop the stopwatch if all tests are successful
         victorySequence();
         const submitButton = document.getElementById("submitCode");
-        submitButton.disabled = true; // Disable the submit button
-        stopStopwatch(); // Stop the stopwatch (assumed to be a function defined elsewhere)
+        submitButton.disabled = true;
+        stopStopwatch();
     }
 }
 
+// Function to set to the local storage with expiration date at midnight chicago time
 async function setGridLocalStorageWithExpiry(key, value) {
 
     const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
     const info = await response.json();
-    if(response.ok){
+    if (response.ok) {
         const date = info.chicago_midnight_utc;
         const objdate = new Date(date);
         var expiryTime = objdate.getTime();
@@ -395,24 +345,20 @@ async function setGridLocalStorageWithExpiry(key, value) {
         value: value,
         expiry: expiryTime,
     };
-
     localStorage.setItem(key, JSON.stringify(data));
 }
 
+// Function to pull from local storage and check if expired or not and only return if not expired
 function getGridLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
-
     if (!itemStr) {
         return null; // No data found
     }
-
     const item = JSON.parse(itemStr);
     const now = new Date().getTime();
-
     if (now > item.expiry) {
         localStorage.removeItem(key); // Clear expired data
         return null; // Indicate that the data is expired
     }
-
     return item.value; // Return the valid data
 }

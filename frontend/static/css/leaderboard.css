@@ -1,0 +1,284 @@
+/* ==============================
+   Global Styles
+   ============================== */
+   body {
+    margin: 0;
+    background-color: #333533; /* Dark background */
+    color: #F7F9FB; /* Light text color */
+    font-family: Consolas, Monaco, "Lucida Console", Courier New, monospace; /* Monospace font */
+    opacity: 0; /* Initial opacity for fade-in effect */
+}
+
+main {
+    padding: 20px;
+    margin: 0 auto;
+    padding-top: 100px; /* Space for fixed navbars */
+    width: 100%;
+}
+
+   h1 {
+    color: #ffe66d; /* Yellow color for the heading */
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ==============================
+   Keyframes for Animations
+   ============================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Keyframes for fade-out */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* ==============================
+   Fade-In and Fade-Out Classes
+   ============================== */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out forwards; /* Animation lasts 0.3s */
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease-in-out forwards; /* Animation lasts 0.3s */
+}
+
+/* ==============================
+   Leaderboard and Rows
+   ============================== */
+.leaderboard-container {
+    text-align: center;
+    width: 80%; /* 80% of the viewport width */
+    margin: 0 auto; /* Center align */
+    max-width: 1200px; /* Optional: Limit maximum width */
+    min-width: 300px; /* Optional: Prevent it from becoming too small */
+}
+
+.leaderboard {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    background: rgb(37, 37, 37);
+    color: #fff;
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.leaderboard-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    color: white;
+    animation: fadeIn 1s ease-in-out forwards; /* Row animation */
+    opacity: 0; /* Initial opacity for fade-in */
+}
+
+.user-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    color: black;
+    font-weight: bold;
+    background-color: #ffe66d; /* Highlight user row */
+    animation: fadeIn 1s ease-in-out forwards; /* Row animation */
+    opacity: 0; /* Initial opacity for fade-in */
+}
+
+.leaderboard-row:nth-child(even) {
+    background: rgb(65, 65, 65); /* Even rows darker background */
+}
+
+.leaderboard-row:nth-child(odd) {
+    background: #333533; /* Odd rows darker background */
+}
+
+.leaderboard-row:last-child {
+    border-bottom: none; /* No border for last row */
+}
+
+.leaderboard-row:first-child {
+    color: #ffe66d; /* Gold color for the top player */
+    font-weight: bold;
+}
+
+/* ==============================
+   Flexbox Utility for Span Elements
+   ============================== */
+span {
+    flex: 1;
+    text-align: center;
+}
+
+span:first-child {
+    text-align: left;
+    flex: 0.5; /* Adjust width for the first span */
+}
+
+span:last-child {
+    text-align: right;
+    flex: 0.5; /* Adjust width for the last span */
+}
+
+/* ==============================
+   Load More Button Styles
+   ============================== */
+#load-more {
+    margin-top: 20px;
+    transition: opacity 0.5s ease-in-out; /* Smooth fade transition */
+    opacity: 0; /* Initially hidden */
+    background-color: lightgrey; /* Light gray background */
+    color: black; /* Black text */
+    border: 2px solid black; /* Black border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px 40px; /* Larger padding */
+    font-size: 18px; /* Larger font size */
+    font-weight: bold; /* Bold text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+    pointer-events: none; /* Prevent clicks when invisible */
+    width: 250px; /* Set fixed width */
+    text-align: center; /* Center text */
+}
+
+#load-more:active {
+    transform: scale(0.95) translateY(2px); /* Slightly smaller on click */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset; /* Inner shadow for depth */
+}
+
+#load-more:hover {
+    background-color: darkgrey; /* Darker gray on hover */
+}
+
+#load-more.show {
+    opacity: 1; /* Fully visible */
+    animation: fadeIn 1s ease-in-out forwards; /* Fade-in animation */
+    pointer-events: all; /* Allow interaction */
+}
+
+/* ==============================
+   Navbar Styles
+   ============================== */
+.mainNavbar, .subNavbar {
+    background-color: #333533; /* Dark background color */
+    color: white;
+    padding: 10px 20px;
+    position: relative; /* Keeps the navbar at the top */
+    width: 100%;
+    z-index: 1000; /* Keeps navbar above other content */
+    box-shadow: 0 2px 50px black; /* Adds shadow */
+}
+
+.subNavbar {
+    position: fixed; /* Keeps the sub-navbar fixed */
+    box-shadow: 0 2px 5px black; /* Adds shadow */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between; /* Aligns items on opposite sides */
+    align-items: center;
+    width: 100%;
+}
+
+/* ==============================
+   Back Button and Links
+   ============================== */
+.backButton {
+    color: #ffe66d; /* Neon yellow text */
+    text-decoration: none; /* Remove underline */
+    font-size: 18px;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+}
+
+.nav-links {
+    display: flex; /* Use flex for the icons */
+    justify-content: flex-end; /* Align icons to the right */
+}
+
+.navObjects {
+    color: white; /* Icon color */
+    margin-left: 15px;
+    font-size: 30px;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.navObjects:hover {
+    color: #ffe66d; /* Highlight on hover */
+    animation: dance 0.6s ease-in-out; /* Dance animation */
+}
+
+.backButton:hover {
+    animation: dance 0.6s ease-in-out; /* Back button dance animation */
+}
+
+/* ==============================
+   Dance Animation for Icons
+   ============================== */
+@keyframes dance {
+    0% {
+        transform: rotate(0) translateY(0);
+    }
+    15% {
+        transform: rotate(-10deg) translateY(-5px);
+    }
+    50% {
+        transform: rotate(5deg) translateY(2.5px);
+    }
+    75% {
+        transform: rotate(-5deg) translateY(-2px);
+    }
+    100% {
+        transform: rotate(0) translateY(0);
+    }
+}
+
+/* ==============================
+   Logo and GIF Styles
+   ============================== */
+.logo-link {
+    display: inline-block;
+    text-align: center; /* Center the logo */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 20%;
+}
+
+.gifClass {
+    width: auto; /* Maintain aspect ratio */
+    max-width: 75%; /* Limit width */
+    max-height: 75%; /* Limit height */
+    background-size: contain; /* Ensure GIF scales proportionally */
+    background-repeat: no-repeat;
+    display: block;
+    margin-left: 50px; /* Centering adjustment */
+}
+
+/* ==============================
+   Emoji Style
+   ============================== */
+.emoji {
+    font-size: 1.3em;
+    /* Adjust size as needed */
+}

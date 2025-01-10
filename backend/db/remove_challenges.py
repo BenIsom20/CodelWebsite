@@ -1,7 +1,7 @@
 import mysql.connector
 import os
 
-# Function to remove a challenge from the database
+# Removes a specific challenge and its associated data from the database.
 def remove_challenge(challenge_id):
     # Database connection
     db_host = os.getenv('MYSQL_HOST')
@@ -20,7 +20,7 @@ def remove_challenge(challenge_id):
     
     cursor = conn.cursor()
 
-    # Check if the challenge exists in the database
+    # Searches for corresponding challenge
     cursor.execute(""" 
         SELECT * FROM challenges WHERE challenge_id = %s
     """, (challenge_id,))
@@ -32,32 +32,28 @@ def remove_challenge(challenge_id):
         conn.close()
         return
 
-    # Print the challenge ID and name for confirmation
     print(f"Removing Challenge {existing_challenge[0]}: {existing_challenge[1]}")
 
-    # Remove related data from the function_skeletons table
+    # Executes removing specific challenge
     cursor.execute(""" 
         DELETE FROM function_skeletons WHERE challenge_id = %s
     """, (challenge_id,))
 
-    # Remove related data from the challenge_cases table
     cursor.execute(""" 
         DELETE FROM challenge_cases WHERE challenge_id = %s
     """, (challenge_id,))
 
-    # Remove the challenge from the challenges table
     cursor.execute(""" 
         DELETE FROM challenges WHERE challenge_id = %s
     """, (challenge_id,))
 
-    # Commit changes and close connection
     conn.commit()
     cursor.close()
     conn.close()
 
     print(f"Challenge with ID '{challenge_id}' and its related data have been removed successfully.")
 
-# Function to list available challenges in the database
+# Lists all challenges in the database with their IDs and names.
 def list_challenges():
     # Database connection
     db_host = os.getenv('MYSQL_HOST')
@@ -75,7 +71,7 @@ def list_challenges():
     
     cursor = conn.cursor()
 
-    # Get a list of all challenge IDs and names
+    # Fetches all challenges and returns all
     cursor.execute(""" 
         SELECT challenge_id, name FROM challenges
     """)
@@ -84,13 +80,12 @@ def list_challenges():
     cursor.close()
     conn.close()
 
-    # Display challenges with challenge_id and name
     for challenge in challenges:
         print(f"{challenge[0]}. {challenge[1]}")
 
     return challenges
 
-# Function to remove all challenges from the database
+# Removes all challenges and their associated data from the database.
 def remove_all():
     # Database connection
     db_host = os.getenv('MYSQL_HOST')
@@ -108,7 +103,7 @@ def remove_all():
     
     cursor = conn.cursor()
 
-    # Get a list of all challenge IDs to remove
+    # Fetches all challenges from databse
     cursor.execute(""" 
         SELECT challenge_id FROM challenges
     """)
@@ -122,7 +117,7 @@ def remove_all():
 
     print("Removing all challenges and their related data...")
 
-    # Iterate over all challenge_ids and remove them
+    # Deletes all challenges
     for challenge_id in challenge_ids:
         cursor.execute(""" 
             DELETE FROM function_skeletons WHERE challenge_id = %s
@@ -136,16 +131,14 @@ def remove_all():
             DELETE FROM challenges WHERE challenge_id = %s
         """, (challenge_id[0],))
 
-    # Commit changes and close connection
     conn.commit()
     cursor.close()
     conn.close()
 
     print("All challenges and their related data have been removed successfully.")
 
-# Main function to run the script
+# Handles user input to perform actions related to challenges in the database.
 def main():
-    # Ask user for action
     print("Choose an action:")
     print("1. Remove a single challenge")
     print("2. Remove all challenges")
@@ -153,28 +146,23 @@ def main():
     action = input("Please enter the number corresponding to your choice: ")
 
     if action == "1":
-        # List available challenges in the database
         available_challenges = list_challenges()
 
         if not available_challenges:
             print("No challenges found in the database.")
             return
 
-        # Prompt user for the challenge_id to remove
         challenge_id = input("Please enter the challenge ID of the challenge to remove: ")
 
-        # Check if the challenge_id is valid
         try:
             challenge_id = int(challenge_id)
         except ValueError:
             print(f"Error: '{challenge_id}' is not a valid challenge ID.")
             return
 
-        # Remove the challenge from the database
         remove_challenge(challenge_id)
 
     elif action == "2":
-        # Remove all challenges from the database
         remove_all()
 
     else:
