@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS webInfo (
     allUsers INT NOT NULL DEFAULT 0
 );
 
--- Insert the initial row with default values into webInfo
-INSERT INTO webInfo (allAttempts, allTime, allUsers)
-SELECT 0, 0, 0
-WHERE NOT EXISTS (SELECT 1 FROM webInfo);
+-- -- Insert the initial row with default values into webInfo
+-- INSERT INTO webInfo (allAttempts, allTime, allUsers)
+-- SELECT 0, 0, 0
+-- WHERE NOT EXISTS (SELECT 1 FROM webInfo);
 
