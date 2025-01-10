@@ -70,7 +70,7 @@ document.getElementById("runCode").addEventListener("click", async function () {
     // Gets the code currently in the editor and sends it to backend for execution
     const userCode = editor.getValue();
     const outputDiv = document.getElementById("output");
-    const response = await fetch(`http:/${publicIp}/run`, {
+    const response = await fetch(`http://${publicIp}/run`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: userCode }),
