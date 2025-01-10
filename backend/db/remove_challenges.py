@@ -63,7 +63,7 @@ def list_challenges():
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    db_config = {
+    conn = {
         'host': db_host, 
         'user': db_user, 
         'password': db_password,
@@ -96,7 +96,7 @@ def remove_all():
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    db_config = {
+    conn = {
         'host': db_host, 
         'user': db_user, 
         'password': db_password,

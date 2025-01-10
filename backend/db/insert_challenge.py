@@ -31,7 +31,7 @@ def insert_challenge_data(challenge_data):
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    db_config = {
+    conn = {
         'host': db_host, 
         'user': db_user, 
         'password': db_password,
@@ -152,7 +152,7 @@ def list_challenges_to_add():
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    db_config = {
+    conn = {
         'host': db_host, 
         'user': db_user, 
         'password': db_password,
