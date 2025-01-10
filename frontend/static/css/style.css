@@ -126,11 +126,11 @@ Button Styles
     /* Black text */
     border: 0px solid 333533;
     /* Black border for definition */
-    border-radius: clamp(4px, 1vw, 10px);  /* Scaled border radius */
+    border-radius: clamp(2px, 1vw, 10px); 
     /* Rounded corners, scaled with viewport width */
-    padding: clamp(8px, 2vw + 1vh, 16px) clamp(16px, 4vw, 30px);
+    padding: clamp(6px, 2vw + 1vh, 16px) clamp(12px, 4vw, 30px);
     /* Scaled padding */
-    font-size: clamp(14px, 2.5vw, 22px);
+    font-size: clamp(12px, 2.5vw, 22px);
     /* Scaled font size */
     /* Comfortable font size */
     font-weight: bold;
