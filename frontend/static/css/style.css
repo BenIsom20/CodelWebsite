@@ -411,8 +411,8 @@ main {
 #stopwatch {
     font-size: 2.5vw;
     box-shadow: 0 0px 0px #ffe66d;
-    border: 2px solid #ffe66d;
-    border-radius: 10px;
+    border: 0.2vw solid #ffe66d;
+    border-radius: 0.52vw;
 }
 
 /* Headings style */
