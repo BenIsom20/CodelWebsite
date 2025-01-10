@@ -3,23 +3,23 @@ from datetime import datetime
 
 # Database connection parameters
 db_config = {
-    'host': 'db',  # Or the name of your DB container if using Docker
-    'user': 'devuser',  # The user you set in docker-compose.yml
-    'password': 'devpass',  # The password you set in docker-compose.yml
-    'database': 'qsdb'  # Your database name
+    'host': 'db',  
+    'user': 'devuser',  
+    'password': 'devpass',  
+    'database': 'qsdb'  
 }
 
+# Retrieves a specific challenge by its ID from the database.
 def get_challenge_by_id(challenge_id):
-    """Fetch a specific challenge by its ID from the database."""
-    connection = None  # Initialize connection to None
+    connection = None
     try:
+        # Connects to the database and queries for a challenge by ID.
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
-
-        # Query to fetch the challenge by ID
         cursor.execute("SELECT challenge_id, name, prompt, date FROM challenges WHERE challenge_id = %s", (challenge_id,))
         challenge = cursor.fetchone()
 
+        # Returns the challenge details if found; otherwise, returns None.
         if challenge:
             return {
                 "challenge_id": challenge[0],
@@ -35,17 +35,18 @@ def get_challenge_by_id(challenge_id):
         return None
 
     finally:
+        # Ensures database connection is properly closed.
         if connection and connection.is_connected():
             cursor.close()
             connection.close()
 
+# Retrieves all test cases associated with a specific challenge ID from the database.
 def get_challenge_cases_by_id(challenge_id):
-    """Fetch the test cases for a specific challenge by its ID from the database."""
     connection = None
     try:
+        # Connects to the database and queries for test cases by challenge ID.
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
-
         cursor.execute(
             """
             SELECT challenge_case_id, challenge_id, prompt, given_data, expected 
@@ -55,8 +56,8 @@ def get_challenge_cases_by_id(challenge_id):
             (challenge_id,)
         )
 
+        # Returns a list of dictionaries containing test case details.
         challenge_cases = cursor.fetchall()
-
         return [
             {
                 "challenge_case_id": case[0],
@@ -73,17 +74,18 @@ def get_challenge_cases_by_id(challenge_id):
         return []
 
     finally:
+        # Ensures database connection is properly closed.
         if connection and connection.is_connected():
             cursor.close()
             connection.close()
 
+# Retrieves the function skeleton for a specific challenge ID from the database.
 def get_function_skeleton_by_id(challenge_id):
-    """Fetch the function skeleton for a specific challenge by its ID from the database."""
     connection = None
     try:
+        # Connects to the database and queries for a function skeleton by challenge ID.
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
-
         cursor.execute(
             """
             SELECT function_skeleton_id, challenge_id, name, parameters, skeleton 
@@ -93,8 +95,8 @@ def get_function_skeleton_by_id(challenge_id):
             (challenge_id,)
         )
 
+        # Returns the function skeleton details if found; otherwise, returns None.
         skeleton = cursor.fetchone()
-
         if skeleton:
             return {
                 "function_skeleton_id": skeleton[0],
@@ -111,19 +113,19 @@ def get_function_skeleton_by_id(challenge_id):
         return None
 
     finally:
+        # Ensures database connection is properly closed.
         if connection and connection.is_connected():
             cursor.close()
             connection.close()
 
+# Retrieves a challenge that matches today's date from the database.
 def get_challenge_by_date():
-    """Fetch a challenge that matches today's date."""
     connection = None
     try:
+        # Connects to the database and queries for a challenge by today's date.
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
-
         today_date = datetime.now().date()
-
         cursor.execute(
             """
             SELECT challenge_id, name, prompt, date 
@@ -133,8 +135,8 @@ def get_challenge_by_date():
             (today_date,)
         )
 
+        # Returns the challenge details if found; otherwise, returns None.
         challenge = cursor.fetchone()
-
         if challenge:
             return {
                 "challenge_id": challenge[0],
@@ -150,19 +152,19 @@ def get_challenge_by_date():
         return None
 
     finally:
+        # Ensures database connection is properly closed.
         if connection and connection.is_connected():
             cursor.close()
             connection.close()
 
+# Retrieves test cases for today's challenge from the database.
 def get_challenge_cases_by_date():
-    """Fetch challenge cases for today's challenge."""
     connection = None
     try:
+        # Connects to the database and queries for test cases associated with today's challenge.
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
-
         today_date = datetime.now().date()
-
         cursor.execute(
             """
             SELECT challenge_case_id, challenge_id, prompt, given_data, expected 
@@ -174,8 +176,8 @@ def get_challenge_cases_by_date():
             (today_date,)
         )
 
+        # Returns a list of dictionaries containing test case details.
         challenge_cases = cursor.fetchall()
-
         return [
             {
                 "challenge_case_id": case[0],
@@ -192,19 +194,19 @@ def get_challenge_cases_by_date():
         return []
 
     finally:
+        # Ensures database connection is properly closed.
         if connection and connection.is_connected():
             cursor.close()
             connection.close()
 
+# Retrieves the function skeleton for today's challenge from the database.
 def get_function_skeleton_by_date():
-    """Fetch the function skeleton for today's challenge."""
     connection = None
     try:
+        # Connects to the database and queries for a function skeleton associated with today's challenge.
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
-
         today_date = datetime.now().date()
-
         cursor.execute(
             """
             SELECT function_skeleton_id, challenge_id, name, parameters, skeleton 
@@ -216,8 +218,8 @@ def get_function_skeleton_by_date():
             (today_date,)
         )
 
+        # Returns the function skeleton details if found; otherwise, returns None.
         skeleton = cursor.fetchone()
-
         if skeleton:
             return {
                 "function_skeleton_id": skeleton[0],
@@ -234,58 +236,24 @@ def get_function_skeleton_by_date():
         return None
 
     finally:
+        # Ensures database connection is properly closed.
         if connection and connection.is_connected():
             cursor.close()
             connection.close()
 
-def get_challenge_by_date():
-    """Fetch a challenge that matches today's date."""
-    connection = None
-    try:
-        connection = mysql.connector.connect(**db_config)
-        cursor = connection.cursor()
-
-        today_date = datetime.now().date()
-
-        cursor.execute(
-            """
-            SELECT challenge_id, name, prompt, date 
-            FROM challenges 
-            WHERE DATE(date) = %s
-            """,
-            (today_date,)
-        )
-
-        challenge = cursor.fetchone()
-
-        if challenge:
-            return {
-                "challenge_id": challenge[0],
-                "name": challenge[1],
-                "prompt": challenge[2],
-                "date": challenge[3]
-            }
-        else:
-            return None
-
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
-        return None
-
-    finally:
-        if connection and connection.is_connected():
-            cursor.close()
-            connection.close()
-
+# Function that gets the challenge cases by date
 def get_challenge_cases_by_date():
     """Fetch challenge cases for today's challenge."""
-    connection = None
+    connection = None  # Initialize the connection as None
     try:
+        # Connect to the database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
 
+        # Get today's date
         today_date = datetime.now().date()
 
+        # Query to fetch challenge cases for today's challenge
         cursor.execute(
             """
             SELECT challenge_case_id, challenge_id, prompt, given_data, expected 
@@ -297,8 +265,10 @@ def get_challenge_cases_by_date():
             (today_date,)
         )
 
+        # Fetch all matching challenge cases
         challenge_cases = cursor.fetchall()
 
+        # Return the challenge cases as a list of dictionaries
         return [
             {
                 "challenge_case_id": case[0],
@@ -311,23 +281,29 @@ def get_challenge_cases_by_date():
         ]
 
     except mysql.connector.Error as err:
+        # Handle any database errors
         print(f"Error: {err}")
         return []
 
     finally:
+        # Ensure the connection is closed properly
         if connection and connection.is_connected():
             cursor.close()
             connection.close()
 
+# Function that retrieves the function skeleton by date
 def get_function_skeleton_by_date():
     """Fetch the function skeleton for today's challenge."""
-    connection = None
+    connection = None  # Initialize the connection as None
     try:
+        # Connect to the database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
 
+        # Get today's date
         today_date = datetime.now().date()
 
+        # Query to fetch the function skeleton for today's challenge
         cursor.execute(
             """
             SELECT function_skeleton_id, challenge_id, name, parameters, skeleton 
@@ -339,8 +315,10 @@ def get_function_skeleton_by_date():
             (today_date,)
         )
 
+        # Fetch the first matching skeleton
         skeleton = cursor.fetchone()
 
+        # Return the skeleton data as a dictionary if found
         if skeleton:
             return {
                 "function_skeleton_id": skeleton[0],
@@ -353,10 +331,12 @@ def get_function_skeleton_by_date():
             return None
 
     except mysql.connector.Error as err:
+        # Handle any database errors
         print(f"Error: {err}")
         return None
 
     finally:
+        # Ensure the connection is closed properly
         if connection and connection.is_connected():
             cursor.close()
             connection.close()

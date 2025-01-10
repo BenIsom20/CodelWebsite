@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <!-- ALL NEEDED INPORTS -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codel</title>
@@ -14,11 +15,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/python/python.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/theme/midnight.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/CodelTheme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/addon/edit/closebrackets.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/Popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
     <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/timer.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/grid.js') }}" defer></script>
@@ -26,41 +27,39 @@
     <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png">
 </head>
 
-
-<!-- NAVBAR CODE -->
+<!-- MAIN NAVBAR CODE -->
 
 <body>
     <nav class="mainNavbar" id="mainNavbar">
         <div class="navbar-container">
-            <a>
+            <!-- STOPWATCH -->
+            <div class = "timer">
                 <span id="stopwatch"></span>
-            </a>
+            </div>
+            <!-- CODEL LOGO -->
             <div class="logo-link">
                 <img class="gifClass" src="/static/images/C.gif" alt="Animated Logo" id="logo">
             </div>
+            <!-- ALL ICONS -->
             <div class="nav-links">
-                <a id="leader" href="leaderboard" class="navObjects" onclick="storeStopwatchTime();"><i
+                <a id="leader" href="leaderboard" class="navObjects"><i
                         class='bx bxs-bar-chart-alt-2'></i></a>
-                <a id="how" href="how" class="navObjects" onclick="storeStopwatchTime()"><i
+                <a id="how" href="how" class="navObjects" ><i
                         class='bx bxs-help-circle'></i></a>
-                <a id="user" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-user-circle'></i></a>
-                <a id="stats" class="navObjects" onclick="storeStopwatchTime()"><i class='bx bxs-medal'></i></a>
+                <a id="user" class="navObjects" ><i class='bx bxs-user-circle'></i></a>
+                <a id="stats" class="navObjects"><i class='bx bxs-medal'></i></a>
             </div>
         </div>
     </nav>
 
-
-
-
     <!-- Challenge and title code-->
-    <p id="Question" style="text-align: center; padding-top: 150px; width: 60%; padding-bottom: 25px; font-size: 30px">
+    <p id="question">
     </p>
 
+    <!-- CODEL GRID -->
     <div id="grid-container" class="grid"></div>
 
-
-
-    <!--Code for input output and buttons-->
+    <!-- SUBMIT AND RUN BUTTONS + EDITOR AND OUTPUT AREAS -->
     <div class="container mt-4">
         <div class="row mt-3">
             <div class="but">
@@ -86,19 +85,19 @@
     </div>
     <button id="resetButton" class="mainbutton">Reset</button>
 
-    <!-- Popup -->
+    <!-- ACCOUNT POPUP -->
     <div id="mainPopup" class="popup"
         style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
         <div class="popup-content">
             <span class="close" id="closePopup">&times;</span>
 
-            <!-- Login Form -->
+            <!-- LOGIN FORM -->
             <div id="loginForm" class="tab-content active"
                 style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
                 <h2>Sign In</h2>
                 <input id="logusername" type="text" placeholder="Username">
                 <p id="placeholder"></p>
-                <input class="inputs" id="logpassword" type="password" placeholder="Password">
+                <input id="logpassword" type="password" placeholder="Password">
                 <p id="lognote"></p>
                 <button id="login">Sign In</button>
                 <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
@@ -107,7 +106,7 @@
                 <p id="outnote"></p>
             </div>
 
-            <!-- Register Form -->
+            <!-- REGISTER FORM -->
             <div id="registerForm" class="tab-content"
                 style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
                 <h2>Create an Account</h2>
@@ -125,7 +124,7 @@
                 <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
             </div>
 
-            <!-- Delete Account Form -->
+            <!-- DELETE FORM -->
             <div id="deleteForm" class="tab-content"
                 style="display: none; opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease, transform 0.3s ease;">
                 <h2>Delete Your Account</h2>
@@ -140,14 +139,13 @@
         </div>
     </div>
 
-
-    <!-- Popup -->
+    <!-- Stats popup -->
     <div id="statsPopup" class="popup"
         style="opacity: 0; transform: scale(0.8); transition: opacity 0.3s ease, transform 0.3s ease;">
         <div class="stats-content" id="popupContent">
             <span class="close" id="closeStatsPopup">&times;</span>
 
-            <!-- User Stats -->
+            <!-- User stats popup -->
             <div id="userStats" class="tab-content active"
                 style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
                 <h2>User Stats</h2>
@@ -162,62 +160,10 @@
         </div>
     </div>
 
-
-
-
-    <!--keep here-->
+    <!-- MAIN JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script>
-        document.getElementById('leader').addEventListener('click', function (event) {
-            smoothTransition(event);
-        });
-
-        document.getElementById('how').addEventListener('click', function (event) {
-            smoothTransition(event);
-        });
-
-
-        function smoothTransition(event) {
-            try {
-                event.preventDefault(); // Prevent the default navigation
-                const href = event.currentTarget.href; // Get the target URL
-
-                // Add the fade-out class to the body
-                document.body.classList.remove('fade-in');
-                document.body.classList.add('fade-out');
-
-                // Wait for the transition to complete, then navigate
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 300); // Match this duration with your CSS transition time
-            }
-            catch (error) {
-                alert(error);
-            }
-
-        }
-    </script>
-
+    <!-- Script for first appearance animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            function playGif(gifclass) {
-                const gif = $(gifclass);
-                gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
-            }
-            const seenGif = Cookies.get('seenGif');
-            if (!seenGif) {
-                $('.hack6-loading-wrapper').css('display', 'flex');
-                playGif('.hack6-gif');
-                typer.js
-                Cookies.set('seenGif', true, { expires: 1 });
-
-                setTimeout(() => {
-                    $('.hack6-loading-wrapper').fadeOut(500);
-                }, 3000)
-            }
-        })
-    </script>
 </body>
 
 </html>

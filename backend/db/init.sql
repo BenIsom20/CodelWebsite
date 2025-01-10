@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS qsdb;
-USE qsdb;
+CREATE DATABASE IF NOT EXISTS qsdb; -- Sets up database 
+USE qsdb; -- Uses the database
 
--- Create challenges table
+-- Create challenges table that holds each individual challenge
 CREATE TABLE IF NOT EXISTS challenges (
     challenge_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -9,27 +9,27 @@ CREATE TABLE IF NOT EXISTS challenges (
     date TIMESTAMP
 );
 
--- Create challenge_cases table with foreign key
+-- Create challenge_cases table with foreign key which holds each challenges tests
 CREATE TABLE IF NOT EXISTS challenge_cases (
-    challenge_case_id INT AUTO_INCREMENT PRIMARY KEY,  -- Adding a unique ID for each case
+    challenge_case_id INT AUTO_INCREMENT PRIMARY KEY,
     challenge_id INT NOT NULL,
     prompt VARCHAR(255) NOT NULL,
     given_data VARCHAR(255) NOT NULL,
     expected VARCHAR(255) NOT NULL,
-    FOREIGN KEY (challenge_id) REFERENCES challenges(challenge_id)  -- Foreign key to challenges table
+    FOREIGN KEY (challenge_id) REFERENCES challenges(challenge_id)
 );
 
--- Create function_skeletons table with foreign key to challenges table
+-- Create function_skeletons table which holds each challenges function skeleton
 CREATE TABLE IF NOT EXISTS function_skeletons (
-    function_skeleton_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique ID for each function skeleton
-    challenge_id INT NOT NULL,  -- Foreign key referencing challenges
-    name VARCHAR(255) NOT NULL,  -- Function name
-    parameters VARCHAR(255),  -- Function parameters as a string
-    skeleton TEXT,  -- Function skeleton
-    FOREIGN KEY (challenge_id) REFERENCES challenges(challenge_id)  -- Foreign key to challenges table
+    function_skeleton_id INT AUTO_INCREMENT PRIMARY KEY,
+    challenge_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    parameters VARCHAR(255),
+    skeleton TEXT,
+    FOREIGN KEY (challenge_id) REFERENCES challenges(challenge_id)
 );
 
--- user data
+-- Create User data table which holds each account information
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS users (
     allStreak INT NOT NULL DEFAULT 0
 );
 
+-- Create webInfo table which holds information about CODEL as a whole
 CREATE TABLE IF NOT EXISTS webInfo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     allAttempts INT NOT NULL DEFAULT 0,
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS webInfo (
     allUsers INT NOT NULL DEFAULT 0
 );
 
--- Insert the initial row with default values (if the row doesn't exist yet)
+-- Insert the initial row with default values into webInfo
 INSERT INTO webInfo (allAttempts, allTime, allUsers)
 SELECT 0, 0, 0
 WHERE NOT EXISTS (SELECT 1 FROM webInfo);

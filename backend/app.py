@@ -36,14 +36,14 @@ def leaderboard():
 logging.basicConfig(level=logging.DEBUG)
 
 jwt_secret_key = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_SECRET_KEY"] = jwt_secret_key
+app.config["JWT_SECRET_KEY"] = "change later"
 jwt = JWTManager(app)
 
 db_config = {
-    'host': 'db', # change this to the name of my db container if using docker
+    'host': 'db', 
     'user': 'devuser', 
     'password': 'devpass',
-    'database': 'qsdb' #database name
+    'database': 'qsdb'
 }
 
 # Global variable for storing the current challenge
@@ -52,36 +52,37 @@ current_challenge = {}
 current_challenge_cases = []
 current_challenge_function_skeleton = {}
 
+# Fetch the challenge from the database and set it to the global variable.
 def set_current_challenge_by_id(challenge_id):
-    """Fetch the challenge from the database and set it to the global variable."""
     global current_challenge
     current_challenge = get_challenge_by_id(challenge_id)
 
+# Fetch the challenge cases from the database and set them to the global variable.
 def set_current_challenge_cases_by_id(challenge_id):
-    """Fetch the challenge cases from the database and set them to the global variable."""
     global current_challenge_cases
     current_challenge_cases = get_challenge_cases_by_id(challenge_id)
 
+# Fetch the function skeleton from the database and set it to the global variable.
 def set_current_challenge_function_skeleton_by_id(challenge_id):
-    """Fetch the function skeleton from the database and set it to the global variable."""
     global current_challenge_function_skeleton
     current_challenge_function_skeleton = get_function_skeleton_by_id(challenge_id)
 
+# Fetch the challenge from the database and set it to the global variable.
 def set_current_challenge_by_date():
-    """Fetch the challenge from the database and set it to the global variable."""
     global current_challenge
     current_challenge = get_challenge_by_date()
 
+# Fetch the challenge cases from the database and set them to the global variable.
 def set_current_challenge_cases_by_date():
-    """Fetch the challenge cases from the database and set them to the global variable."""
     global current_challenge_cases
     current_challenge_cases = get_challenge_cases_by_date()
 
+# Fetch the function skeleton from the database and set it to the global variable.
 def set_current_challenge_function_skeleton_by_date():
-    """Fetch the function skeleton from the database and set it to the global variable."""
     global current_challenge_function_skeleton
     current_challenge_function_skeleton = get_function_skeleton_by_date()
 
+# Function that gets an iso format string of the time in UTC of midnight in chicago
 def get_chicago_midnight():
     # Define the Chicago time zone
     chicago_tz = timezone('America/Chicago')
@@ -153,11 +154,13 @@ def midnight_job():
 # Start the scheduler
 scheduler.start()
 
+# Route that returns the iso string of midnight in chicago
 @app.route('/get_chicago_midnight', methods=['GET'])
 def get_chicago_midnight_api():
     midnight_utc = get_chicago_midnight()
     return jsonify({"chicago_midnight_utc": midnight_utc})
 
+# Route that runs the code given to it as python code 
 @app.route("/run", methods=["POST"])
 def execute_code():
     try:
@@ -185,10 +188,12 @@ def execute_code():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Route that tests the python code given against our tests 
 @app.route("/test", methods=["POST"])
 def test_code():
     """Route to test the user's code against predefined test cases."""
     try:
+        # Gets data from frontend 
         compiled = True
         data = request.json
         code = data.get("code", "")
@@ -257,6 +262,7 @@ result = {code_call}
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Route that returns all the info of the daily challenge
 @app.route("/Startup", methods=["GET"])
 def Startup():
     # Set the current challenge
@@ -284,6 +290,7 @@ def Startup():
         "Array": len(tests)
     })
 
+# Route that returns the skeleton for the daily challenge
 @app.route('/get_skeleton', methods=['GET'])
 def get_skeleton():
     skeleton = current_challenge_function_skeleton
@@ -293,6 +300,7 @@ def get_skeleton():
     else:
         return jsonify({"error": "Skeleton not found"}), 404
 
+# Route that registers an account in the database 
 @app.route("/register", methods=["POST"])
 def register():
     try:
@@ -341,7 +349,7 @@ def register():
             cursor.close()
             connection.close()
 
-# Login an existing user and generate a JWT token
+# Route to login an existing user and generate a JWT token
 @app.route("/login", methods=["POST"])
 def login():
     try:
@@ -370,7 +378,7 @@ def login():
         access_token = create_access_token(identity={"user_id": user[0], "username": username})
         return jsonify({"access_token": access_token}), 200
 
-    except mysql.connector.Error as err:
+    except Exception as err:
         # Handle any database errors
         return jsonify({"error": f"Database error: {err}"}), 500
     finally:
@@ -379,7 +387,7 @@ def login():
             cursor.close()
             connection.close()
 
-# A protected route that requires a valid JWT token
+# A protected route that requires a valid JWT token and returns username
 @app.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
@@ -400,7 +408,7 @@ def get_db_connection():
         database="qsdb"
     )
 
-# Update the user's state after a victory
+# Route to update the user's state after a victory
 @app.route("/victory", methods=["POST"])
 @jwt_required()  # Protect the route
 def victory():
@@ -450,6 +458,7 @@ def victory():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
+# Route to update the database value allTime with given time
 @app.route("/updateAllTime", methods=["POST"])
 def updateAllTime():
     data = request.json
@@ -464,7 +473,7 @@ def updateAllTime():
         SET allTime = allTime + %s
         """
         # Use a tuple to pass the parameter
-        values = (data["time_increment"],)  # Ensure 'time_increment' is in your JSON payload
+        values = (data["time_increment"],)  
 
         # Execute the query
         cursor.execute(query, values)
@@ -485,7 +494,7 @@ def updateAllTime():
         if connection:
             connection.close()
 
-# Update the user's state after a victory
+# Route to update the user's state after a victory
 @app.route("/saveProgress", methods=["POST"])
 @jwt_required()  # Protect the route
 def saveProgress():
@@ -523,7 +532,7 @@ def saveProgress():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
-# Delete a user and their associated data
+# Route to delete a user and their associated data
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
     try:
@@ -560,7 +569,7 @@ def delete_user():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
-# Retrieve user data from the database
+# Route to retrieve user data from the database
 @app.route("/get_user_data", methods=["GET"])
 @jwt_required()  # Protect the route with JWT token
 def get_user_data():
@@ -596,6 +605,7 @@ def get_user_data():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
+# Route to return accounts and information that are top of all users
 @app.route("/getLeaderboard", methods=["GET"])
 def getLeaderboard():
     try:
@@ -633,7 +643,7 @@ def getLeaderboard():
         return jsonify({"error": str(e)}), 500
 
 
-# Retrieve user data from the database
+# Route to retrieve user data from the database
 @app.route("/stats", methods=["GET"])
 @jwt_required()  # Protect the route with JWT token
 def stats():
@@ -670,6 +680,7 @@ def stats():
         # Handle any exceptions that occur
         return jsonify({"error": str(e)}), 500
 
+# Helper method to add one to allAttempts in our database
 def addOneToAllAttempts():
     try:
         # Connect to the database
@@ -700,6 +711,7 @@ def addOneToAllAttempts():
         if connection:
             connection.close()
 
+# Helper method to add one to AllUsers in our database
 def addOneToAllUsers():
     try:
         # Connect to the database
@@ -733,4 +745,3 @@ def addOneToAllUsers():
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
-
