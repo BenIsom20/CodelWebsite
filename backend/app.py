@@ -15,8 +15,8 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from better_profanity import profanity
 from collections.abc import Iterable
-import os
 
+# Get ENVs for database configuration
 db_host = os.getenv('MYSQL_HOST')
 db_user = os.getenv('MYSQL_USER')
 db_password = os.getenv('MYSQL_PASSWORD')
@@ -33,7 +33,7 @@ def index():
 
 @app.route('/how')
 def how():
-    return render_template('How.html')
+    return render_template('how.html')
 
 @app.route('/leaderboard')
 def leaderboard():

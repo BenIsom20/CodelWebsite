@@ -3,20 +3,20 @@ import os
 
 # Removes a specific challenge and its associated data from the database.
 def remove_challenge(challenge_id):
-    # Database connection
+    
+    # Get ENVs for database configuration
     db_host = os.getenv('MYSQL_HOST')
     db_user = os.getenv('MYSQL_USER')
     db_password = os.getenv('MYSQL_PASSWORD')
     db_database = os.getenv('MYSQL_DATABASE')
 
-
-    # Create a connection to the MySQL database
-    conn = mysql.connector.connect(
-        host=db_host, 
-        user=db_user, 
-        password=db_password,
-        database=db_database  # Use actual database name
-    )
+    # Create configuration dictionary for database connections
+    db_config = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     
     cursor = conn.cursor()
 
@@ -55,19 +55,20 @@ def remove_challenge(challenge_id):
 
 # Lists all challenges in the database with their IDs and names.
 def list_challenges():
-    # Database connection
+    
+    # Get ENVs for database configuration
     db_host = os.getenv('MYSQL_HOST')
     db_user = os.getenv('MYSQL_USER')
     db_password = os.getenv('MYSQL_PASSWORD')
     db_database = os.getenv('MYSQL_DATABASE')
 
-    # Create a connection to the MySQL database
-    conn = mysql.connector.connect(
-        host=db_host, 
-        user=db_user, 
-        password=db_password,
-        database=db_database  # Use actual database name
-    )
+    # Create configuration dictionary for database connections
+    db_config = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     
     cursor = conn.cursor()
 
@@ -87,20 +88,20 @@ def list_challenges():
 
 # Removes all challenges and their associated data from the database.
 def remove_all():
-    # Database connection
+    
+    # Get ENVs for database configuration
     db_host = os.getenv('MYSQL_HOST')
     db_user = os.getenv('MYSQL_USER')
     db_password = os.getenv('MYSQL_PASSWORD')
     db_database = os.getenv('MYSQL_DATABASE')
 
-    # Create a connection to the MySQL database
-    conn = mysql.connector.connect(
-        host=db_host, 
-        user=db_user, 
-        password=db_password,
-        database=db_database  # Use actual database name
-    )
-    
+    # Create configuration dictionary for database connections
+    db_config = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     cursor = conn.cursor()
 
     # Fetches all challenges from databse

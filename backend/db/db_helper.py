@@ -2,12 +2,13 @@ import mysql.connector
 import os
 from datetime import datetime
 
+# Get ENVs for database configuration
 db_host = os.getenv('MYSQL_HOST')
 db_user = os.getenv('MYSQL_USER')
 db_password = os.getenv('MYSQL_PASSWORD')
 db_database = os.getenv('MYSQL_DATABASE')
 
-
+# Create configuration dictionary for database connections
 db_config = {
     'host': db_host, 
     'user': db_user, 

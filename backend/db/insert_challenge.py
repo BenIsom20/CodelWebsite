@@ -23,18 +23,20 @@ def generate_function_skeleton(function_name, parameters, cases):
 
 # Function to insert data into the database
 def insert_challenge_data(challenge_data):
+    
+    # Get ENVs for database configuration
     db_host = os.getenv('MYSQL_HOST')
     db_user = os.getenv('MYSQL_USER')
     db_password = os.getenv('MYSQL_PASSWORD')
     db_database = os.getenv('MYSQL_DATABASE')
 
-    # Create a connection to the MySQL database
-    conn = mysql.connector.connect(
-        host=db_host, 
-        user=db_user, 
-        password=db_password,
-        database=db_database  # Use actual database name
-    )
+    # Create configuration dictionary for database connections
+    db_config = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     
     cursor = conn.cursor()
 
@@ -108,18 +110,20 @@ def insert_all():
 
 # Function to list available challenges in the database
 def list_challenges():
+    
+    # Get ENVs for database configuration
     db_host = os.getenv('MYSQL_HOST')
     db_user = os.getenv('MYSQL_USER')
     db_password = os.getenv('MYSQL_PASSWORD')
     db_database = os.getenv('MYSQL_DATABASE')
 
-    # Create a connection to the MySQL database
-    conn = mysql.connector.connect(
-        host=db_host, 
-        user=db_user, 
-        password=db_password,
-        database=db_database  # Use actual database name
-    )
+    # Create configuration dictionary for database connections
+    db_config = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     
     cursor = conn.cursor()
 
@@ -140,20 +144,20 @@ def list_challenges():
 
 # Function to list challenges that can be added (exist in YAML files but not in the database)
 def list_challenges_to_add():
-    #Database Connection
+    
+    # Get ENVs for database configuration
     db_host = os.getenv('MYSQL_HOST')
     db_user = os.getenv('MYSQL_USER')
     db_password = os.getenv('MYSQL_PASSWORD')
     db_database = os.getenv('MYSQL_DATABASE')
 
-
-    # Create a connection to the MySQL database
-    conn = mysql.connector.connect(
-        host=db_host, 
-        user=db_user, 
-        password=db_password,
-        database=db_database  # Use actual database name
-    )
+    # Create configuration dictionary for database connections
+    db_config = {
+        'host': db_host, 
+        'user': db_user, 
+        'password': db_password,
+        'database': db_database #database name
+    }
     
     cursor = conn.cursor()
 
