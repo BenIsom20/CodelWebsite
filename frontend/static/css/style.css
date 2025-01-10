@@ -305,8 +305,9 @@ Button Styles
     /* Neon green for text */
     text-decoration: none;
     /* Remove underline */
-    font-size: 18px;
+    font-size: 0.9375vw;
     padding: 5px 10px;
+    width: 33.333%;
     transition: color 0.3s ease;
 }
 

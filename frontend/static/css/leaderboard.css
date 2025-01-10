@@ -206,20 +206,22 @@ span:last-child {
 .backButton {
     color: #ffe66d; /* Neon yellow text */
     text-decoration: none; /* Remove underline */
-    font-size: 18px;
+    font-size: 0.9375vw;
     padding: 5px 10px;
+    width: 33.333%;
     transition: color 0.3s ease;
 }
 
 .nav-links {
     display: flex; /* Use flex for the icons */
     justify-content: flex-end; /* Align icons to the right */
+    width: 33.333%;
 }
 
 .navObjects {
     color: white; /* Icon color */
     margin-left: 15px;
-    font-size: 30px;
+    font-size: clamp(0.75rem, 1.5vw, 3rem);
     transition: background-color 0.3s ease; /* Smooth hover transition */
     cursor: pointer; /* Pointer cursor on hover */
 }
@@ -258,21 +260,26 @@ span:last-child {
    Logo and GIF Styles
    ============================== */
 .logo-link {
-    display: inline-block;
-    text-align: center; /* Center the logo */
+    display: flex;
+    justify-content: center;
+    /* Center the image inside the link */
     padding-top: 10px;
     padding-bottom: 10px;
-    width: 20%;
+    width: 33.333333%;
 }
 
+/* GIF styling */
 .gifClass {
-    width: auto; /* Maintain aspect ratio */
-    max-width: 75%; /* Limit width */
-    max-height: 75%; /* Limit height */
-    background-size: contain; /* Ensure GIF scales proportionally */
+    width: auto;
+    /* Keep the aspect ratio */
+    max-width: 40%;
+    /* Adjust width */
+    max-height: 40%;
+    /* Adjust height */
+    background-size: contain;
+    /* Ensure the GIF scales proportionally */
     background-repeat: no-repeat;
     display: block;
-    margin-left: 50px; /* Centering adjustment */
 }
 
 /* ==============================
