@@ -169,7 +169,7 @@ Rectangle Color Animations
 ==========*/
 
 /* Green rectangle style */
-.green {
+.rectangle.green {
     color: #F7F9FB;
     background-color: #61C9A8ed;
     border: 0px solid;
@@ -192,7 +192,7 @@ Rectangle Color Animations
 }
 
 /* Red rectangle style */
-.red {
+.rectangle.red {
     color: #F7F9FB;
     background-color: #EA526F;
     border: 0px solid;

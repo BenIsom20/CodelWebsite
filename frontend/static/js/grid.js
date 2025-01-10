@@ -310,15 +310,15 @@ async function loadGridState() {
     const startIndex = newCurrentRow * totalColumns;
     const endIndex = startIndex + totalColumns;
 
-    // Loop through each rectangle in the current row to check if all pass
-    for (let i = startIndex; i < endIndex; i++) {
-        const rectangle = rectangles[i];
-        // Check if the rectangle has the 'green' class
-        if (!rectangle.classList.contains('green')) {
-            // If any rectangle is not green, set fail to true
-            fail = true;
-        }
-    }
+    // // Loop through each rectangle in the current row to check if all pass
+    // for (let i = startIndex; i < endIndex; i++) {
+    //     const rectangle = rectangles[i];
+    //     // Check if the rectangle has the 'green' class
+    //     if (!rectangle.classList.contains('green')) {
+    //         // If any rectangle is not green, set fail to true
+    //         fail = true;
+    //     }
+    // }
 
     // If none of the rectangles in the current row failed (i.e., all are green)
     if (!fail) {
