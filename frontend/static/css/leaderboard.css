@@ -5,7 +5,7 @@
     margin: 0;
     background-color: #333533; /* Dark background */
     color: #F7F9FB; /* Light text color */
-    font-family: Consolas, Monaco, "Lucida Console", Courier New, monospace; /* Monospace font */
+    font-family: "Fira Code", monospace;
     opacity: 0; /* Initial opacity for fade-in effect */
 }
 
@@ -228,6 +228,12 @@ span:last-child {
 
 .backButton:hover {
     animation: dance 0.6s ease-in-out; /* Back button dance animation */
+}
+
+/* Back button div width */
+.back {
+    display: flex;
+    width: 33.333%;
 }
 
 /* ==============================
