@@ -2,7 +2,7 @@
     text-align: center; 
     padding-top: 10vh; 
     width: 60%;
-    padding-bottom: 25px; 
+    padding-bottom:  2.74423710208562vh; 
     font-size: clamp(1rem, 1.5vw, 3rem);
 }
 
@@ -88,7 +88,7 @@ Layout Styles
     row-gap: 20px;
     /* Reduced gap */
     column-gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 2.1953896816684964vh;
     justify-content: center;
     /* Centers grid items horizontally */
     /* Shift the grid to the left by 50px */
@@ -126,11 +126,11 @@ Button Styles
     /* Black text */
     border: 0px solid 333533;
     /* Black border for definition */
-    border-radius: clamp(2px, 1vw, 10px); 
+    border-radius: clamp(2px, 1vw, 5px); 
     /* Rounded corners, scaled with viewport width */
-    padding: clamp(6px, 2vw + 1vh, 16px) clamp(12px, 4vw, 30px);
+    padding: clamp(6px, 2vw + 1vh, 10px) clamp(12px, 4vw, 20px);
     /* Scaled padding */
-    font-size: clamp(12px, 2.5vw, 22px);
+    font-size: clamp(12px, 2.5vw, 18px);
     /* Scaled font size */
     /* Comfortable font size */
     font-weight: bold;
