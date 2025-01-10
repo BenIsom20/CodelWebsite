@@ -1,3 +1,4 @@
+let popupPublicIp = "44.201.228.74";
 // Global variable tracking if stats was clicked
 let cameFrom = false;
 
@@ -90,7 +91,7 @@ async function fetchStats() {
         return null; // Indicate no stats are available since no user logged in 
     }
     try {
-        const response = await fetch(`http://${publicIp}/stats`, {
+        const response = await fetch(`http://${popupPublicIp}/stats`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -281,7 +282,7 @@ function captureDelete() {
 // Function to register a new user
 async function registerUser(username, password, email) {
     // Send a POST request to the registration endpoint
-    const response = await fetch(`http://${publicIp}/register`, {
+    const response = await fetch(`http://${popupPublicIp}/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -303,7 +304,7 @@ async function registerUser(username, password, email) {
 async function loginUser(username, password) {
     try {
         // Send a POST request to the login endpoint
-        const response = await fetch(`http://${publicIp}/login`, {
+        const response = await fetch(`http://${popupPublicIp}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -341,7 +342,7 @@ async function loginUser(username, password) {
 async function deleteUser(username, password) {
     // Send a POST request to the delete user endpoint
     const payload = { username, password };
-    const response = await fetch(`http://${publicIp}/delete_user`, {
+    const response = await fetch(`http://${popupPublicIp}/delete_user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -365,7 +366,7 @@ async function logoutUserOnDel(paramusername) {
     if (!token) return; // Exit if no token is found
 
     // Send a GET request to the protected endpoint with the token in the Authorization header
-    const response = await fetch(`http://${publicIp}/protected`, {
+    const response = await fetch(`http://${popupPublicIp}/protected`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`
