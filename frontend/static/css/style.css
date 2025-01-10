@@ -1,6 +1,6 @@
 #question{
     text-align: center; 
-    padding-top: 2vh; 
+    padding-top: 20vh; 
     width: 80%; 
     padding-bottom: 25px; 
     font-size: clamp(1rem, 1.5vw, 3rem);
@@ -334,7 +334,7 @@ Navigation Styles
     color: #F7F9FB;
     /* Icon color */
     margin-left: 15px;
-    font-size: clamp(2rem, 2vw, 3rem);
+    font-size: 1.75vw;
     transition: background-color 0.3s ease;
     cursor: pointer;
 }
