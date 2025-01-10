@@ -408,10 +408,10 @@ def protected():
 # Helper function to get a database connection
 def get_db_connection():
     return mysql.connector.connect(
-        host="db",  # Docker service name for the database
-        user="devuser",
-        password="devpass",
-        database="qsdb"
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
 
 # Route to update the user's state after a victory
