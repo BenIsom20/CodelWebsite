@@ -10,7 +10,7 @@
     /* Light text color for readability */
     font-family: "Fira Code", monospace;
     /* Monospace font for code */
-    font-size: 1.0vw;
+    font-size: clamp(1rem, 1vw, 3rem);
     /* Larger font size for better readability */
     line-height: 1.6;
     /* Increased line height for better line spacing */
