@@ -1,5 +1,8 @@
 // JAVASCRIPT FOR ALL GRID AND TEXT THINGS
 
+// import the publicIp from static to be referenced for backend calls
+import { publicIp } from './static/js/main.js';
+
 // Get references to the grid container and buttons from the DOM
 const gridContainer = document.getElementById('grid-container');  // The container where the rectangles will be added
 const addRowButton = document.getElementById('submitCode');  // Button to trigger adding a new row

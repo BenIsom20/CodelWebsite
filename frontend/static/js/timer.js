@@ -1,3 +1,6 @@
+// import the publicIp from static to be referenced for backend calls
+import { publicIp } from './static/js/main.js';
+
 let stopwatchTime = 0; // Initial time in seconds (starts at 0)
 let stopwatchInterval; // Holds the interval ID for the stopwatch
 let isRunning = false; // Flag to track if the stopwatch is currently running
