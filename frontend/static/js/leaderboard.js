@@ -1,3 +1,6 @@
+// import the publicIp from static to be referenced for backend calls
+import { publicIp } from './static/js/main.js';
+
 var username = ""; // Global var storing the username of currently logged in player
 let offset = 0; // Start offset
 const limit = 10; // Number of entries to fetch per request
