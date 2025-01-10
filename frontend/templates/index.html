@@ -20,10 +20,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
-    <script src="{{ url_for('static', filename='js/editor.js') }}" defer type="module"></script>
-    <script src="{{ url_for('static', filename='js/timer.js') }}" defer type="module"></script>
-    <script src="{{ url_for('static', filename='js/grid.js') }}" defer type="module"></script>
-    <script src="{{ url_for('static', filename='js/popup.js') }}" defer type="module"></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/timer.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/grid.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/popup.js') }}" defer></script>
     <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png">
 </head>
 
@@ -161,7 +161,7 @@
     </div>
 
     <!-- MAIN JS -->
-    <script src="{{ url_for('static', filename='js/main.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <!-- Script for first appearance animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
 </body>

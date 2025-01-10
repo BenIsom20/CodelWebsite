@@ -1,6 +1,3 @@
-// import the publicIp from static to be referenced for backend calls
-import { publicIp } from './static/js/main.js';
-
 // Global variable tracking if stats was clicked
 let cameFrom = false;
 

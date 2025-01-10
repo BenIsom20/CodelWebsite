@@ -1,8 +1,5 @@
 // JAVASCRIPT CODE FOR ALL CODEMIRROR ITEMS
 
-// import the publicIp from static to be referenced for backend calls
-import { publicIp } from './static/js/main.js';
-
 // Global attempt counter
 var attempt = 0;
 
