@@ -203,7 +203,6 @@ span:last-child {
     text-decoration: none; /* Remove underline */
     font-size: clamp(0.75rem, 1vw, 3rem);
     padding: 5px 10px;
-    width: 33.333%;
     transition: color 0.3s ease;
 }
 
