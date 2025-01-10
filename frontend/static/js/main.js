@@ -141,7 +141,7 @@ document.getElementById("resetButton").addEventListener("click", resetState);
 
 // Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
 async function setIndexLocalStorageWithExpiry(key, value) {
-    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight");
+    const response = await fetch(`http://${publicIp}/get_chicago_midnight`);
     const info = await response.json();
 
     if (response.ok) {

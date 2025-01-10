@@ -8,7 +8,7 @@ async function getUsername() {
     if (!token) { return; } // Exit if user not logged in 
 
     // Send a GET request to the protected endpoint with the token in the Authorization header
-    const response = await fetch('http://localhost:5000/protected', {
+    const response = await fetch(`http://${publicIp}/protected`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -28,7 +28,7 @@ async function loadLeaderboard() {
     // Calls to the backend to get the info needed to populate the leaderboard
     const loadMoreButton = document.getElementById("load-more");
     loadMoreButton.classList.add("hidden");
-    const response = await fetch(`http://127.0.0.1:5000/getLeaderboard?offset=${offset}&limit=${limit}`);
+    const response = await fetch(`http://${publicIp}/getLeaderboard?offset=${offset}&limit=${limit}`);
 
     // Parse the response
     const data = await response.json();

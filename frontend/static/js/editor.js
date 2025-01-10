@@ -264,7 +264,7 @@ async function victorySequence() {
     const timeDic = { "time_increment": time }
 
     // Send the user's code to the backend via a POST request to update total time
-    const response = await fetch("http://127.0.0.1:5000/updateAllTime", {
+    const response = await fetch(`http://${publicIp}/updateAllTime`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(timeDic),
