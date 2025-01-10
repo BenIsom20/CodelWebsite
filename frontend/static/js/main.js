@@ -23,6 +23,7 @@ async function getUserData() {
         setIndexLocalStorageWithExpiry("stopwatchTime", time);
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
+        setIndexLocalStorageWithExpiry("victory", true);
         
         loadCode();
         startStopwatch();

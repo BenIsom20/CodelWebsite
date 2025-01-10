@@ -138,6 +138,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
                 colorRow(resultsArray, numTests); // Color the row based on test outcomes
             } else if (victoryCheck(resultsArray) == "s") {
                 // All tests passed
+                await setLocalStorageWithExpiry("victory", true);
                 colorRow(resultsArray, numTests); // Update grid with success colors
                 victory = true;
                 const submitButton = document.getElementById("submitCode");
