@@ -1,3 +1,5 @@
+publicIp = "44.201.228.74"; // Setting publicIp for backend calls
+
 var username = ""; // Global var storing the username of currently logged in player
 let offset = 0; // Start offset
 const limit = 10; // Number of entries to fetch per request
@@ -8,7 +10,7 @@ async function getUsername() {
     if (!token) { return; } // Exit if user not logged in 
 
     // Send a GET request to the protected endpoint with the token in the Authorization header
-    const response = await fetch(`http://${window.publicIp}/protected`, {
+    const response = await fetch(`http://${publicIp}/protected`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -28,7 +30,7 @@ async function loadLeaderboard() {
     // Calls to the backend to get the info needed to populate the leaderboard
     const loadMoreButton = document.getElementById("load-more");
     loadMoreButton.classList.add("hidden");
-    const response = await fetch(`http://${window.publicIp}/getLeaderboard?offset=${offset}&limit=${limit}`);
+    const response = await fetch(`http://${publicIp}/getLeaderboard?offset=${offset}&limit=${limit}`);
 
     // Parse the response
     const data = await response.json();
