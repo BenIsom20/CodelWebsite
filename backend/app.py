@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import subprocess
-from db.db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id, get_challenge_by_date, get_challenge_cases_by_date, get_function_skeleton_by_date
+from backend.db.db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id, get_challenge_by_date, get_challenge_cases_by_date, get_function_skeleton_by_date
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import bcrypt
 import mysql.connector
