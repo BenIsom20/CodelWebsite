@@ -317,6 +317,7 @@ Button Styles
 
 /* Back button div width */
 .back {
+    display: flex;
     width: 33.333%;
 }
 
