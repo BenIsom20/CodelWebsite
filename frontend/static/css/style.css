@@ -223,7 +223,7 @@ Navbar Styles
     box-shadow: 0 2px 50px #ffe66d;
     position: fixed;
     top: 0px;
-    margin-bottom:10px;
+    margin-bottom:50px;
     /* Makes sure the navbar stays above other content */
 }
 
