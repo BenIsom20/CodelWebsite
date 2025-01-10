@@ -1,7 +1,7 @@
 #question{
     text-align: center; 
     padding-top: 10vh; 
-    width: minmax(80%, 700px);
+    width: 60%;
     padding-bottom: 25px; 
     font-size: clamp(1rem, 1.5vw, 3rem);
 }
@@ -126,11 +126,12 @@ Button Styles
     /* Black text */
     border: 0px solid 333533;
     /* Black border for definition */
-    border-radius: 5px;
-    /* Rounded corners */
-    padding: 10px 20px;
-    /* Padding for size */
-    font-size: 18px;
+    border-radius: clamp(4px, 1vw, 10px);  /* Scaled border radius */
+    /* Rounded corners, scaled with viewport width */
+    padding: clamp(8px, 2vw + 1vh, 16px) clamp(16px, 4vw, 30px);
+    /* Scaled padding */
+    font-size: clamp(14px, 2.5vw, 22px);
+    /* Scaled font size */
     /* Comfortable font size */
     font-weight: bold;
     /* Bold text */
