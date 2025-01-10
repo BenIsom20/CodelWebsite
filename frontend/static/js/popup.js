@@ -340,6 +340,7 @@ async function loginUser(username, password) {
 // Function to delete a user account
 async function deleteUser(username, password) {
     // Send a POST request to the delete user endpoint
+    const payload = { username, password };
     const response = await fetch(`http://${publicIp}/delete_user`, {
         method: 'POST',
         headers: {

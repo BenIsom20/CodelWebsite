@@ -5,7 +5,6 @@ async function getUserData() {
     const token = localStorage.getItem("jwt_token"); // Retrieve JWT token
     const gridData = getIndexLocalStorageWithExpiry("gridState"); // Retrieve grid state
 
-    const gridData = getIndexLocalStorageWithExpiry("gridState");
     // Send a GET request to the backend to fetch user data
     const response = await fetch(`http://${publicIp}/get_user_data`, {
         method: "GET",  // GET method is used to retrieve data from the server
