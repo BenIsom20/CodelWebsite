@@ -11,12 +11,12 @@ def remove_challenge(challenge_id):
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    conn = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
+    )
     
     cursor = conn.cursor()
 
@@ -63,13 +63,12 @@ def list_challenges():
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
-    
+    conn = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
+    )
     cursor = conn.cursor()
 
     # Fetches all challenges and returns all
@@ -96,12 +95,12 @@ def remove_all():
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    conn = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
+    )
     cursor = conn.cursor()
 
     # Fetches all challenges from databse

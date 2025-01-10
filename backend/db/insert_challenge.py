@@ -31,12 +31,12 @@ def insert_challenge_data(challenge_data):
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    conn = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
+    )
     
     cursor = conn.cursor()
 
@@ -118,12 +118,12 @@ def list_challenges():
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    conn = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
+    )
     
     cursor = conn.cursor()
 
@@ -152,12 +152,12 @@ def list_challenges_to_add():
     db_database = os.getenv('MYSQL_DATABASE')
 
     # Create configuration dictionary for database connections
-    conn = {
-        'host': db_host, 
-        'user': db_user, 
-        'password': db_password,
-        'database': db_database #database name
-    }
+    conn = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
+    )
     
     cursor = conn.cursor()
 
