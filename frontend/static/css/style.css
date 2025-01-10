@@ -1,10 +1,16 @@
 #question {
     text-align: center; 
     padding-top: 10vh; 
-    width: clamp(80%, 60%, 600px); /* Scales width closer to the edges on small screens */
+    width: 60%;
     padding-bottom: 2.74423710208562vh; 
     font-size: clamp(1rem, 1.5vw, 3rem);
     margin: 0 auto; /* Center the content */
+}
+/* Media query for smaller devices */
+@media (max-width: 480px) {
+    #question {
+        width: 90%; /* Allow more of the screen width to be used */
+    }
 }
 
 
