@@ -303,7 +303,7 @@ async function registerUser(username, password, email) {
 async function loginUser(username, password) {
     try {
         // Send a POST request to the login endpoint
-        const response = await fetch(`http://${publicIp}:5000/login`, {
+        const response = await fetch(`http://${publicIp}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
