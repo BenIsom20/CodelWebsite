@@ -178,19 +178,14 @@ span:last-child {
 /* ==============================
    Navbar Styles
    ============================== */
-.mainNavbar, .subNavbar {
+.subNavbar {
     background-color: #333533; /* Dark background color */
     color: white;
-    padding: 10px 20px;
-    position: relative; /* Keeps the navbar at the top */
+    padding: 0px 20px;
     width: 100%;
     z-index: 1000; /* Keeps navbar above other content */
-    box-shadow: 0 2px 50px black; /* Adds shadow */
-}
-
-.subNavbar {
-    position: fixed; /* Keeps the sub-navbar fixed */
     box-shadow: 0 2px 5px black; /* Adds shadow */
+    position: fixed; /* Keeps the sub-navbar fixed */
 }
 
 .navbar-container {
@@ -206,7 +201,7 @@ span:last-child {
 .backButton {
     color: #ffe66d; /* Neon yellow text */
     text-decoration: none; /* Remove underline */
-    font-size: 0.9375vw;
+    font-size: clamp(0.75rem, 1vw, 3rem);
     padding: 5px 10px;
     width: 33.333%;
     transition: color 0.3s ease;
