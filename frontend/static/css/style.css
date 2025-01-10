@@ -1,6 +1,6 @@
 #question{
     text-align: center; 
-    padding-top: 20vh; 
+    padding-top: 0px; 
     width: 80%; 
     padding-bottom: 25px; 
     font-size: clamp(1rem, 1.5vw, 3rem);
@@ -223,6 +223,7 @@ Navbar Styles
     box-shadow: 0 2px 50px #ffe66d;
     position: fixed;
     top: 0px;
+    margin-bottom:10px;
     /* Makes sure the navbar stays above other content */
 }
 
