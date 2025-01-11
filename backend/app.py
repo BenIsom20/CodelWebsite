@@ -22,7 +22,7 @@ db_user = os.getenv('MYSQL_USER')
 db_password = os.getenv('MYSQL_PASSWORD')
 db_database = os.getenv('MYSQL_DATABASE')
 jwt_secret_key = os.getenv('FWT_TOKEN')
-
+is_ready = False
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes
 CORS(app)
@@ -159,6 +159,12 @@ def midnight_job():
 
 # Start the scheduler
 scheduler.start()
+
+@app.route('/ready', methods=['GET'])
+def ready():
+    if is_ready:
+        return "OK", 200
+    return "Not Ready", 503
 
 # Route that returns the iso string of midnight in chicago
 @app.route('/get_chicago_midnight', methods=['GET'])
@@ -747,6 +753,8 @@ def addOneToAllUsers():
             cursor.close()
         if connection:
             connection.close()
+
+is_ready = True
 
 #ALL PATHS MUST BE ABOVE THIS CODE!
 if __name__ == "__main__":

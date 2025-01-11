@@ -74,6 +74,21 @@ function clearExpiredLocalStorage() {
 // Sets up the application when the window finishes loading.
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
+    var ready = false;
+    while(ready === false){
+        const response = await fetch(`http://${localIp}/ready`)
+        if(response.ok){
+            ready = true;
+           windowLoad();
+        } else{
+            // await for backend to be ready
+        }
+    }
+    
+    
+};
+
+async function windowLoad(){
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
     fetchTestExplanation(); // Fetch and display test explanation
@@ -102,7 +117,7 @@ window.onload = async function () {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
-};
+}
 
 // Creates a delay for a specified number of milliseconds.
 function delay(ms) {
