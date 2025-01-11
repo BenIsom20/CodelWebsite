@@ -23,13 +23,13 @@ async function getUserData() {
         setIndexLocalStorageWithExpiry("stopwatchTime", time);
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
-     
+
         loadCode();
         startStopwatch();
         await loadGridState();
     } else if (time && code && grid) {
         // Save data for ongoing work
-        if(!sessionStorage.getItem("alreadyLoaded")){
+        if (!sessionStorage.getItem("alreadyLoaded")) {
             setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
         sessionStorage.setItem("alreadyLoaded", "yes");
@@ -74,22 +74,6 @@ function clearExpiredLocalStorage() {
 // Sets up the application when the window finishes loading.
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
-    var ready = false;
-    while(ready === false){
-        const response = await fetch(`http://${publicIp}/ready`)
-        if(response.ok){
-            ready = true;
-           windowLoad();
-        } else{
-            console.log("fail");
-            // await for backend to be ready
-        }
-    }
-    
-    
-};
-
-async function windowLoad(){
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
     fetchTestExplanation(); // Fetch and display test explanation
@@ -118,7 +102,7 @@ async function windowLoad(){
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
-}
+};
 
 // Creates a delay for a specified number of milliseconds.
 function delay(ms) {
@@ -202,7 +186,7 @@ function smoothTransition(event) {
         document.body.classList.add('fade-out');
         setTimeout(() => {
             window.location.href = href;
-        }, 300); 
+        }, 300);
     }
     catch (error) {
         // empty might set up logging later 
