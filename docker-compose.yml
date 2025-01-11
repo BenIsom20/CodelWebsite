@@ -36,6 +36,7 @@ services:
       - db  # Ensures backend waits for db service to start before running
 
   nginx:
+    container_name: fproxy-codel-container
     image: nginx:latest
     ports:
       - "8080:80"
