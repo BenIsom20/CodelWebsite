@@ -266,7 +266,7 @@ async function loadGridState() {
 
     // Retrieve the saved grid state from localStorage
     const savedState = JSON.parse(getGridLocalStorageWithExpiry("gridState"));
-
+    alert(savedState);
     // Check if the saved state is valid and is an array
     if (savedState && Array.isArray(savedState)) {
         const grid = document.getElementById("grid-container");
