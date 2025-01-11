@@ -26,7 +26,7 @@ async function getUserData() {
      
         loadCode();
         startStopwatch();
-        loadGridState();
+        await loadGridState();
     } else if (time && code && grid) {
         // Save data for ongoing work
         if(!sessionStorage.getItem("alreadyLoaded")){
@@ -38,7 +38,7 @@ async function getUserData() {
         await delay(100);
         loadCode();
         startStopwatch();
-        loadGridState();
+        await loadGridState();
     } else {
         // Initialize new session if no valid data exists
         startStopwatch();
@@ -85,7 +85,7 @@ window.onload = async function () {
         // Initialize state for unauthenticated users
         startStopwatch();
         if (gridData) {
-            loadGridState();
+            await loadGridState();
         } else {
             initializeColumn();
         }
