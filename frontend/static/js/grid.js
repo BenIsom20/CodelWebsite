@@ -128,7 +128,7 @@ async function getUsername() {
 
 
     } catch (error) {
-        //may set up logging later
+        console.log(error);
     }
 }
 
