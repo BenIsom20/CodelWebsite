@@ -24,9 +24,9 @@ async function getUserData() {
         await setIndexLocalStorageWithExpiry("savedCode", code);
         await setIndexLocalStorageWithExpiry("gridState", grid);
 
-        await loadGridState();
         await loadCode();
         await startStopwatch();
+        await loadGridState();
         
     } else if (time && code && grid) {
         // Save data for ongoing work
@@ -36,10 +36,10 @@ async function getUserData() {
         sessionStorage.setItem("alreadyLoaded", "yes");
         await setIndexLocalStorageWithExpiry("savedCode", code);
         await setIndexLocalStorageWithExpiry("gridState", grid);
-        
-        await loadGridState();
+
         await loadCode();
         await startStopwatch();
+        await loadGridState();
         
     } else {
         // Initialize new session if no valid data exists
