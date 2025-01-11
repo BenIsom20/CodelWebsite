@@ -81,6 +81,7 @@ window.onload = async function () {
             ready = true;
            windowLoad();
         } else{
+            console.log("fail");
             // await for backend to be ready
         }
     }
