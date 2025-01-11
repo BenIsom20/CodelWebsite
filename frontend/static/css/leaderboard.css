@@ -216,7 +216,7 @@ span:last-child {
 .navObjects {
     color: white; /* Icon color */
     margin-left: 15px;
-    font-size: clamp(0.75rem, 1.5vw, 3rem);
+    font-size: clamp(1rem, 1.5vw, 3rem);
     transition: background-color 0.3s ease; /* Smooth hover transition */
     cursor: pointer; /* Pointer cursor on hover */
 }
