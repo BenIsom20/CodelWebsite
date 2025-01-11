@@ -85,7 +85,7 @@ async function initializeColumn() {
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
             gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
-            const height = gridElement.offsetWidth/numTest - numTest*10;
+            const height = gridElement.offsetWidth / numTest - numTest * 10;
             gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
 
@@ -110,6 +110,28 @@ async function initializeColumn() {
     amountOfRow++;
 }
 
+async function getUsername() {
+    try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`http://${publicIp}/protected`, {
+            // Send a GET request to the protected endpoint with the token in the Authorization header
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            const usernameDict = await response2.json();
+            const username = usernameDict.username;
+            return username;
+        }
+
+
+    } catch (error) {
+        //may set up logging later
+    }
+}
+
 // Function to fetch from backend what the challenge prompt is
 async function fetchTestExplanation() {
     const questionElement = document.getElementById("question");
@@ -123,22 +145,11 @@ async function fetchTestExplanation() {
 
     // checks for logged in user to change prompt to have their name
     if (localStorage.getItem('jwt_token')) {
-        try {
-            const token = localStorage.getItem('jwt_token');
-            const response2 = await fetch(`http://${publicIp}/protected`, {
-                // Send a GET request to the protected endpoint with the token in the Authorization header
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const usernameDict = await response2.json();
-            const username = usernameDict.username;
-            if (response2.ok && username) {
-                txt = `Hello ${username}, ${txt}`;
-            }
-        } catch (error) {
-            // empty for right now may add logging in future
+        const name = await getUsername();
+        if (name) {
+            txt = `Hello ${name}, ${txt}`;
+        } else {
+            txt = `Hello, ${txt}`;
         }
     } else {
         // If the user is not logged in, append a generic greeting to the question prompt
@@ -259,7 +270,7 @@ async function loadGridState() {
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
             gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
-            const height = gridElement.offsetWidth/numTest - numTest*10;
+            const height = gridElement.offsetWidth / numTest - numTest * 10;
             gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
     }
