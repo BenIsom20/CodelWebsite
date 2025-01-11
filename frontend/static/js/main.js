@@ -20,9 +20,9 @@ async function getUserData() {
     if (time && code && grid && victory) {
 
         // Save data to local storage and initialize components for completed state
-        setIndexLocalStorageWithExpiry("stopwatchTime", time);
-        setIndexLocalStorageWithExpiry("savedCode", code);
-        setIndexLocalStorageWithExpiry("gridState", grid);
+        await setIndexLocalStorageWithExpiry("stopwatchTime", time);
+        await setIndexLocalStorageWithExpiry("savedCode", code);
+        await setIndexLocalStorageWithExpiry("gridState", grid);
 
         await loadGridState();
         await loadCode();
@@ -34,8 +34,8 @@ async function getUserData() {
             setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
         sessionStorage.setItem("alreadyLoaded", "yes");
-        setIndexLocalStorageWithExpiry("savedCode", code);
-        setIndexLocalStorageWithExpiry("gridState", grid);
+        await setIndexLocalStorageWithExpiry("savedCode", code);
+        await setIndexLocalStorageWithExpiry("gridState", grid);
         await delay(100);
         await loadGridState();
         await loadCode();
@@ -74,14 +74,14 @@ function clearExpiredLocalStorage() {
 window.onload = async function () {
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
-    fetchTestExplanation(); // Fetch and display test explanation
+    await fetchTestExplanation(); // Fetch and display test explanation
 
     const token = localStorage.getItem("jwt_token");
     const gridData = getIndexLocalStorageWithExpiry("gridState");
 
     if (!token) {
         // Initialize state for unauthenticated users
-        startStopwatch();
+        await startStopwatch();
         if (gridData) {
             await loadGridState();
         } else {
