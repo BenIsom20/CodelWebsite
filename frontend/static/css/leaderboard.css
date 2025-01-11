@@ -80,6 +80,7 @@ main {
     color: #fff;
     padding: 1rem;
     font-weight: bold;
+    font-size: clamp(1rem, 1.5vw, 3rem);
 }
 
 .leaderboard-row {
@@ -286,6 +287,6 @@ span:last-child {
    Emoji Style
    ============================== */
 .emoji {
-    font-size: 1.3em;
+    font-size: clamp(1rem, 1.5vw, 3rem);
     /* Adjust size as needed */
 }
