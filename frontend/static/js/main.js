@@ -76,7 +76,7 @@ function clearExpiredLocalStorage() {
 window.onload = async function () {
     var ready = false;
     while(ready === false){
-        const response = await fetch(`http://${localIp}/ready`)
+        const response = await fetch(`http://${publicIp}/ready`)
         if(response.ok){
             ready = true;
            windowLoad();
