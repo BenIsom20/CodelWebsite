@@ -322,7 +322,7 @@ async function loadGridState() {
     // If none of the rectangles in the current row failed (i.e., all are green)
     if (!fail) {
         // Disable the submit button and stop the stopwatch if all tests are successful
-        await victorySequence();
+        victorySequence();
         const submitButton = document.getElementById("submitCode");
         submitButton.disabled = true;
         stopStopwatch();

@@ -221,6 +221,16 @@ async function saveProgress() {
 
 // Function to send victory state and related data to the backend
 async function victorySend() {
+    const time = getLocalStorageWithExpiry("stopwatchTime");
+    const timeDic = { "time_increment": time }
+
+    // Send the user's code to the backend via a POST request to update total time
+    const response = await fetch(`http://${publicIp}/updateAllTime`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(timeDic),
+    });
+
     // Check if user is signed in
     if (localStorage.getItem("jwt_token") != null) {
         // get data to send
@@ -250,7 +260,7 @@ async function victorySend() {
 }
 
 // Function for animation when user wins and updates total time on codel
-async function victorySequence() {
+function victorySequence() {
     // Animation for victory
     const navbar = document.getElementById("mainNavbar");
     const logo = document.getElementById("logo");
@@ -260,15 +270,6 @@ async function victorySequence() {
     });
     navbar.style.boxShadow = "0 2px 50px #61C9A8ed";
     logo.src = "static/images/V.gif?";
-    const time = getLocalStorageWithExpiry("stopwatchTime");
-    const timeDic = { "time_increment": time }
-
-    // Send the user's code to the backend via a POST request to update total time
-    const response = await fetch(`http://${publicIp}/updateAllTime`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(timeDic),
-    });
 }
 
 // Funciton for animation when user attempts and does not win
