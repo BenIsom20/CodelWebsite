@@ -36,7 +36,6 @@ async function getUserData() {
         sessionStorage.setItem("alreadyLoaded", "yes");
         await setIndexLocalStorageWithExpiry("savedCode", code);
         await setIndexLocalStorageWithExpiry("gridState", grid);
-        await delay(100);
         await loadGridState();
         await loadCode();
         await startStopwatch();
@@ -45,7 +44,6 @@ async function getUserData() {
         // Initialize new session if no valid data exists
         await startStopwatch();
         await initializeColumn();
-        await delay(100);
         await loadCode();
     }
 }
@@ -87,7 +85,6 @@ window.onload = async function () {
         } else {
             await initializeColumn();
         }
-        await delay(100);
         await loadCode();
     } else {
         // Retrieve and initialize user data
@@ -95,7 +92,7 @@ window.onload = async function () {
     }
 
     // Handle post-login state restoration
-    await delay(500);
+
     if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
