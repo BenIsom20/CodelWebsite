@@ -11,7 +11,7 @@
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="static/css/leaderboard.css">
-    <script src="static/js/popup.js" defer></script>
+    <script src="{{ url_for('static', filename='js/popup.js') }}" defer></script>
     <link rel="stylesheet" href="static/css/popup.css">
     <link rel="icon" href="static/images/CodelIcon.png" type="image/png">
 
@@ -22,8 +22,10 @@
     <!-- CODE FOR NAVBAR -->
     <nav class="subNavbar">
         <div class="navbar-container">
-            <a id="backtocode" href="/" class="backButton" >BACK TO
-                CODEL</a>
+            <div class="back">
+                <a id="backtocode" href="/" class="backButton" >BACK TO
+                    CODEL</a>
+            </div>
             <div class="logo-link">
                 <img class="gifClass" src="static/images/C.gif" alt="Animated Logo" id="logo">
             </div>
@@ -38,7 +40,7 @@
     <!-- CODE FOR THE LEADERBOARD-->
     <main>
         <div class="leaderboard-container">
-            <h1>CODEL Leaderboard</h1>
+            <h1>Leaderboard</h1>
             <div class="leaderboard-table">
                 <div class="leaderboard-header">
                     <span>Rank <span class="emoji">🏅</span></span>

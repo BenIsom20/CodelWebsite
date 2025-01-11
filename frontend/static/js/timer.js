@@ -57,7 +57,7 @@ async function setTimerLocalStorageWithExpiry(key, value) {
         expiryTime = item.expiry; // Use the existing expiry time
     } else {
         // Gets from backend what the time in chicago at midnight is to set as expiration date
-        const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight")
+        const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
         const info = await response.json();
         if (response.ok) {
             const date = info.chicago_midnight_utc;

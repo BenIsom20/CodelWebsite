@@ -46,11 +46,10 @@ document.getElementById("how").addEventListener("click", saveCode);
 
 // Fetch code skeleton from the backend.
 async function fetchSkeleton() {
-    // gets the skeleton from the backend to send to the editor
-    const response = await fetch("http://127.0.0.1:5000/get_skeleton");
-    if (response.ok) {
-        return await response.json();
-    }
+            const response = await fetch(`http://${publicIp}/get_skeleton`);
+            if (response.ok) {
+                return await response.json(); // Return parsed skeleton
+            }
 }
 
 // Load code from localStorage or fetch skeleton if not found.
@@ -71,7 +70,7 @@ document.getElementById("runCode").addEventListener("click", async function () {
     // Gets the code currently in the editor and sends it to backend for execution
     const userCode = editor.getValue();
     const outputDiv = document.getElementById("output");
-    const response = await fetch("http://127.0.0.1:5000/run", {
+    const response = await fetch(`http://${publicIp}/run`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: userCode }),
@@ -96,7 +95,8 @@ document.getElementById("submitCode").addEventListener("click", async function (
     const userCode = editor.getValue();
     const outputDiv = document.getElementById("output");
     try {
-        const response = await fetch("http://127.0.0.1:5000/test", {
+        // Send the user's code to the backend via a POST request
+        const response = await fetch(`http://${publicIp}/test`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ code: userCode }),
@@ -207,8 +207,8 @@ async function saveProgress() {
             attempts: attempt
         };
 
-        // Send a POST request to the backend to update the users data
-        fetch("http://localhost:5000/saveProgress", {
+        // Send a POST request to the backend to update victory state
+        fetch(`http://${publicIp}/saveProgress`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -237,8 +237,8 @@ async function victorySend() {
             attempts: attempt
         };
 
-        // Send a POST request to the backend to update users data
-        fetch("http://localhost:5000/victory", {
+        // Send a POST request to the backend to update victory state
+        fetch(`http://${publicIp}/victory`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -264,7 +264,7 @@ async function victorySequence() {
     const timeDic = { "time_increment": time }
 
     // Send the user's code to the backend via a POST request to update total time
-    const response = await fetch("http://127.0.0.1:5000/updateAllTime", {
+    const response = await fetch(`http://${publicIp}/updateAllTime`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(timeDic),
@@ -283,8 +283,7 @@ function trySequence() {
 
 // Function to set to the local storage with expiration date at midnight chicago time
 async function setLocalStorageWithExpiry(key, value) {
-    // Gets from backend what the time in chicago at midnight is to set as expiration date
-    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight")
+    const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
     const info = await response.json();
     if (response.ok) {
         const date = info.chicago_midnight_utc;

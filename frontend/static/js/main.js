@@ -1,13 +1,14 @@
-// Fetches user-specific data from the backend and initializes the application state.
-// Handles scenarios where the user has completed their session, partially completed, or has no saved data.
+publicIp = "44.201.228.74";
+
+// Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {
     const token = localStorage.getItem("jwt_token"); // Retrieve JWT token
     const gridData = getIndexLocalStorageWithExpiry("gridState"); // Retrieve grid state
 
-    // Fetch user data from the backend
-    const response = await fetch("http://127.0.0.1:5000/get_user_data", {
-        method: "GET",
-        headers: { 'Authorization': `Bearer ${token}` },
+    // Send a GET request to the backend to fetch user data
+    const response = await fetch(`http://${publicIp}/get_user_data`, {
+        method: "GET",  // GET method is used to retrieve data from the server
+        headers: { 'Authorization': `Bearer ${token}` },  // Include the token for authorization
     });
 
     const result = await response.json(); // Parse JSON response
@@ -19,34 +20,30 @@ async function getUserData() {
     if (time && code && grid && victory) {
 
         // Save data to local storage and initialize components for completed state
-        setIndexLocalStorageWithExpiry("stopwatchTime", time);
-        setIndexLocalStorageWithExpiry("savedCode", code);
-        setIndexLocalStorageWithExpiry("gridState", grid);
+        await setIndexLocalStorageWithExpiry("stopwatchTime", time);
+        await setIndexLocalStorageWithExpiry("savedCode", code);
+        await setIndexLocalStorageWithExpiry("gridState", grid);
+
+        await loadGridState();
+        await loadCode();
+        await startStopwatch();
         
-        loadCode();
-        startStopwatch();
-        loadGridState();
     } else if (time && code && grid) {
         // Save data for ongoing work
-        if(!sessionStorage.getItem("alreadyLoaded")){
+        if (!sessionStorage.getItem("alreadyLoaded")) {
             setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
         sessionStorage.setItem("alreadyLoaded", "yes");
-        setIndexLocalStorageWithExpiry("savedCode", code);
-        setIndexLocalStorageWithExpiry("gridState", grid);
-        await delay(100);
-        loadCode();
-        startStopwatch();
-        loadGridState();
+        await setIndexLocalStorageWithExpiry("savedCode", code);
+        await setIndexLocalStorageWithExpiry("gridState", grid);
+        await loadGridState();
+        await loadCode();
+        await startStopwatch();
+        
     } else {
         // Initialize new session if no valid data exists
-        startStopwatch();
-        if (gridData) {
-            loadGridState();
-        } else {
-            initializeColumn();
-        }
-        await delay(100);
+        await startStopwatch();
+        await initializeColumn();
         await loadCode();
     }
 }
@@ -73,29 +70,21 @@ function clearExpiredLocalStorage() {
 // Sets up the application when the window finishes loading.
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
-    // Handle back navigation or cache restoration
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted) {
-            window.location.reload();
-        }
-    });
-
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
-    fetchTestExplanation(); // Fetch and display test explanation
+    await fetchTestExplanation(); // Fetch and display test explanation
 
     const token = localStorage.getItem("jwt_token");
     const gridData = getIndexLocalStorageWithExpiry("gridState");
 
     if (!token) {
         // Initialize state for unauthenticated users
-        startStopwatch();
+        await startStopwatch();
         if (gridData) {
-            loadGridState();
+            await loadGridState();
         } else {
-            initializeColumn();
+            await initializeColumn();
         }
-        await delay(100);
         await loadCode();
     } else {
         // Retrieve and initialize user data
@@ -103,7 +92,7 @@ window.onload = async function () {
     }
 
     // Handle post-login state restoration
-    await delay(500);
+
     if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
@@ -146,7 +135,7 @@ document.getElementById("resetButton").addEventListener("click", resetState);
 
 // Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
 async function setIndexLocalStorageWithExpiry(key, value) {
-    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight");
+    const response = await fetch(`http://${publicIp}/get_chicago_midnight`);
     const info = await response.json();
 
     if (response.ok) {
@@ -192,7 +181,7 @@ function smoothTransition(event) {
         document.body.classList.add('fade-out');
         setTimeout(() => {
             window.location.href = href;
-        }, 300); 
+        }, 300);
     }
     catch (error) {
         // empty might set up logging later 

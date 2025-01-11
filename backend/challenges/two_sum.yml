@@ -1,6 +1,6 @@
 challenge:
   name: "Two Sum"
-  date: "2025-01-06"
+  date: "2025-01-10"
   function:
     name: "two_sum"
     parameters: ["nums", "target"]

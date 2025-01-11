@@ -1,15 +1,21 @@
 import mysql.connector
+import os
 from datetime import datetime
 
-# Database connection parameters
+# Get ENVs for database configuration
+db_host = os.getenv('MYSQL_HOST')
+db_user = os.getenv('MYSQL_USER')
+db_password = os.getenv('MYSQL_PASSWORD')
+db_database = os.getenv('MYSQL_DATABASE')
+
+# Create configuration dictionary for database connections
 db_config = {
-    'host': 'db',  
-    'user': 'devuser',  
-    'password': 'devpass',  
-    'database': 'qsdb'  
+    'host': db_host, 
+    'user': db_user, 
+    'password': db_password,
+    'database': db_database #database name
 }
 
-# Retrieves a specific challenge by its ID from the database.
 def get_challenge_by_id(challenge_id):
     connection = None
     try:
