@@ -31,11 +31,12 @@ async function getUserData() {
     } else if (time && code && grid) {
         // Save data for ongoing work
         if (!sessionStorage.getItem("alreadyLoaded")) {
-            setIndexLocalStorageWithExpiry("stopwatchTime", time);
+            await setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
         sessionStorage.setItem("alreadyLoaded", "yes");
         await setIndexLocalStorageWithExpiry("savedCode", code);
         await setIndexLocalStorageWithExpiry("gridState", grid);
+        
         await loadGridState();
         await loadCode();
         await startStopwatch();
@@ -98,11 +99,6 @@ window.onload = async function () {
         document.getElementById("stats").click();
     }
 };
-
-// Creates a delay for a specified number of milliseconds.
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // Reloads the logo image to prevent caching issues.
 function reloadGif() {

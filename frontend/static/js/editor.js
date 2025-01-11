@@ -151,7 +151,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
     } catch (error) {
         // no use right now may set up loggin in future
     }
-    storeGridState(victory); // Save the grid state to localStorage
+    await storeGridState(victory); // Save the grid state to localStorage
 });
 
 // Function to check if all tests passed

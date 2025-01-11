@@ -23,7 +23,7 @@ async function getUsername() {
         username = data.username; // Store the username
     }
 }
-getUsername(); // calls this right away 
+
 
 // Function to load leaderboard entries
 async function loadLeaderboard() {
@@ -102,13 +102,14 @@ async function loadLeaderboard() {
 }
 
 // Load initial leaderboard data on page load
-window.onload = function () {
+window.onload = async function () {
+    await getUsername(); // calls this right away 
     // Checks if user is returning from the stats page
     if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
-    loadLeaderboard();
+    await loadLeaderboard();
     document.body.classList.add('fade-in');
 
 }

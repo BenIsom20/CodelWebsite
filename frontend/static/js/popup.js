@@ -354,7 +354,7 @@ async function deleteUser(username, password) {
     const data = await response.json();
     if (response.ok) {
         document.getElementById('delnote').innerHTML = "Successfully Deleted Account";
-        logoutUserOnDel(username); // logs out the user when account deleted
+        await logoutUserOnDel(username); // logs out the user when account deleted
     } else {
         document.getElementById('delnote').innerHTML = "Username or Password Incorrect";
     }
