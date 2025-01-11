@@ -266,7 +266,6 @@ async function loadGridState() {
 
     // Retrieve the saved grid state from localStorage
     const savedState = JSON.parse(getGridLocalStorageWithExpiry("gridState"));
-    alert(savedState);
     // Check if the saved state is valid and is an array
     if (savedState && Array.isArray(savedState)) {
         const grid = document.getElementById("grid-container");
@@ -313,12 +312,6 @@ async function loadGridState() {
     // Loop through each rectangle in the current row to check if all pass
     for (let i = startIndex; i < endIndex; i++) {
         const rectangle = rectangles[i];
-        if(rectangle){
-            alert(rectangle);
-        }
-        else{
-            alert("no rectangle");
-        }
         // Check if the rectangle has the 'green' class
         if (!rectangle.classList.contains('green')) {
             // If any rectangle is not green, set fail to true
