@@ -56,7 +56,7 @@ async function setTimerLocalStorageWithExpiry(key, value) {
         const item = JSON.parse(savedItem);
         expiryTime = item.expiry; // Use the existing expiry time
     } else {
-        expiryTime = getIndexLocalStorageWithExpiry("expiry");
+        expiryTime = getTimerLocalStorageWithExpiry("expiry");
     }
     const data = {
         value: value,

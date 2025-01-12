@@ -346,7 +346,7 @@ async function loadGridState() {
 
 // Function to set to the local storage with expiration date at midnight chicago time
 function setGridLocalStorageWithExpiry(key, value) {
-    const expiration = getIndexLocalStorageWithExpiry("expiry");
+    const expiration = getGridLocalStorageWithExpiry("expiry");
     if(expiration){
         const data = { value, expiry: expiration };
         localStorage.setItem(key, JSON.stringify(data));

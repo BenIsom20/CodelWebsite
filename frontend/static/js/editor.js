@@ -284,7 +284,7 @@ function trySequence() {
 
 // Function to set to the local storage with expiration date at midnight chicago time
 function setLocalStorageWithExpiry(key, value) {
-    const expiration = getIndexLocalStorageWithExpiry("expiry");
+    const expiration = getLocalStorageWithExpiry("expiry");
         if(expiration){
             const data = { value, expiry: expiration };
             localStorage.setItem(key, JSON.stringify(data));
