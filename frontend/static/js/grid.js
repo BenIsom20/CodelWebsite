@@ -125,6 +125,9 @@ async function getUsername() {
             const username = usernameDict.username;
             return username;
         }
+        else{
+            alert(response.json.error)
+        }
 
 
     } catch (error) {
@@ -149,6 +152,7 @@ async function fetchTestExplanation() {
         if (name) {
             txt = `Hello ${name}, ${txt}`;
         } else {
+            
             txt = `Hello, ${txt}`;
         }
     } else {
