@@ -34,7 +34,7 @@ editor.setSize("100%", 300); // Set the editor size
 async function saveCode() {
     const userCode = editor.getValue();
     const stringUserCode = JSON.stringify(userCode);
-    await setLocalStorageWithExpiry("savedCode", stringUserCode);
+    setLocalStorageWithExpiry("savedCode", stringUserCode);
 }
 
 // Event listener for the "Leader" button to save code
@@ -111,7 +111,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
         } else {
             // Save the submitted code to localStorage
             const stringUserCode = JSON.stringify(userCode);
-            await setLocalStorageWithExpiry("savedCode", stringUserCode);
+            setLocalStorageWithExpiry("savedCode", stringUserCode);
 
             // Notify the user of successful submission
             outputDiv.innerHTML = "Code Successfully Submitted";
@@ -283,21 +283,14 @@ function trySequence() {
 }
 
 // Function to set to the local storage with expiration date at midnight chicago time
-async function setLocalStorageWithExpiry(key, value) {
-    const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
-    const info = await response.json();
-    if (response.ok) {
-        const date = info.chicago_midnight_utc;
-        const objdate = new Date(date);
-        var expiryTime = objdate.getTime();
-
-    }
-    const data = {
-        value: value,
-        expiry: expiryTime,
-    };
-
-    localStorage.setItem(key, JSON.stringify(data));
+function setLocalStorageWithExpiry(key, value) {
+    const expiration = getIndexLocalStorageWithExpiry("expiry");
+        if(expiration){
+            const data = { value, expiry: expiration };
+            localStorage.setItem(key, JSON.stringify(data));
+        } else{
+            // may set up logging later 
+        }
 }
 
 // Function to pull from local storage and check if expired or not and only return if not expired

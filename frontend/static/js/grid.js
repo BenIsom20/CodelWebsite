@@ -248,7 +248,7 @@ async function storeGridState(victory) {
 
     // Save the array to localStorage
     const jsongridState = JSON.stringify(gridState);
-    await setGridLocalStorageWithExpiry("gridState", jsongridState);
+    setGridLocalStorageWithExpiry("gridState", jsongridState);
 
     // checks if there was a victory to corresponding animations and what data to send to the backend
     if (victory) {
@@ -345,21 +345,14 @@ async function loadGridState() {
 }
 
 // Function to set to the local storage with expiration date at midnight chicago time
-async function setGridLocalStorageWithExpiry(key, value) {
-
-    const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
-    const info = await response.json();
-    if (response.ok) {
-        const date = info.chicago_midnight_utc;
-        const objdate = new Date(date);
-        var expiryTime = objdate.getTime();
-
+function setGridLocalStorageWithExpiry(key, value) {
+    const expiration = getIndexLocalStorageWithExpiry("expiry");
+    if(expiration){
+        const data = { value, expiry: expiration };
+        localStorage.setItem(key, JSON.stringify(data));
+    } else{
+        // may set up logging later 
     }
-    const data = {
-        value: value,
-        expiry: expiryTime,
-    };
-    localStorage.setItem(key, JSON.stringify(data));
 }
 
 // Function to pull from local storage and check if expired or not and only return if not expired

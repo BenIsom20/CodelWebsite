@@ -20,9 +20,9 @@ async function getUserData() {
     if (time && code && grid && victory) {
 
         // Save data to local storage and initialize components for completed state
-        await setIndexLocalStorageWithExpiry("stopwatchTime", time);
-        await setIndexLocalStorageWithExpiry("savedCode", code);
-        await setIndexLocalStorageWithExpiry("gridState", grid);
+        setIndexLocalStorageWithExpiry("stopwatchTime", time);
+        setIndexLocalStorageWithExpiry("savedCode", code);
+        setIndexLocalStorageWithExpiry("gridState", grid);
 
         await loadCode();
         await startStopwatch();
@@ -31,11 +31,11 @@ async function getUserData() {
     } else if (time && code && grid) {
         // Save data for ongoing work
         if (!sessionStorage.getItem("alreadyLoaded")) {
-            await setIndexLocalStorageWithExpiry("stopwatchTime", time);
+            setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
         sessionStorage.setItem("alreadyLoaded", "yes");
-        await setIndexLocalStorageWithExpiry("savedCode", code);
-        await setIndexLocalStorageWithExpiry("gridState", grid);
+        setIndexLocalStorageWithExpiry("savedCode", code);
+        setIndexLocalStorageWithExpiry("gridState", grid);
 
         await loadCode();
         await startStopwatch();
@@ -72,6 +72,7 @@ function clearExpiredLocalStorage() {
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
     document.body.classList.add('fade-in'); // Add fade-in effect
+    await setExpiry();
     clearExpiredLocalStorage(); // Remove expired localStorage data
     await fetchTestExplanation(); // Fetch and display test explanation
 
@@ -131,8 +132,7 @@ function resetState() {
 }
 document.getElementById("resetButton").addEventListener("click", resetState);
 
-// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
-async function setIndexLocalStorageWithExpiry(key, value) {
+async function setExpiry(){
     const response = await fetch(`http://${publicIp}/get_chicago_midnight`);
     const info = await response.json();
 
@@ -140,9 +140,21 @@ async function setIndexLocalStorageWithExpiry(key, value) {
         const date = info.chicago_midnight_utc;
         const expiryTime = new Date(date).getTime();
 
-        const data = { value, expiry: expiryTime };
-        localStorage.setItem(key, JSON.stringify(data));
+        const data = { expiryTime, expiry: expiryTime };
+        localStorage.setItem("expiry", JSON.stringify(data));
     }
+}
+
+// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
+function setIndexLocalStorageWithExpiry(key, value) {
+        const expiration = getIndexLocalStorageWithExpiry("expiry");
+        if(expiration){
+            const data = { value, expiry: expiration };
+            localStorage.setItem(key, JSON.stringify(data));
+        } else{
+            // may set up logging later 
+        }
+        
 }
 
 // Retrieves a value from localStorage if it has not expired.
