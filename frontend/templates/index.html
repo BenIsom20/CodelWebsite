@@ -91,6 +91,16 @@
         <div class="popup-content">
             <span class="close" id="closePopup">&times;</span>
 
+            <!-- LOGGED IN FORM -->
+            <div id="loggedInForm" class="tab-content"
+                style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
+                <h2 id = "userDisplay"></h2>
+                <button id="logout">Sign Out</button>
+                <p class="tab-link" data-target="registerForm">Want to create another account?<br> Create one</p>
+                <p class="tab-link" data-target="loginForm">Want to sign in to another account?<br> Sign In</p>
+                <p id="outnote"></p>
+            </div>
+
             <!-- LOGIN FORM -->
             <div id="loginForm" class="tab-content active"
                 style="opacity: 1; transform: translateX(0); transition: opacity 0.3s ease, transform 0.3s ease;">
@@ -102,8 +112,6 @@
                 <button id="login">Sign In</button>
                 <p class="tab-link" data-target="registerForm">Don't have an account?<br> Create one</p>
                 <p class="tab-link" data-target="deleteForm">Want to remove your account?<br> Delete Account</p>
-                <button id="logout">Sign Out</button>
-                <p id="outnote"></p>
             </div>
 
             <!-- REGISTER FORM -->

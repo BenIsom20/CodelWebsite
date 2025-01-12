@@ -3,7 +3,7 @@ publicIp = "44.201.228.74";
 let cameFrom = false;
 
 // Event listener for the user icon
-document.getElementById("user").addEventListener("click", (event) => {
+document.getElementById("user").addEventListener("click", async (event) => {
     // creates opening animation for the account popup
     event.preventDefault();
     const popup = document.getElementById("mainPopup");
@@ -12,10 +12,37 @@ document.getElementById("user").addEventListener("click", (event) => {
         popup.style.opacity = "1";
         popup.style.transform = "scale(1)";
     }, 10);
-
+    const name = localStorage.getItem("jwt_token");
+    if(name){
+        await populateForm();
+        document.querySelector(".tab-link[data-target='loggedInForm']").click();
+    }else{
+        document.querySelector(".tab-link[data-target='loginForm']").click();
+    }
     // Default to Login form
-    document.querySelector(".tab-link[data-target='loginForm']").click();
 });
+
+async function populateForm(){
+    try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`http://${publicIp}/protected`, {
+            // Send a GET request to the protected endpoint with the token in the Authorization header
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            const usernameDict = await response.json();
+            const username = usernameDict.username;
+            document.getElementById("userDisplay").innerHTML = `Currently logged in as,<br>${username}.`
+        }
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 // Event listener for the closing button for popup
 document.getElementById("closePopup").addEventListener("click", () => {
