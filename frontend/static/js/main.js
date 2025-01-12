@@ -88,8 +88,10 @@ window.onload = async function () {
         }
         await loadCode();
     } else {
+        
         // Retrieve and initialize user data
         await getUserData();
+        await populateForm();
     }
 
     // Handle post-login state restoration

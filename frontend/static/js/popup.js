@@ -3,7 +3,7 @@ publicIp = "44.201.228.74";
 let cameFrom = false;
 
 // Event listener for the user icon
-document.getElementById("user").addEventListener("click", async (event) => {
+document.getElementById("user").addEventListener("click", (event) => {
     // creates opening animation for the account popup
     event.preventDefault();
     const popup = document.getElementById("mainPopup");
@@ -14,7 +14,7 @@ document.getElementById("user").addEventListener("click", async (event) => {
     }, 10);
     const name = localStorage.getItem("jwt_token");
     if(name){
-        await populateForm();
+        
         document.querySelector(".tab-link[data-target='loggedInForm']").click();
     }else{
         document.querySelector(".tab-link[data-target='loginForm']").click();
