@@ -13,13 +13,11 @@ document.getElementById("user").addEventListener("click", async (event) => {
         popup.style.transform = "scale(1)";
     }, 10);
     const name = localStorage.getItem("jwt_token");
-    if (name) {
+    if(name){
         await populateForm();
-        document.querySelector("#loggedInForm").classList.add("active");
-        document.querySelector("#loginForm").classList.remove("active");
-    } else {
-        document.querySelector("#loginForm").classList.add("active");
-        document.querySelector("#loggedInForm").classList.remove("active");
+        document.querySelector(".tab-link[data-target='loggedInForm']").click();
+    }else{
+        document.querySelector(".tab-link[data-target='loginForm']").click();
     }
     // Default to Login form
 });
@@ -37,7 +35,7 @@ async function populateForm(){
         if (response.ok) {
             const usernameDict = await response.json();
             const username = usernameDict.username;
-            document.getElementById("userDisplay").innerHTML = `Currently logged in as,<br>${username}.`
+            document.getElementById("userDisplay").innerHTML = `Currently logged in as<br>${username}.`
         }
 
 
