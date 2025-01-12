@@ -85,7 +85,7 @@ async function initializeColumn() {
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
             gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
-            const height = gridElement.offsetWidth / numTest - numTest * 10;
+            const height = gridElement.offsetWidth / numTest - (numTest-1) * 10;
             gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
 
@@ -121,7 +121,7 @@ async function getUsername() {
             }
         });
         if (response.ok) {
-            const usernameDict = await response2.json();
+            const usernameDict = await response.json();
             const username = usernameDict.username;
             return username;
         }
@@ -270,7 +270,7 @@ async function loadGridState() {
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
             gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
-            const height = gridElement.offsetWidth / numTest - numTest * 10;
+            const height = gridElement.offsetWidth / numTest - (numTest-1) * 10;
             gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
     }
