@@ -13,11 +13,13 @@ document.getElementById("user").addEventListener("click", async (event) => {
         popup.style.transform = "scale(1)";
     }, 10);
     const name = localStorage.getItem("jwt_token");
-    if(name){
+    if (name) {
         await populateForm();
-        document.querySelector(".tab-link[data-target='loggedInForm']").click();
-    }else{
-        document.querySelector(".tab-link[data-target='loginForm']").click();
+        document.querySelector("#loggedInForm").classList.add("active");
+        document.querySelector("#loginForm").classList.remove("active");
+    } else {
+        document.querySelector("#loginForm").classList.add("active");
+        document.querySelector("#loggedInForm").classList.remove("active");
     }
     // Default to Login form
 });
