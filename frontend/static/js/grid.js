@@ -126,7 +126,7 @@ async function getUsername() {
             return username;
         }
         else{
-            localStorage.removeItem("jwt_token");
+            localStorage.clear();
             return null;
         }
 
