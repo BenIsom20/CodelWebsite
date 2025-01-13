@@ -359,6 +359,7 @@ function setGridLocalStorageWithExpiry(key, value) {
 function getGridLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
     if (!itemStr) {
+        alert("grid not found");
         return null; // No data found
     }
     const item = JSON.parse(itemStr);
