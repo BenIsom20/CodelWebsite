@@ -138,7 +138,7 @@ async function setExpiry(){
 
     if (response.ok) {
         const date = info.chicago_midnight_utc;
-        const expiryTime = newDate(date).getTime();
+        const expiryTime = new Date(date).getTime();
         const value = new Date(date).getTime();
 
         const data = { value, expiry: expiryTime };
