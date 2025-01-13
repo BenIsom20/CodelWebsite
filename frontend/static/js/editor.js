@@ -289,7 +289,7 @@ function setLocalStorageWithExpiry(key, value) {
             const data = { value, expiry: expiration };
             localStorage.setItem(key, JSON.stringify(data));
         } else{
-            // may set up logging later 
+            alert("problem");
         }
 }
 
