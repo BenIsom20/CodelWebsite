@@ -113,7 +113,6 @@ async function initializeColumn() {
 async function getUsername() {
     try {
         const token = localStorage.getItem('jwt_token');
-        alert(token + "token");
         const response = await fetch(`http://${publicIp}/protected`, {
             // Send a GET request to the protected endpoint with the token in the Authorization header
             method: 'GET',
@@ -353,7 +352,7 @@ function setGridLocalStorageWithExpiry(key, value) {
         const data = { value, expiry: expiration };
         localStorage.setItem(key, JSON.stringify(data));
     } else{
-        alert("problem");
+        // may set up logging later
     }
 }
 
@@ -367,7 +366,6 @@ function getGridLocalStorageWithExpiry(key) {
     const item = JSON.parse(itemStr);
     const now = new Date().getTime();
     if (now > item.expiry) {
-        alert("grid not found");
         localStorage.removeItem(key); // Clear expired data
         return null; // Indicate that the data is expired
     }
