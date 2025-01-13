@@ -127,12 +127,13 @@ async function getUsername() {
             return username;
         }
         else{
-            alert(result.error + " response.json.error");
+            localStorage.removeItem("jwt_token");
+            return null;
         }
 
 
     } catch (error) {
-        alert(error);
+        // may set up logging later
     }
 }
 
@@ -154,7 +155,7 @@ async function fetchTestExplanation() {
             txt = `Hello ${name}, ${txt}`;
         } else {
             
-            txt = `Hello, ${txt}`;
+            txt = `Hello guest, ${txt}`;
         }
     } else {
         // If the user is not logged in, append a generic greeting to the question prompt
