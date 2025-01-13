@@ -21,28 +21,30 @@ services:
       dockerfile: Dockerfile
     container_name: backend-codel-container
     ports:
-      - "80:5000" 
+      - "5000:5000"  # Expose port 5000 for internal communication
     volumes:
       - .:/app
     environment:
       FLASK_APP: app.py
       FLASK_ENV: development
       FWT_TOKEN: ${FWT_TOKEN}
-      MYSQL_HOST: ${MYSQL_HOST}  # Ensure that the backend knows where the DB is
+      MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
-      - db  # Ensures backend waits for db service to start before running
+      - db
 
   nginx:
     container_name: fproxy-codel-container
     image: nginx:latest
     ports:
       - "8080:5001"
-      - "443:443"
+      - "443:443" 
     volumes:
       - ./backend/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.crt 
+      - ./nginx.key 
     depends_on:
       - backend
 
