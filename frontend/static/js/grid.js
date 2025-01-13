@@ -127,6 +127,7 @@ async function getUsername() {
         }
         else{
             localStorage.clear();
+            alert("cleared");
             return null;
         }
 
