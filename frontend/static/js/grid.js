@@ -133,7 +133,7 @@ async function getUsername() {
 
 
     } catch (error) {
-        // may set up logging later
+        alert(error);
     }
 }
 
