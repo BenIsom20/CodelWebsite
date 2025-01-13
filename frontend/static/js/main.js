@@ -6,7 +6,7 @@ async function getUserData() {
     const gridData = getIndexLocalStorageWithExpiry("gridState"); // Retrieve grid state
 
     // Send a GET request to the backend to fetch user data
-    const response = await fetch(`http://${publicIp}/get_user_data`, {
+    const response = await fetch(`https://${publicIp}/get_user_data`, {
         method: "GET",  // GET method is used to retrieve data from the server
         headers: { 'Authorization': `Bearer ${token}` },  // Include the token for authorization
     });
@@ -133,7 +133,7 @@ function resetState() {
 document.getElementById("resetButton").addEventListener("click", resetState);
 
 async function setExpiry(){
-    const response = await fetch(`http://${publicIp}/get_chicago_midnight`);
+    const response = await fetch(`https://${publicIp}/get_chicago_midnight`);
     const info = await response.json();
 
     if (response.ok) {

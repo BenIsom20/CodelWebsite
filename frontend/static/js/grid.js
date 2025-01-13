@@ -75,7 +75,7 @@ function colorRow(stringList, numTests) {
 // Asynchronous function to initialize the grid and send code for execution
 async function initializeColumn() {
     // Send the code to the backend for execution
-    const response = await fetch(`http://${publicIp}/Startup`);
+    const response = await fetch(`https://${publicIp}/Startup`);
     const result = await response.json();
 
     // After receiving the result, use the numTests property to create rectangles in the grid
@@ -113,7 +113,7 @@ async function initializeColumn() {
 async function getUsername() {
     try {
         const token = localStorage.getItem('jwt_token');
-        const response = await fetch(`http://${publicIp}/protected`, {
+        const response = await fetch(`https://${publicIp}/protected`, {
             // Send a GET request to the protected endpoint with the token in the Authorization header
             method: 'GET',
             headers: {
@@ -144,7 +144,7 @@ async function fetchTestExplanation() {
     const lastRunDate = Cookies.get('lastTypingEffectRunDate');
 
     // Fetch question data
-    const response = await fetch(`http://${publicIp}/Startup`);
+    const response = await fetch(`https://${publicIp}/Startup`);
     const data = await response.json();
     var txt = data.prompt; // Get the prompt from the fetched data
 
@@ -265,7 +265,7 @@ async function storeGridState(victory) {
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
 async function loadGridState() {
     // Fetch the number of tests from the server (assumed to be related to the grid)
-    const response = await fetch(`http://${publicIp}/Startup`);
+    const response = await fetch(`https://${publicIp}/Startup`);
     const result = await response.json();
 
     // After receiving the result, use the numTests property to determine how many columns to create in the grid

@@ -46,7 +46,7 @@ document.getElementById("how").addEventListener("click", saveCode);
 
 // Fetch code skeleton from the backend.
 async function fetchSkeleton() {
-            const response = await fetch(`http://${publicIp}/get_skeleton`);
+            const response = await fetch(`https://${publicIp}/get_skeleton`);
             if (response.ok) {
                 return await response.json(); // Return parsed skeleton
             }
@@ -70,7 +70,7 @@ document.getElementById("runCode").addEventListener("click", async function () {
     // Gets the code currently in the editor and sends it to backend for execution
     const userCode = editor.getValue();
     const outputDiv = document.getElementById("output");
-    const response = await fetch(`http://${publicIp}/run`, {
+    const response = await fetch(`https://${publicIp}/run`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: userCode }),
@@ -96,7 +96,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
     const outputDiv = document.getElementById("output");
     try {
         // Send the user's code to the backend via a POST request
-        const response = await fetch(`http://${publicIp}/test`, {
+        const response = await fetch(`https://${publicIp}/test`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ code: userCode }),
@@ -208,7 +208,7 @@ async function saveProgress() {
         };
 
         // Send a POST request to the backend to update victory state
-        fetch(`http://${publicIp}/saveProgress`, {
+        fetch(`https://${publicIp}/saveProgress`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -225,7 +225,7 @@ async function victorySend() {
     const timeDic = { "time_increment": time }
 
     // Send the user's code to the backend via a POST request to update total time
-    const response = await fetch(`http://${publicIp}/updateAllTime`, {
+    const response = await fetch(`https://${publicIp}/updateAllTime`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(timeDic),
@@ -248,7 +248,7 @@ async function victorySend() {
         };
 
         // Send a POST request to the backend to update victory state
-        fetch(`http://${publicIp}/victory`, {
+        fetch(`https://${publicIp}/victory`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
