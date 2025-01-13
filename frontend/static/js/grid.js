@@ -113,6 +113,7 @@ async function initializeColumn() {
 async function getUsername() {
     try {
         const token = localStorage.getItem('jwt_token');
+        alert(token + "token");
         const response = await fetch(`http://${publicIp}/protected`, {
             // Send a GET request to the protected endpoint with the token in the Authorization header
             method: 'GET',
@@ -126,12 +127,12 @@ async function getUsername() {
             return username;
         }
         else{
-            alert(response.json.error)
+            alert(response.json.error + " response.json.error");
         }
 
 
     } catch (error) {
-        console.log(error);
+        alert(error);
     }
 }
 
