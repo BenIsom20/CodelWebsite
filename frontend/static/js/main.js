@@ -138,9 +138,9 @@ async function setExpiry(){
 
     if (response.ok) {
         const date = info.chicago_midnight_utc;
-        const expiryTime = new Date(date).getTime();
+        const value = new Date(date).getTime();
 
-        const data = { expiryTime, expiry: expiryTime };
+        const data = { value, expiry: expiryTime };
         localStorage.setItem("expiry", JSON.stringify(data));
     }
 }
