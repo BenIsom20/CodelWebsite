@@ -359,12 +359,13 @@ function setGridLocalStorageWithExpiry(key, value) {
 function getGridLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
     if (!itemStr) {
-        alert("grid not found");
+        
         return null; // No data found
     }
     const item = JSON.parse(itemStr);
     const now = new Date().getTime();
     if (now > item.expiry) {
+        alert("grid not found");
         localStorage.removeItem(key); // Clear expired data
         return null; // Indicate that the data is expired
     }
