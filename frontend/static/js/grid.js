@@ -127,13 +127,13 @@ async function getUsername() {
         }
         else{
             localStorage.clear();
-            alert("cleared");
+            
             return null;
         }
 
 
     } catch (error) {
-        alert(error + " slkdjf");
+        // may set up logging later
     }
 }
 
