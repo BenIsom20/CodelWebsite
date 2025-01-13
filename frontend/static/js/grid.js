@@ -133,7 +133,7 @@ async function getUsername() {
 
 
     } catch (error) {
-        alert(error);
+        alert(error + " slkdjf");
     }
 }
 
