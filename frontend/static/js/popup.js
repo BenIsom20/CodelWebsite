@@ -1,4 +1,4 @@
-publicIp = "44.201.228.74";
+publicIp = "thecodel.com";
 // Global variable tracking if stats was clicked
 let cameFrom = false;
 

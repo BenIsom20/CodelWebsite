@@ -1,4 +1,4 @@
-publicIp = "44.201.228.74";
+publicIp = "thecodel.com";
 
 // Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {

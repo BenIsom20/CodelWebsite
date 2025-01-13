@@ -1,4 +1,4 @@
-publicIp = "44.201.228.74"; // Setting publicIp for backend calls
+publicIp = "thecodel.com"; // Setting publicIp for backend calls
 
 var username = ""; // Global var storing the username of currently logged in player
 let offset = 0; // Start offset
