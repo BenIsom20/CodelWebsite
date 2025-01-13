@@ -121,13 +121,13 @@ async function getUsername() {
                 'Authorization': `Bearer ${token}`
             }
         });
+        const result = await response.json();
         if (response.ok) {
-            const usernameDict = await response.json();
-            const username = usernameDict.username;
+            const username = result.username;
             return username;
         }
         else{
-            alert(response.json.error + " response.json.error");
+            alert(result.error + " response.json.error");
         }
 
 
