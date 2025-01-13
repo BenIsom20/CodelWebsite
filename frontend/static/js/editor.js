@@ -34,7 +34,7 @@ editor.setSize("100%", 300); // Set the editor size
 async function saveCode() {
     const userCode = editor.getValue();
     const stringUserCode = JSON.stringify(userCode);
-    await setLocalStorageWithExpiry("savedCode", stringUserCode);
+    setLocalStorageWithExpiry("savedCode", stringUserCode);
 }
 
 // Event listener for the "Leader" button to save code
@@ -111,7 +111,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
         } else {
             // Save the submitted code to localStorage
             const stringUserCode = JSON.stringify(userCode);
-            await setLocalStorageWithExpiry("savedCode", stringUserCode);
+            setLocalStorageWithExpiry("savedCode", stringUserCode);
 
             // Notify the user of successful submission
             outputDiv.innerHTML = "Code Successfully Submitted";
@@ -151,7 +151,7 @@ document.getElementById("submitCode").addEventListener("click", async function (
     } catch (error) {
         // no use right now may set up loggin in future
     }
-    storeGridState(victory); // Save the grid state to localStorage
+    await storeGridState(victory); // Save the grid state to localStorage
 });
 
 // Function to check if all tests passed
@@ -221,6 +221,16 @@ async function saveProgress() {
 
 // Function to send victory state and related data to the backend
 async function victorySend() {
+    const time = getLocalStorageWithExpiry("stopwatchTime");
+    const timeDic = { "time_increment": time }
+
+    // Send the user's code to the backend via a POST request to update total time
+    const response = await fetch(`http://${publicIp}/updateAllTime`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(timeDic),
+    });
+
     // Check if user is signed in
     if (localStorage.getItem("jwt_token") != null) {
         // get data to send
@@ -250,7 +260,7 @@ async function victorySend() {
 }
 
 // Function for animation when user wins and updates total time on codel
-async function victorySequence() {
+function victorySequence() {
     // Animation for victory
     const navbar = document.getElementById("mainNavbar");
     const logo = document.getElementById("logo");
@@ -260,15 +270,6 @@ async function victorySequence() {
     });
     navbar.style.boxShadow = "0 2px 50px #61C9A8ed";
     logo.src = "static/images/V.gif?";
-    const time = getLocalStorageWithExpiry("stopwatchTime");
-    const timeDic = { "time_increment": time }
-
-    // Send the user's code to the backend via a POST request to update total time
-    const response = await fetch(`http://${publicIp}/updateAllTime`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(timeDic),
-    });
 }
 
 // Funciton for animation when user attempts and does not win
@@ -282,21 +283,14 @@ function trySequence() {
 }
 
 // Function to set to the local storage with expiration date at midnight chicago time
-async function setLocalStorageWithExpiry(key, value) {
-    const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
-    const info = await response.json();
-    if (response.ok) {
-        const date = info.chicago_midnight_utc;
-        const objdate = new Date(date);
-        var expiryTime = objdate.getTime();
-
-    }
-    const data = {
-        value: value,
-        expiry: expiryTime,
-    };
-
-    localStorage.setItem(key, JSON.stringify(data));
+function setLocalStorageWithExpiry(key, value) {
+    const expiration = getLocalStorageWithExpiry("expiry");
+        if(expiration){
+            const data = { value, expiry: expiration };
+            localStorage.setItem(key, JSON.stringify(data));
+        } else{
+            // may set up logging
+        }
 }
 
 // Function to pull from local storage and check if expired or not and only return if not expired

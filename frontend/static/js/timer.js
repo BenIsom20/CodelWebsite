@@ -17,7 +17,7 @@ async function startStopwatch() {
         stopwatchInterval = setInterval(async () => {
             stopwatchTime++;
             // saves time to local storage
-            await setTimerLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
+            setTimerLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
             updateStopwatchDisplay(); // Update the display with the new time
         }, 1000);
         isRunning = true;
@@ -28,7 +28,7 @@ async function startStopwatch() {
 function stopStopwatch() {
     clearInterval(stopwatchInterval);
     isRunning = false;
-    setLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
+    setTimerLocalStorageWithExpiry("stopwatchTime", stopwatchTime);
 }
 
 // Function to update the display of the stopwatch
@@ -56,14 +56,7 @@ async function setTimerLocalStorageWithExpiry(key, value) {
         const item = JSON.parse(savedItem);
         expiryTime = item.expiry; // Use the existing expiry time
     } else {
-        // Gets from backend what the time in chicago at midnight is to set as expiration date
-        const response = await fetch(`http://${publicIp}/get_chicago_midnight`)
-        const info = await response.json();
-        if (response.ok) {
-            const date = info.chicago_midnight_utc;
-            const objdate = new Date(date);
-            expiryTime = objdate.getTime();
-        }
+        expiryTime = getTimerLocalStorageWithExpiry("expiry");
     }
     const data = {
         value: value,

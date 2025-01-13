@@ -23,31 +23,28 @@ async function getUserData() {
         setIndexLocalStorageWithExpiry("stopwatchTime", time);
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
-     
-        loadCode();
-        startStopwatch();
-        loadGridState();
+
+        await loadCode();
+        await startStopwatch();
+        await loadGridState();
+        
     } else if (time && code && grid) {
         // Save data for ongoing work
-        if(!sessionStorage.getItem("alreadyLoaded")){
+        if (!sessionStorage.getItem("alreadyLoaded")) {
             setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
         sessionStorage.setItem("alreadyLoaded", "yes");
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
-        await delay(100);
-        loadCode();
-        startStopwatch();
-        loadGridState();
+
+        await loadCode();
+        await startStopwatch();
+        await loadGridState();
+        
     } else {
         // Initialize new session if no valid data exists
-        startStopwatch();
-        if (gridData) {
-            loadGridState();
-        } else {
-            initializeColumn();
-        }
-        await delay(100);
+        await startStopwatch();
+        await initializeColumn();
         await loadCode();
     }
 }
@@ -76,38 +73,35 @@ function clearExpiredLocalStorage() {
 window.onload = async function () {
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
-    fetchTestExplanation(); // Fetch and display test explanation
+    await fetchTestExplanation(); // Fetch and display test explanation
+    await setExpiry();
 
     const token = localStorage.getItem("jwt_token");
     const gridData = getIndexLocalStorageWithExpiry("gridState");
 
     if (!token) {
         // Initialize state for unauthenticated users
-        startStopwatch();
+        await startStopwatch();
         if (gridData) {
-            loadGridState();
+            await loadGridState();
         } else {
-            initializeColumn();
+            await initializeColumn();
         }
-        await delay(100);
         await loadCode();
     } else {
+        
         // Retrieve and initialize user data
         await getUserData();
+        await populateForm();
     }
 
     // Handle post-login state restoration
-    await delay(500);
+
     if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
 };
-
-// Creates a delay for a specified number of milliseconds.
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // Reloads the logo image to prevent caching issues.
 function reloadGif() {
@@ -138,18 +132,30 @@ function resetState() {
 }
 document.getElementById("resetButton").addEventListener("click", resetState);
 
-// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
-async function setIndexLocalStorageWithExpiry(key, value) {
+async function setExpiry(){
     const response = await fetch(`http://${publicIp}/get_chicago_midnight`);
     const info = await response.json();
 
     if (response.ok) {
         const date = info.chicago_midnight_utc;
         const expiryTime = new Date(date).getTime();
+        const value = new Date(date).getTime();
 
         const data = { value, expiry: expiryTime };
-        localStorage.setItem(key, JSON.stringify(data));
+        localStorage.setItem("expiry", JSON.stringify(data));
     }
+}
+
+// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
+function setIndexLocalStorageWithExpiry(key, value) {
+        const expiration = getIndexLocalStorageWithExpiry("expiry");
+        if(expiration){
+            const data = { value, expiry: expiration };
+            localStorage.setItem(key, JSON.stringify(data));
+        } else{
+            // may set up logging later 
+        }
+        
 }
 
 // Retrieves a value from localStorage if it has not expired.
@@ -186,7 +192,7 @@ function smoothTransition(event) {
         document.body.classList.add('fade-out');
         setTimeout(() => {
             window.location.href = href;
-        }, 300); 
+        }, 300);
     }
     catch (error) {
         // empty might set up logging later 

@@ -22,7 +22,6 @@ db_user = os.getenv('MYSQL_USER')
 db_password = os.getenv('MYSQL_PASSWORD')
 db_database = os.getenv('MYSQL_DATABASE')
 jwt_secret_key = os.getenv('FWT_TOKEN')
-
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes
 CORS(app)

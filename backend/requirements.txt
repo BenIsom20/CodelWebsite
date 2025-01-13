@@ -9,4 +9,3 @@ Flask-APScheduler
 pytz
 tzdata
 better-profanity
-gunicorn
