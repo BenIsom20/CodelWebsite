@@ -1,0 +1,27 @@
+challenge:
+  name: "Triangle"
+  date: "2025-01-14"
+  function:
+    name: "minimumTotal"
+    parameters: ["triangle"]
+  prompt: |
+    given a triangle array, return the minimum path sum from top to bottom.
+    For each step, you may move to an adjacent number of the row below. More formally, if you are on index `i` on the current row, you may move to either index `i` or index `i + 1` on the next row.
+    Good luck.
+
+  cases:
+    - prompt: "Find the minimum path sum of the triangle"
+      given_data: "[[2], [3,4], [6,5,7], [4,1,8,3]]"
+      expected: 11
+
+    - prompt: "Find the minimum path sum of the triangle of a single element array"
+      given_data: "[[-10]]"
+      expected: -10
+
+    - prompt: "Find the minimum path sum of the triangle with negatives"
+      given_data: "[[-1], [2,3], [1,-1,-3]]"
+      expected: 0
+
+    - prompt: "Find the minimum path sum of the triangle where a greedy algo doesn't work"
+      given_data: "[[2], [3,4], [9,4,1]], [5,6,8,7]"
+      expected: 14
