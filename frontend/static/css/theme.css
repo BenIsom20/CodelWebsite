@@ -24,8 +24,9 @@
 .CodeMirror-gutters {
     background-color: #1E1F1E;
     /* Gutter background color matching editor */
-    border-right: 3px solid #ffe66d;
+    border-right: 0px solid #ffe66d;
     /* Border color for the right side of the gutter */
+    padding-right: 1vh;
 }
 
 /* Line number styling */
