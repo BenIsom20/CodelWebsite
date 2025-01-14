@@ -1,0 +1,18 @@
+challenge:
+  name: "Single Number"
+  date: "2025-01-01"
+  function:
+    name: "singleNumber"
+    parameters: ["nums"]
+  prompt: |
+    given a non-empty array of integers nums, every element appears twice except for one. 
+    Find that single one. Good luck.
+
+  cases:
+    - prompt: "Find the single number in [4, 1, 2, 1, 2] (basic case)"
+      given_data: "[4, 1, 2, 1, 2]"
+      expected: 4
+
+    - prompt: "Find the single number in [1] (edge case: only one element)"
+      given_data: "[1]"
+      expected: 1
