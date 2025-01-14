@@ -28,7 +28,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', page_description="CODEL is a daily coding game. Every day, you'll face a new coding challenge designed to help you practice and improve your Python skills. Whether you're a beginner or an experienced coder, CODEL is a fun way to learn and grow.")
 
 @app.route('/how')
 def how():
