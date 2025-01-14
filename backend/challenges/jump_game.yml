@@ -1,0 +1,28 @@
+challenge:
+  name: "Jump Game"
+  date: "2025-01-01"
+  function:
+    name: "canJump"
+    parameters: ["nums"]
+  prompt: |
+    you are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+    Return true if you can reach the last index, or false otherwise.
+    Good luck.
+
+  cases:
+    - prompt: "Check [2, 3, 1, 1, 4] (base case: reachable end)"
+      given_data: "[2, 3, 1, 1, 4]"
+      expected: "true"
+
+    - prompt: "Check [3, 2, 1, 0, 4] (base case: unreachable end)"
+      given_data: "[3, 2, 1, 0, 4]"
+      expected: "false"
+
+    - prompt: "Check [0] (edge case: single element array)"
+      given_data: "[0]"
+      expected: "true"
+
+    - prompt: "Check [1, 0, 0, 0] (edge case: all elements zero except the first)"
+      given_data: "[1, 0, 0, 0]"
+      expected: "false"
+

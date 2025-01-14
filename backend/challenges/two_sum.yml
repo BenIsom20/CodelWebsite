@@ -1,13 +1,14 @@
 challenge:
   name: "Two Sum"
-  date: "2025-01-10"
+  date: "2025-01-01
   function:
     name: "two_sum"
     parameters: ["nums", "target"]
   prompt: |
-    Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+    given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
     You may assume that each input would have exactly one solution, and you may not use the same element twice.
     You can return the answer in any order.
+    Good luck.
 
   cases:
     - prompt: "Find indices where nums[i] + nums[j] equals target"

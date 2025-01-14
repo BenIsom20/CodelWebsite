@@ -1,0 +1,28 @@
+challenge:
+  name: "Find the Index of the First Occurrence in a String"
+  date: "2025-01-01"
+  function:
+    name: "strStr"
+    parameters: ["haystack", "needle"]
+  prompt: |
+    given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+    Good luck.
+
+  cases:
+    - prompt: "Check if 'sad' is at the start of 'sadbutsad' (base case: needle at the start)"
+      given_data: "\"sadbutsad\", \"sad\""
+      expected: "0"
+
+    - prompt: "Check if 'miss' is in 'examplestack' (base case: needle not in haystack)"
+      given_data: "\"examplestack\", \"miss\""
+      expected: "-1"
+
+    - prompt: "Check if 'world' is in 'hello world' (base case: needle in the middle)"
+      given_data: "\"hello world\", \"world\""
+      expected: "6"
+
+    - prompt: "Check if an empty needle is in 'abc' (edge case: empty needle)"
+      given_data: "\"abc\", \"\""
+      expected: "0"
+
+

@@ -1,0 +1,30 @@
+challenge:
+  name: "Add Binary"
+  date: "2025-01-01"
+  function:
+    name: "add_binary"
+    parameters: ["a", "b"]
+  prompt: |
+    given two binary strings a and b, return their sum as a binary string.
+    Good luck.
+
+  cases:
+    - prompt: "Add '11' and '1' (base case: small binary strings)"
+      given_data: "\"11\", \"1\""
+      expected: "\"100\""
+
+    - prompt: "Add '1010' and '1011' (base case: different lengths)"
+      given_data: "\"1010\", \"1011\""
+      expected: "\"10101\""
+
+    - prompt: "Add '0' and '0' (edge case: strings with all zeros)"
+      given_data: "\"0\", \"0\""
+      expected: "\"0\""
+
+    - prompt: "Add '0001' and '0010' (edge case: leading zeros)"
+      given_data: "\"0001\", \"0010\""
+      expected: "\"11\""
+
+    - prompt: "Add two large binary numbers (edge case: very large inputs)"
+      given_data: "\"1111\", \"1111\""
+      expected: "\"11110\""
