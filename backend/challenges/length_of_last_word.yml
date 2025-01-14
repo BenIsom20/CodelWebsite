@@ -1,0 +1,27 @@
+challenge:
+  name: "Length of Last Word"
+  date: "2025-01-01"
+  function:
+    name: "length_of_last_word"
+    parameters: ["s"]
+  prompt: |
+    given a string s consisting of words and spaces, return the length of the last word in the string.
+    A word is defined as a maximal substring consisting of non-space characters only.
+    Good luck.
+
+  cases:
+    - prompt: "Find the length of the last word in 'Hello World' (base case: normal input with two words)"
+      given_data: "\"Hello World\""
+      expected: "5"
+
+    - prompt: "Find the length of the last word in '   fly me   to   the moon  ' (edge case: leading and trailing spaces)"
+      given_data: "\"   fly me   to   the moon  \""
+      expected: "4"
+
+    - prompt: "Find the length of the last word in 'a ' (edge case: single character word with trailing space)"
+      given_data: "\"a \""
+      expected: "1"
+
+    - prompt: "Find the length of the last word in 'hello' (edge case: single word without spaces)"
+      given_data: "\"hello\""
+      expected: "5"
