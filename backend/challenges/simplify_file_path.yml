@@ -1,6 +1,6 @@
 challenge:
   name: "Simplify Path"
-  date: "2025-01-01"
+  date: "2025-01-13"
   function:
     name: "simplify_path"
     parameters: ["path"]
