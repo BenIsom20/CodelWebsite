@@ -26,13 +26,13 @@
     /* Gutter background color matching editor */
     border-right: 0px solid #ffe66d;
     /* Border color for the right side of the gutter */
-    padding-right: 1vh;
 }
 
 /* Line number styling */
 .CodeMirror-linenumber {
     color: #6d86ff;
     /* Line number color (light blue) */
+    padding-left: 0px;  /* Adjust the left padding to move line numbers to the left */
 }
 
 /* ================================
