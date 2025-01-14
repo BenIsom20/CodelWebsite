@@ -25,7 +25,3 @@ challenge:
     - prompt: "Search for 'ABCDEFG' in the grid (edge case: word longer than any row/column)"
       given_data: "[[\"A\",\"B\",\"C\"],[\"D\",\"E\",\"F\"]], \"ABCDEFG\""
       expected: "false"
-
-    - prompt: "Search for 'ABA' in the grid (edge case: same letter reused incorrectly)"
-      given_data: "[[\"A\",\"B\",\"A\"]], \"ABA\""
-      expected: "false"
