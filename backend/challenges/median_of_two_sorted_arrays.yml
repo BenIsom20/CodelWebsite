@@ -1,6 +1,6 @@
 challenge:
   name: "Median of Two Sorted Arrays"
-  date: "2025-01-01"
+  date: "2025-01-02"
   function:
     name: "findMedianSortedArrays"
     parameters: ["nums1", "nums2"]
