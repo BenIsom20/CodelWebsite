@@ -1,11 +1,11 @@
 challenge:
   name: "Simplify Path"
-  date: "2025-01-13"
+  date: "2025-01-01"
   function:
     name: "simplify_path"
     parameters: ["path"]
   prompt: |
-    Given an absolute path for a Unix-style file system, simplify it to its canonical form. The path must start with a single slash '/'. Consecutive slashes should be treated as a single slash. 
+    given an absolute path for a Unix-style file system, simplify it to its canonical form. The path must start with a single slash '/'. Consecutive slashes should be treated as a single slash. 
     A single period '.' represents the current directory and should be ignored, while a double period '..' moves up to the parent directory unless already at the root. 
     Names such as '...' or '....' are treated as valid directory names. The simplified path should not end with a slash unless it is the root directory. 
     Return the simplified canonical path. Good luck.
