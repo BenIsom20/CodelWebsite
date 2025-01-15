@@ -40,7 +40,7 @@ async function populateForm(){
 
 
     } catch (error) {
-        console.log(error);
+        // may set up logging later
     }
 }
 
