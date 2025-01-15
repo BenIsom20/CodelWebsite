@@ -159,7 +159,7 @@ document.getElementById("stats").addEventListener("click", async (event) => {
         setTimeout(() => {
             popup.style.opacity = "1";
             popup.style.transform = "scale(1)";
-        }, 10);
+        }, 100);
 
         // Default to Login form
         document.querySelector(".tab-link[data-target='loginForm']").click();
@@ -169,7 +169,7 @@ document.getElementById("stats").addEventListener("click", async (event) => {
         setTimeout(() => {
             popup.style.opacity = "1";
             popup.style.transform = "scale(1)";
-        }, 10);
+        }, 100);
         document.querySelector(".tab-link[data-target='userStats']").click();
     }
 });
