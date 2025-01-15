@@ -72,34 +72,40 @@ document.getElementById("mainPopup").addEventListener("click", (event) => {
     
 });
 
-// Tab switching logic with animation
-const tabLinks = document.querySelectorAll(".tab-link");
-const tabContents = document.querySelectorAll(".tab-content");
+// Get mainPopup specifically
+const mainPopup = document.getElementById("mainPopup");
 
-// Code for switching between popups
+// Restrict tab switching logic to tab-links within mainPopup
+const tabLinks = mainPopup.querySelectorAll(".tab-link");
+
 tabLinks.forEach(link => {
     link.addEventListener("click", event => {
         const targetId = event.target.getAttribute("data-target");
 
-        // Remove active class and hide current tab with animation
-        const currentTab = document.querySelector(".tab-content.active");
-        currentTab.style.opacity = "0";
-        currentTab.style.transform = "translateX(-100%)";
-        setTimeout(() => {
-            currentTab.style.display = "none";
-            currentTab.classList.remove("active");
-
-            // Show target tab with animation
-            const targetContent = document.getElementById(targetId);
-            targetContent.style.display = "block";
+        // Restrict to only tabs inside mainPopup
+        const currentTab = mainPopup.querySelector(".tab-content.active");
+        if (currentTab) {
+            currentTab.style.opacity = "0";
+            currentTab.style.transform = "translateX(-100%)";
             setTimeout(() => {
-                targetContent.style.opacity = "1";
-                targetContent.style.transform = "translateX(0)";
-                targetContent.classList.add("active");
-            }, 10);
-        }, 300);
+                currentTab.style.display = "none";
+                currentTab.classList.remove("active");
+
+                // Show target tab with animation
+                const targetContent = mainPopup.querySelector(`#${targetId}`);
+                if (targetContent) {
+                    targetContent.style.display = "block";
+                    setTimeout(() => {
+                        targetContent.style.opacity = "1";
+                        targetContent.style.transform = "translateX(0)";
+                        targetContent.classList.add("active");
+                    }, 10);
+                }
+            }, 300);
+        }
     });
 });
+
 
 // Function that formats seconds into a more readable time
 function formatTime(seconds) {
@@ -164,7 +170,7 @@ document.getElementById("stats").addEventListener("click", async (event) => {
         // Default to Login form
         document.querySelector(".tab-link[data-target='loginForm']").click();
     } else { // otherwise opens the stats popup to display stats
-        const popup = document.getElementById("userStats");
+        const popup = document.getElementById("statsPopup");
         popup.style.display = "flex";
         setTimeout(() => {
             popup.style.opacity = "1";
