@@ -164,7 +164,7 @@ document.getElementById("stats").addEventListener("click", async (event) => {
         // Default to Login form
         document.querySelector(".tab-link[data-target='loginForm']").click();
     } else { // otherwise opens the stats popup to display stats
-        const popup = document.getElementById("statsPopup");
+        const popup = document.getElementById("userStats");
         popup.style.display = "flex";
         setTimeout(() => {
             popup.style.opacity = "1";
