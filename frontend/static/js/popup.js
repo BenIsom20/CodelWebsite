@@ -164,13 +164,13 @@ document.getElementById("stats").addEventListener("click", async (event) => {
         // Default to Login form
         document.querySelector(".tab-link[data-target='loginForm']").click();
     } else { // otherwise opens the stats popup to display stats
-        const popup = document.getElementById("mainPopup");
+        const popup = document.getElementById("statsPopup");
         popup.style.display = "flex";
         setTimeout(() => {
             popup.style.opacity = "1";
             popup.style.transform = "scale(1)";
         }, 10);
-        document.querySelector(".tab-link[data-target='statsPopup']").click();
+        document.querySelector(".tab-link[data-target='userStats']").click();
     }
 });
 
