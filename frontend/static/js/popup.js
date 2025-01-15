@@ -170,6 +170,7 @@ document.getElementById("stats").addEventListener("click", async (event) => {
             popup.style.opacity = "1";
             popup.style.transform = "scale(1)";
         }, 10);
+        document.querySelector(".tab-link[data-target='userStats']").click();
     }
 });
 
