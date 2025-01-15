@@ -2,21 +2,6 @@ publicIp = "44.201.228.74";
 // Global variable tracking if stats was clicked
 let cameFrom = false;
 
-// Event listener for the user icon
-document.getElementById("user").addEventListener("click", (event) => {
-    // creates opening animation for the account popup
-    event.preventDefault();
-    const popup = document.getElementById("mainPopup");
-    popup.style.display = "flex";
-    setTimeout(() => {
-        popup.style.opacity = "1";
-        popup.style.transform = "scale(1)";
-    }, 10);
-
-    // Default to Login form
-    document.querySelector(".tab-link[data-target='loginForm']").click();
-});
-
 // // Event listener for the user icon
 // document.getElementById("user").addEventListener("click", (event) => {
 //     // creates opening animation for the account popup
@@ -27,15 +12,30 @@ document.getElementById("user").addEventListener("click", (event) => {
 //         popup.style.opacity = "1";
 //         popup.style.transform = "scale(1)";
 //     }, 10);
-//     const name = localStorage.getItem("jwt_token");
-//     if(name){
-        
-//         document.querySelector(".tab-link[data-target='loggedInForm']").click();
-//     }else{
-//         document.querySelector(".tab-link[data-target='loginForm']").click();
-//     }
+
 //     // Default to Login form
+//     document.querySelector(".tab-link[data-target='loginForm']").click();
 // });
+
+// Event listener for the user icon
+document.getElementById("user").addEventListener("click", (event) => {
+    // creates opening animation for the account popup
+    event.preventDefault();
+    const popup = document.getElementById("mainPopup");
+    popup.style.display = "flex";
+    setTimeout(() => {
+        popup.style.opacity = "1";
+        popup.style.transform = "scale(1)";
+    }, 10);
+    const name = localStorage.getItem("jwt_token");
+    if(name){
+        
+        document.querySelector(".tab-link[data-target='loggedInForm']").click();
+    }else{
+        document.querySelector(".tab-link[data-target='loginForm']").click();
+    }
+    // Default to Login form
+});
 
 async function populateForm(){
     try {
@@ -87,32 +87,66 @@ document.getElementById("mainPopup").addEventListener("click", (event) => {
     
 });
 
-// Tab switching logic with animation
-const tabLinks = document.querySelectorAll(".tab-link");
-const tabContents = document.querySelectorAll(".tab-content");
+// // Tab switching logic with animation
+// const tabLinks = document.querySelectorAll(".tab-link");
+// const tabContents = document.querySelectorAll(".tab-content");
 
-// Code for switching between popups
+// // Code for switching between popups
+// tabLinks.forEach(link => {
+//     link.addEventListener("click", event => {
+//         const targetId = event.target.getAttribute("data-target");
+
+//         // Remove active class and hide current tab with animation
+//         const currentTab = document.querySelector(".tab-content.active");
+//         currentTab.style.opacity = "0";
+//         currentTab.style.transform = "translateX(-100%)";
+//         setTimeout(() => {
+//             currentTab.style.display = "none";
+//             currentTab.classList.remove("active");
+
+//             // Show target tab with animation
+//             const targetContent = document.getElementById(targetId);
+//             targetContent.style.display = "block";
+//             setTimeout(() => {
+//                 targetContent.style.opacity = "1";
+//                 targetContent.style.transform = "translateX(0)";
+//                 targetContent.classList.add("active");
+//             }, 10);
+//         }, 300);
+//     });
+// });
+
+// Get mainPopup specifically
+const mainPopup = document.getElementById("mainPopup");
+
+// Restrict tab switching logic to tab-links within mainPopup
+const tabLinks = mainPopup.querySelectorAll(".tab-link");
+
 tabLinks.forEach(link => {
     link.addEventListener("click", event => {
         const targetId = event.target.getAttribute("data-target");
 
-        // Remove active class and hide current tab with animation
-        const currentTab = document.querySelector(".tab-content.active");
-        currentTab.style.opacity = "0";
-        currentTab.style.transform = "translateX(-100%)";
-        setTimeout(() => {
-            currentTab.style.display = "none";
-            currentTab.classList.remove("active");
-
-            // Show target tab with animation
-            const targetContent = document.getElementById(targetId);
-            targetContent.style.display = "block";
+        // Restrict to only tabs inside mainPopup
+        const currentTab = mainPopup.querySelector(".tab-content.active");
+        if (currentTab) {
+            currentTab.style.opacity = "0";
+            currentTab.style.transform = "translateX(-100%)";
             setTimeout(() => {
-                targetContent.style.opacity = "1";
-                targetContent.style.transform = "translateX(0)";
-                targetContent.classList.add("active");
-            }, 10);
-        }, 300);
+                currentTab.style.display = "none";
+                currentTab.classList.remove("active");
+
+                // Show target tab with animation
+                const targetContent = mainPopup.querySelector(`#${targetId}`);
+                if (targetContent) {
+                    targetContent.style.display = "block";
+                    setTimeout(() => {
+                        targetContent.style.opacity = "1";
+                        targetContent.style.transform = "translateX(0)";
+                        targetContent.classList.add("active");
+                    }, 10);
+                }
+            }, 300);
+        }
     });
 });
 
