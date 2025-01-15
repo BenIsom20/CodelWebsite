@@ -12,15 +12,30 @@ document.getElementById("user").addEventListener("click", (event) => {
         popup.style.opacity = "1";
         popup.style.transform = "scale(1)";
     }, 10);
-    const name = localStorage.getItem("jwt_token");
-    if(name){
-        
-        document.querySelector(".tab-link[data-target='loggedInForm']").click();
-    }else{
-        document.querySelector(".tab-link[data-target='loginForm']").click();
-    }
+
     // Default to Login form
+    document.querySelector(".tab-link[data-target='loginForm']").click();
 });
+
+// // Event listener for the user icon
+// document.getElementById("user").addEventListener("click", (event) => {
+//     // creates opening animation for the account popup
+//     event.preventDefault();
+//     const popup = document.getElementById("mainPopup");
+//     popup.style.display = "flex";
+//     setTimeout(() => {
+//         popup.style.opacity = "1";
+//         popup.style.transform = "scale(1)";
+//     }, 10);
+//     const name = localStorage.getItem("jwt_token");
+//     if(name){
+        
+//         document.querySelector(".tab-link[data-target='loggedInForm']").click();
+//     }else{
+//         document.querySelector(".tab-link[data-target='loginForm']").click();
+//     }
+//     // Default to Login form
+// });
 
 async function populateForm(){
     try {
