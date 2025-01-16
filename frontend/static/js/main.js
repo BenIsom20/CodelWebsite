@@ -1,278 +1,220 @@
-/* main.js */
-let publicIp = "thecodel.com";
+publicIp = "thecodel.com";
 
-/* -----------------------------
- * Helper: Re-start Fade-In Animation
- * ----------------------------- */
-function reAddFadeInAnimation() {
-  // Ensure the body starts at opacity 0
-  document.body.style.opacity = 0;
-
-  // Remove 'fade-in' class to reset any prior animation
-  document.body.classList.remove("fade-in");
-
-  // Force a reflow so browser sees the class removal
-  void document.body.offsetWidth;
-
-  // Re-add 'fade-in' to start the animation from 0 -> 1
-  document.body.classList.add("fade-in");
-}
-
-/* -----------------------------
- * On Animation End, set opacity to 1
- * ----------------------------- */
-document.body.addEventListener("animationend", (e) => {
-  if (e.animationName === "fadeIn") {
-    document.body.style.opacity = 1;
-  }
-});
-
-/* -----------------------------
- * Core: Get User Data
- * ----------------------------- */
+// Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {
-  const token = localStorage.getItem("jwt_token");
-  const gridData = getIndexLocalStorageWithExpiry("gridState");
+    const token = localStorage.getItem("jwt_token"); // Retrieve JWT token
+    const gridData = getIndexLocalStorageWithExpiry("gridState"); // Retrieve grid state
 
-  const response = await fetch(`https://${publicIp}/get_user_data`, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    // Send a GET request to the backend to fetch user data
+    const response = await fetch(`https://${publicIp}/get_user_data`, {
+        method: "GET",  // GET method is used to retrieve data from the server
+        headers: { 'Authorization': `Bearer ${token}` },  // Include the token for authorization
+    });
 
-  const result = await response.json();
-  const { time, code, grid, completed } = result;
-  const victory = completed === 1 ? true : null;
+    const result = await response.json(); // Parse JSON response
+    const { time, code, grid, completed } = result; // Destructure result
 
-  // If we have valid data and victory is true
-  if (time && code && grid && victory) {
-    setIndexLocalStorageWithExpiry("stopwatchTime", time);
-    setIndexLocalStorageWithExpiry("savedCode", code);
-    setIndexLocalStorageWithExpiry("gridState", grid);
+    // Determine victory state
+    const victory = completed === 1 ? true : null;
 
-    await loadCode();
-    await startStopwatch();
-    await loadGridState();
-  }
-  // If we have valid data but no victory
-  else if (time && code && grid) {
-    if (!sessionStorage.getItem("alreadyLoaded")) {
-      setIndexLocalStorageWithExpiry("stopwatchTime", time);
-    }
-    sessionStorage.setItem("alreadyLoaded", "yes");
-    setIndexLocalStorageWithExpiry("savedCode", code);
-    setIndexLocalStorageWithExpiry("gridState", grid);
+    if (time && code && grid && victory) {
 
-    await loadCode();
-    await startStopwatch();
-    await loadGridState();
-  }
-  // Otherwise, initialize a new session
-  else {
-    await startStopwatch();
-    await initializeColumn();
-    await loadCode();
-  }
-}
+        // Save data to local storage and initialize components for completed state
+        setIndexLocalStorageWithExpiry("stopwatchTime", time);
+        setIndexLocalStorageWithExpiry("savedCode", code);
+        setIndexLocalStorageWithExpiry("gridState", grid);
 
-/* -----------------------------
- * Clear Expired Local Storage
- * ----------------------------- */
-function clearExpiredLocalStorage() {
-  const now = Date.now();
-  for (let key in localStorage) {
-    if (localStorage.hasOwnProperty(key)) {
-      const itemStr = localStorage.getItem(key);
-      try {
-        const item = JSON.parse(itemStr);
-        if (item && item.expiry && now > item.expiry) {
-          localStorage.removeItem(key);
+        await loadCode();
+        await startStopwatch();
+        await loadGridState();
+        
+    } else if (time && code && grid) {
+        // Save data for ongoing work
+        if (!sessionStorage.getItem("alreadyLoaded")) {
+            setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
-      } catch (e) {
-        // Ignore JSON parse errors
-      }
-    }
-  }
-}
+        sessionStorage.setItem("alreadyLoaded", "yes");
+        setIndexLocalStorageWithExpiry("savedCode", code);
+        setIndexLocalStorageWithExpiry("gridState", grid);
 
-/* -----------------------------
- * Main Initialization Logic
- * (Runs on window onload)
- * ----------------------------- */
-async function initApp() {
-  // Clear expired localStorage
-  clearExpiredLocalStorage();
-
-  // Fetch and display test explanation
-  await fetchTestExplanation();
-
-  // Set expiry
-  await setExpiry();
-
-  // Check token and grid data
-  const token = localStorage.getItem("jwt_token");
-  const gridData = getIndexLocalStorageWithExpiry("gridState");
-
-  if (!token) {
-    await startStopwatch();
-    if (gridData) {
-      await loadGridState();
+        await loadCode();
+        await startStopwatch();
+        await loadGridState();
+        
     } else {
-      await initializeColumn();
+        // Initialize new session if no valid data exists
+        await startStopwatch();
+        await initializeColumn();
+        await loadCode();
     }
-    await loadCode();
-  } else {
-    await getUserData();
-    await populateForm();
-  }
-
-  // Handle post-login state restoration
-  if (sessionStorage.getItem("cameFrom") === "true") {
-    sessionStorage.setItem("cameFrom", "false");
-    document.getElementById("stats").click();
-  }
 }
 
-/* -----------------------------
- * On window onload
- * ----------------------------- */
+// Clears items in localStorage that have passed their expiration date.
+// Ensures stale data does not persist and affect application behavior.
+function clearExpiredLocalStorage() {
+    const now = new Date().getTime();
+    for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+            const itemStr = localStorage.getItem(key);
+            try {
+                const item = JSON.parse(itemStr);
+                if (item && item.expiry && now > item.expiry) {
+                    localStorage.removeItem(key);
+                }
+            } catch (e) {
+                // Catch and ignore JSON parsing errors (e.g., for non-expirable items)
+            }
+        }
+    }
+}
+
+// Sets up the application when the window finishes loading.
+// Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
-  // Re-start fade-in animation
-  reAddFadeInAnimation();
-  // Run main init
-  await initApp();
+    document.body.classList.remove('fade-out'); // Add fade-in effect
+    document.body.classList.add('fade-in'); // Add fade-in effect
+    clearExpiredLocalStorage(); // Remove expired localStorage data
+    await fetchTestExplanation(); // Fetch and display test explanation
+    await setExpiry();
+
+    const token = localStorage.getItem("jwt_token");
+    const gridData = getIndexLocalStorageWithExpiry("gridState");
+
+    if (!token) {
+        // Initialize state for unauthenticated users
+        await startStopwatch();
+        if (gridData) {
+            await loadGridState();
+        } else {
+            await initializeColumn();
+        }
+        await loadCode();
+    } else {
+        
+        // Retrieve and initialize user data
+        await getUserData();
+        await populateForm();
+    }
+
+    // Handle post-login state restoration
+
+    if (sessionStorage.getItem("cameFrom") === "true") {
+        sessionStorage.setItem("cameFrom", "false");
+        document.getElementById("stats").click();
+    }
 };
 
-/* -----------------------------
- * On pageshow (handles bfcache)
- * ----------------------------- */
-window.addEventListener("pageshow", (event) => {
-  if (event.persisted) {
-    // Page loaded from back/forward cache
-    reAddFadeInAnimation();
-  }
-});
-
-/* -----------------------------
- * Reload GIF
- * ----------------------------- */
+// Reloads the logo image to prevent caching issues.
 function reloadGif() {
-  const logo = document.getElementById("logo");
-  if (!logo) return;
-  const currentSrc = logo.src.split("?")[0];
-  const newSrc = `${currentSrc}?t=${Date.now()}`;
-  logo.src = newSrc;
+    const logo = document.getElementById('logo');
+    const currentSrc = logo.src.split('?')[0];
+    const newSrc = `${currentSrc}?t=${new Date().getTime()}`;
+    logo.src = newSrc;
 }
 
-/* -----------------------------
- * Clear LocalStorage + Cookies
- * ----------------------------- */
+// Clears all data in localStorage and cookies, and reloads the page.
 function clearLocalStorageAndCookies() {
-  localStorage.clear();
-  document.cookie = ""; // Simplified
-  reloadGif();
+    localStorage.clear();
+    document.cookie = ""; // Simplified cookie clearing
+    reloadGif();
 }
 
-/* -----------------------------
- * Reset State
- * ----------------------------- */
+// Resets the application by clearing localStorage, cookies, and reloading the page.
 function resetState() {
-  const cookies = document.cookie.split(";");
-  reloadGif();
-  for (let cookie of cookies) {
-    const name = cookie.split("=")[0].trim();
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
-  }
-  localStorage.clear();
-  sessionStorage.clear();
-  location.reload();
+    const cookies = document.cookie.split(";");
+    reloadGif();
+    for (let cookie of cookies) {
+        const name = cookie.split("=")[0].trim();
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+    }
+    localStorage.clear();
+    sessionStorage.clear();
+    location.reload();
 }
 document.getElementById("resetButton").addEventListener("click", resetState);
 
-/* -----------------------------
- * Set Expiry with Chicago Midnight
- * ----------------------------- */
-async function setExpiry() {
-  const response = await fetch(`https://${publicIp}/get_chicago_midnight`);
-  const info = await response.json();
+async function setExpiry(){
+    const response = await fetch(`https://${publicIp}/get_chicago_midnight`);
+    const info = await response.json();
 
-  if (response.ok) {
-    const date = info.chicago_midnight_utc;
-    const expiryTime = new Date(date).getTime();
-    const value = new Date(date).getTime();
+    if (response.ok) {
+        const date = info.chicago_midnight_utc;
+        const expiryTime = new Date(date).getTime();
+        const value = new Date(date).getTime();
 
-    const data = { value, expiry: expiryTime };
-    localStorage.setItem("expiry", JSON.stringify(data));
-  }
+        const data = { value, expiry: expiryTime };
+        localStorage.setItem("expiry", JSON.stringify(data));
+    }
 }
 
-/* -----------------------------
- * localStorage with Expiry Helpers
- * ----------------------------- */
+// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
 function setIndexLocalStorageWithExpiry(key, value) {
-  const expiration = getIndexLocalStorageWithExpiry("expiry");
-  if (expiration) {
-    const data = { value, expiry: expiration };
-    localStorage.setItem(key, JSON.stringify(data));
-  }
+        const expiration = getIndexLocalStorageWithExpiry("expiry");
+        if(expiration){
+            const data = { value, expiry: expiration };
+            localStorage.setItem(key, JSON.stringify(data));
+        } else{
+            // may set up logging later 
+        }
+        
 }
 
+// Retrieves a value from localStorage if it has not expired.
 function getIndexLocalStorageWithExpiry(key) {
-  const itemStr = localStorage.getItem(key);
-  if (!itemStr) return null;
+    const itemStr = localStorage.getItem(key);
+    if (!itemStr) return null;
 
-  try {
     const item = JSON.parse(itemStr);
-    const now = Date.now();
+    const now = new Date().getTime();
+
     if (now > item.expiry) {
-      localStorage.removeItem(key);
-      return null;
+        localStorage.removeItem(key);
+        return null;
     }
     return item.value;
-  } catch (e) {
-    // If parse fails, return null or handle differently
-    return null;
-  }
 }
 
-/* -----------------------------
- * Smooth Transition on Link Clicks
- * ----------------------------- */
-function smoothTransition(event) {
-  try {
-    event.preventDefault();
-    const href = event.currentTarget.href;
-    document.body.classList.remove("fade-in");
-    document.body.classList.add("fade-out");
-    setTimeout(() => {
-      window.location.href = href;
-    }, 300);
-  } catch (error) {
-    // Handle or log error
-  }
-}
-document.getElementById("leader").addEventListener("click", smoothTransition);
-document.getElementById("how").addEventListener("click", smoothTransition);
-
-/* -----------------------------
- * Optional: jQuery-based first-visit GIF logic
- * (Commented Out)
- * ----------------------------- 
-$(document).ready(function () {
-  function playGif(gifclass) {
-    const gif = $(gifclass);
-    gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
-  }
-
-  const seenGif = Cookies.get('seenGif');
-  if (!seenGif) {
-    $('.hack6-loading-wrapper').css('display', 'flex');
-    playGif('.hack6-gif');
-    // typer.js
-    Cookies.set('seenGif', true, { expires: 1 });
-
-    setTimeout(() => {
-      $('.hack6-loading-wrapper').fadeOut(500);
-    }, 3000);
-  }
+// Event listener to make animation when going away from page
+document.getElementById('leader').addEventListener('click', function (event) {
+    smoothTransition(event);
 });
-*/
+
+// Event listener to make animation when going away from page
+document.getElementById('how').addEventListener('click', function (event) {
+    smoothTransition(event);
+});
+
+// Function to make a smooth transition
+function smoothTransition(event) {
+    try {
+        event.preventDefault();
+        const href = event.currentTarget.href;
+        document.body.classList.remove('fade-in');
+        document.body.classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = href;
+        }, 300);
+    }
+    catch (error) {
+        // empty might set up logging later 
+    }
+}
+
+// // animation for on first visit of website in logo and prompt
+// $(document).ready(function () {
+//     function playGif(gifclass) {
+//         const gif = $(gifclass);
+//         gif[0].src = gif[0].src.replace(/\?.*$/, "") + "?x=" + Math.random();
+//     }
+//     const seenGif = Cookies.get('seenGif');
+//     if (!seenGif) {
+//         $('.hack6-loading-wrapper').css('display', 'flex');
+//         playGif('.hack6-gif');
+//         typer.js
+//         Cookies.set('seenGif', true, { expires: 1 });
+
+//         setTimeout(() => {
+//             $('.hack6-loading-wrapper').fadeOut(500);
+//         }, 3000)
+//     }
+// })
