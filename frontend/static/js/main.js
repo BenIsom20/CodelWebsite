@@ -70,24 +70,10 @@ function clearExpiredLocalStorage() {
 
 // Sets up the application when the window finishes loading.
 // Includes handling localStorage expiration, restoring states, and fetching user data.
-// Run the init logic on a normal (non-cached) load
 window.onload = async function () {
-    // On initial load, re-add fade-in immediately
-    reAddFadeInAnimation();
-    await initApp();
-};
-
-// Re-run the fade-in animation if the page comes from the bfcache
-window.addEventListener("pageshow", async function (event) {
-    if (event.persisted) {
-        reAddFadeInAnimation();
-    }
-});
-
-
-async function initApp() {
-    clearExpiredLocalStorage();      // Remove expired localStorage data
-    await fetchTestExplanation();    // Fetch and display test explanation
+    document.body.classList.add('fade-in'); // Add fade-in effect
+    clearExpiredLocalStorage(); // Remove expired localStorage data
+    await fetchTestExplanation(); // Fetch and display test explanation
     await setExpiry();
 
     const token = localStorage.getItem("jwt_token");
@@ -103,29 +89,19 @@ async function initApp() {
         }
         await loadCode();
     } else {
+        
         // Retrieve and initialize user data
         await getUserData();
         await populateForm();
     }
 
     // Handle post-login state restoration
+
     if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
-}
-
-function reAddFadeInAnimation() {
-    // Remove the fade-in class to reset animation
-    document.body.classList.remove("fade-in");
-
-    // Force a reflow to ensure the class removal is recognized
-    void document.body.offsetWidth;
-
-    // Re-add the fade-in class so the animation restarts
-    document.body.classList.add("fade-in");
-}
-
+};
 
 // Reloads the logo image to prevent caching issues.
 function reloadGif() {
