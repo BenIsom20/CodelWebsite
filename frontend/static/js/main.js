@@ -103,6 +103,13 @@ window.onload = async function () {
     }
 };
 
+  // On pageshow (especially when coming back from the bfcache)
+  window.addEventListener('pageshow', (event) => {
+    // We can choose to run it only if the page is from bfcache
+    document.body.classList.remove('fade-out'); // Remove fade-out effect
+    document.body.classList.add('fade-in'); // Add fade-in effect
+  });
+
 // Reloads the logo image to prevent caching issues.
 function reloadGif() {
     const logo = document.getElementById('logo');
@@ -189,8 +196,7 @@ function smoothTransition(event) {
         event.preventDefault();
         const href = event.currentTarget.href;
         document.body.classList.remove('fade-in');
-        document.body.classList.add('fade-out');
-        document.body.classList.remove('fade-out'); 
+        document.body.classList.add('fade-out'); 
         setTimeout(() => {
             window.location.href = href;
         }, 300);
