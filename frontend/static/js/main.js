@@ -71,6 +71,7 @@ function clearExpiredLocalStorage() {
 // Sets up the application when the window finishes loading.
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
+    document.body.classList.remove('fade-out'); // Remove fade-out effect
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
     await fetchTestExplanation(); // Fetch and display test explanation
