@@ -72,10 +72,10 @@ function clearExpiredLocalStorage() {
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
     document.body.classList.add('fade-in'); // Add fade-in effect
+    document.body.opacity = 1; // Set opacity to 1
     clearExpiredLocalStorage(); // Remove expired localStorage data
     await fetchTestExplanation(); // Fetch and display test explanation
     await setExpiry();
-
     const token = localStorage.getItem("jwt_token");
     const gridData = getIndexLocalStorageWithExpiry("gridState");
 
