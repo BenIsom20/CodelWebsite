@@ -73,7 +73,7 @@ function clearExpiredLocalStorage() {
 // Run the init logic on a normal (non-cached) load
 window.onload = async function () {
     // On initial load, re-add fade-in immediately
-    // reAddFadeInAnimation();
+    reAddFadeInAnimation();
     await initApp();
 };
 
