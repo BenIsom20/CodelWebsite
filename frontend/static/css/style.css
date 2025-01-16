@@ -29,13 +29,17 @@ body {
     /* Neon green color for text */
     font-family: "Fira Code", monospace;
     /* Optional: Choose a font */
-    opacity: 0;
+    opacity: 1;
 }
+
+body.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+  }
 
 /*================
 Keyframe Animations
 ==========*/
-
 /* Keyframes for fade-in */
 @keyframes fadeIn {
     from {
