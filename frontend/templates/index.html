@@ -5,7 +5,7 @@
     <!-- ALL NEEDED INPORTS -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ page_description }}">
+    <meta name="description" content="CODEL is a daily coding game. Every day, you'll face a new coding challenge designed to help you practice and improve your Python skills. Whether you're a beginner or an experienced coder, CODEL is a fun way to learn and grow.">
     <meta name="keywords" content="codel, thecodel, CODEL, daily coding game, coding wordle, coding challenges, coding game, python coding challenges, daily game, wordle, connections, daily mini, a coding version of Wordle, purple moonlit cactus coding challenge juggling">
     <meta name="author" content="Aksel Jackson and Benjamin Isom">
     <title>Codel</title>
@@ -27,7 +27,19 @@
     <script src="{{ url_for('static', filename='js/timer.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/grid.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/popup.js') }}" defer></script>
-    <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png">
+    <!-- Default favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.ico') }}" type="image/x-icon">
+
+    <!-- PNG format for modern browsers -->
+    <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png" sizes="32x32">
+    <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png" sizes="192x192">
+
+    <!-- Apple touch icon -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}">
+
+    <!-- Android/Chrome larger sizes -->
+    <link rel="icon" href="{{ url_for('static', filename='images/CodelIcon.png') }}" type="image/png" sizes="512x512">
+
 </head>
 
 <!-- MAIN NAVBAR CODE -->
