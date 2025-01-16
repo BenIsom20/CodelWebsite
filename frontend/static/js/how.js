@@ -23,7 +23,7 @@ function smoothTransition(event) {
 // Add the 'fade-in' class to the body when the page loads
 window.onload = async function () {
     document.body.classList.add('fade-in'); // Trigger the fade-in animation when the page is loaded
-    if(localStorage.getItem(jwt_key)){
+    if(localStorage.getItem("jwt_token")){
         await populateForm();
     }
     // Check if the user is returning from stats page

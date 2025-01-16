@@ -111,7 +111,7 @@ window.onload = async function () {
     }
     
     await loadLeaderboard();
-    if(localStorage.getItem(jwt_key)){
+    if(localStorage.getItem("jwt_token")){
         await populateForm();
     }
     document.body.classList.add('fade-in');
