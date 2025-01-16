@@ -73,20 +73,14 @@ function clearExpiredLocalStorage() {
 // Run the init logic on a normal (non-cached) load
 window.onload = async function () {
     // On initial load, re-add fade-in immediately
-    reAddFadeInAnimation();
+    // reAddFadeInAnimation();
     await initApp();
 };
 
 // Re-run the fade-in animation if the page comes from the bfcache
 window.addEventListener("pageshow", async function (event) {
     if (event.persisted) {
-        // The page was loaded from the browser’s back-forward cache
-        // Re-apply the fade-in so the page isn’t stuck transparent
         reAddFadeInAnimation();
-
-        // Optional: if you want to re-run your initialization logic
-        // you could do: await initApp();
-        // But in many cases, just re-adding the animation is enough
     }
 });
 
