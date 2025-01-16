@@ -40,7 +40,7 @@ async function populateForm(){
 
 
     } catch (error) {
-        console.log(error);
+       // may set up logging later
     }
 }
 
@@ -97,7 +97,7 @@ tabLinks.forEach(link => {
                 targetContent.style.transform = "translateX(0)";
                 targetContent.classList.add("active");
             }, 10);
-        }, 300);
+        }, 100);
     });
 });
 
@@ -170,6 +170,7 @@ document.getElementById("stats").addEventListener("click", async (event) => {
             popup.style.opacity = "1";
             popup.style.transform = "scale(1)";
         }, 10);
+        document.querySelector(".tab-link[data-target='userStats']").click();
     }
 });
 
