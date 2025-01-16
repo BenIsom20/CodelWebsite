@@ -29,6 +29,7 @@ body {
     /* Neon green color for text */
     font-family: "Fira Code", monospace;
     /* Optional: Choose a font */
+    opacity: 0;
 }
 
 /*================
