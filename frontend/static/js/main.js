@@ -189,7 +189,7 @@ function smoothTransition(event) {
         event.preventDefault();
         const href = event.currentTarget.href;
         document.body.classList.remove('fade-in');
-        document.body.classList.add('fade-out');
+        // document.body.classList.add('fade-out');
         setTimeout(() => {
             window.location.href = href;
         }, 300);
