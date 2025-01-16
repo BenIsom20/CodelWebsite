@@ -73,6 +73,8 @@ function clearExpiredLocalStorage() {
 // Sets up the application when the window finishes loading.
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
+    location.reload();
+
     // Handle back navigation or cache restoration
     window.addEventListener('pageshow', function (event) {
         if (event.persisted) {
