@@ -32,3 +32,10 @@ window.onload = async function () {
         document.getElementById("stats").click(); 
     }
 };
+
+  // On pageshow (especially when coming back from the bfcache)
+  window.addEventListener('pageshow', (event) => {
+    // We can choose to run it only if the page is from bfcache
+    document.body.classList.remove('fade-out'); // Remove fade-out effect
+    document.body.classList.add('fade-in'); // Add fade-in effect
+  });
