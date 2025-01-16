@@ -1,26 +1,32 @@
 challenge:
   name: "Two Sum"
-  date: "2025-01-06"
+  date: "2025-01-01"
   function:
     name: "two_sum"
     parameters: ["nums", "target"]
   prompt: |
-    Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+    given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
     You may assume that each input would have exactly one solution, and you may not use the same element twice.
     You can return the answer in any order.
+    Good luck.
 
   cases:
-    - prompt: "Find indices where nums[i] + nums[j] equals target"
-      given_data: "[2, 7, 11, 15], 9"
+    - prompt: "Base case with a small array of two elements."
+      given_data: "[1, 4], 5"
       expected: "[0, 1]"
 
-    - prompt: "Find indices where nums[i] + nums[j] equals target"
-      given_data: "[0, 2], 2"
+    - prompt: "Array contains negative numbers; ensure the solution works with negatives."
+      given_data: "[-3, 4, 1, 2], -1"
+      expected: "[0, 3]"
+
+    - prompt: "Target is zero; ensure the function handles sums involving zero correctly."
+      given_data: "[0, 3, -3, 7], 0"
+      expected: "[1, 2]"
+
+    - prompt: "Large numbers in the array; ensure the solution handles large integers."
+      given_data: "[100000, 999500, 450000, 500], 1000000"
+      expected: "[1, 3]"
+
+    - prompt: "All elements in the array are the same; ensure the function handles duplicates properly."
+      given_data: "[5, 5, 5, 5], 10"
       expected: "[0, 1]"
-
-    - prompt: "Find indices where nums[i] + nums[j] equals target"
-      given_data: "[3, 3], 6"
-      expected: "[0, 1]"
-
-
-

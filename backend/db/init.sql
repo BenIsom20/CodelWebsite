@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS qsdb; -- Sets up database 
-USE qsdb; -- Uses the database
+CREATE DATABASE IF NOT EXISTS codelDatabase;
+USE codelDatabase;
 
 -- Create challenges table that holds each individual challenge
 CREATE TABLE IF NOT EXISTS challenges (

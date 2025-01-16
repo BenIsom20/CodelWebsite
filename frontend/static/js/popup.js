@@ -1,3 +1,4 @@
+publicIp = "thecodel.com";
 // Global variable tracking if stats was clicked
 let cameFrom = false;
 
@@ -11,10 +12,37 @@ document.getElementById("user").addEventListener("click", (event) => {
         popup.style.opacity = "1";
         popup.style.transform = "scale(1)";
     }, 10);
-
+    const name = localStorage.getItem("jwt_token");
+    if(name){
+        
+        document.querySelector(".tab-link[data-target='loggedInForm']").click();
+    }else{
+        document.querySelector(".tab-link[data-target='loginForm']").click();
+    }
     // Default to Login form
-    document.querySelector(".tab-link[data-target='loginForm']").click();
 });
+
+async function populateForm(){
+    try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`https://${publicIp}/protected`, {
+            // Send a GET request to the protected endpoint with the token in the Authorization header
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            const usernameDict = await response.json();
+            const username = usernameDict.username;
+            document.getElementById("userDisplay").innerHTML = `Currently logged in as<br>${username}.`
+        }
+
+
+    } catch (error) {
+       // may set up logging later
+    }
+}
 
 // Event listener for the closing button for popup
 document.getElementById("closePopup").addEventListener("click", () => {
@@ -69,7 +97,7 @@ tabLinks.forEach(link => {
                 targetContent.style.transform = "translateX(0)";
                 targetContent.classList.add("active");
             }, 10);
-        }, 300);
+        }, 100);
     });
 });
 
@@ -90,8 +118,7 @@ async function fetchStats() {
         return null; // Indicate no stats are available since no user logged in 
     }
     try {
-        // fetches stats corresponding to what user logged in 
-        const response = await fetch("http://localhost:5000/stats", {
+        const response = await fetch(`https://${publicIp}/stats`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -143,6 +170,7 @@ document.getElementById("stats").addEventListener("click", async (event) => {
             popup.style.opacity = "1";
             popup.style.transform = "scale(1)";
         }, 10);
+        document.querySelector(".tab-link[data-target='userStats']").click();
     }
 });
 
@@ -282,7 +310,7 @@ function captureDelete() {
 // Function to register a new user
 async function registerUser(username, password, email) {
     // Send a POST request to the registration endpoint
-    const response = await fetch('http://localhost:5000/register', {
+    const response = await fetch(`https://${publicIp}/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -304,7 +332,7 @@ async function registerUser(username, password, email) {
 async function loginUser(username, password) {
     try {
         // Send a POST request to the login endpoint
-        const response = await fetch('http://localhost:5000/login', {
+        const response = await fetch(`https://${publicIp}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -342,7 +370,7 @@ async function loginUser(username, password) {
 async function deleteUser(username, password) {
     // Send a POST request to the delete user endpoint
     const payload = { username, password };
-    const response = await fetch('http://localhost:5000/delete_user', {
+    const response = await fetch(`https://${publicIp}/delete_user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -354,7 +382,7 @@ async function deleteUser(username, password) {
     const data = await response.json();
     if (response.ok) {
         document.getElementById('delnote').innerHTML = "Successfully Deleted Account";
-        logoutUserOnDel(username); // logs out the user when account deleted
+        await logoutUserOnDel(username); // logs out the user when account deleted
     } else {
         document.getElementById('delnote').innerHTML = "Username or Password Incorrect";
     }
@@ -366,7 +394,7 @@ async function logoutUserOnDel(paramusername) {
     if (!token) return; // Exit if no token is found
 
     // Send a GET request to the protected endpoint with the token in the Authorization header
-    const response = await fetch('http://localhost:5000/protected', {
+    const response = await fetch(`https://${publicIp}/protected`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`

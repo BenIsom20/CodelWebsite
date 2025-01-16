@@ -10,7 +10,7 @@
     /* Light text color for readability */
     font-family: "Fira Code", monospace;
     /* Monospace font for code */
-    font-size: 18px;
+    font-size: clamp(0.75rem, 1vw, 3rem);
     /* Larger font size for better readability */
     line-height: 1.6;
     /* Increased line height for better line spacing */
@@ -32,6 +32,7 @@
 .CodeMirror-linenumber {
     color: #6d86ff;
     /* Line number color (light blue) */
+    padding-left: 0px;  /* Adjust the left padding to move line numbers to the left */
 }
 
 /* ================================

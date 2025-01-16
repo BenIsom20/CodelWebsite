@@ -1,11 +1,11 @@
 challenge:
   name: "Permutations"
-  date: "2025-01-09"
+  date: "2025-01-01"
   function:
     name: "permute"
     parameters: ["nums"]
   prompt: |
-    Write a Python function that takes a list of distinct integers as input and returns all possible permutations of the list. The order of the permutations in the output does not matter. Good Luck.
+    write a Python function that takes a list of distinct integers as input and returns all possible permutations of the list. The order of the permutations in the output does not matter. Good Luck.
 
   cases:
     - prompt: "Permute a list of three distinct integers"

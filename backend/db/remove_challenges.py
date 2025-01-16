@@ -1,14 +1,23 @@
 import mysql.connector
+import os
 
 # Removes a specific challenge and its associated data from the database.
 def remove_challenge(challenge_id):
-    # Connects to database
+    
+    # Get ENVs for database configuration
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
+    # Create configuration dictionary for database connections
     conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
+    
     cursor = conn.cursor()
 
     # Searches for corresponding challenge
@@ -46,12 +55,19 @@ def remove_challenge(challenge_id):
 
 # Lists all challenges in the database with their IDs and names.
 def list_challenges():
-    # Connects to the database
+    
+    # Get ENVs for database configuration
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
+    # Create configuration dictionary for database connections
     conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
     cursor = conn.cursor()
 
@@ -71,12 +87,19 @@ def list_challenges():
 
 # Removes all challenges and their associated data from the database.
 def remove_all():
-    # Connects to database
+    
+    # Get ENVs for database configuration
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
+    # Create configuration dictionary for database connections
     conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
     cursor = conn.cursor()
 

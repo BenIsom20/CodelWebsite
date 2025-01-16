@@ -1,9 +1,16 @@
-#question{
+#question {
     text-align: center; 
-    padding-top: 150px; 
-    width: 60%; 
-    padding-bottom: 25px; 
-    font-size: 1.8vw;
+    padding-top: 10vh; 
+    width: 60%;
+    padding-bottom: 2.74423710208562vh; 
+    font-size: clamp(1rem, 1.5vw, 3rem);
+    margin: 0 auto; /* Center the content */
+}
+/* Media query for smaller devices */
+@media (max-width: 480px) {
+    #question {
+        width: 90%; /* Allow more of the screen width to be used */
+    }
 }
 
 
@@ -78,6 +85,7 @@ Layout Styles
     width: 100%;
     background-color: #1E1F1E;
     padding-left: 10px;
+    font-size: clamp(0.75rem, 1vw, 3rem);
 }
 
 /* Grid layout for items */
@@ -87,7 +95,7 @@ Layout Styles
     row-gap: 20px;
     /* Reduced gap */
     column-gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 2.1953896816684964vh;
     justify-content: center;
     /* Centers grid items horizontally */
     /* Shift the grid to the left by 50px */
@@ -125,11 +133,12 @@ Button Styles
     /* Black text */
     border: 0px solid 333533;
     /* Black border for definition */
-    border-radius: 5px;
-    /* Rounded corners */
-    padding: 10px 20px;
-    /* Padding for size */
-    font-size: 18px;
+    border-radius: clamp(2px, 1vw, 5px); 
+    /* Rounded corners, scaled with viewport width */
+    padding: clamp(6px, 2vw + 1vh, 10px) clamp(12px, 4vw, 20px);
+    /* Scaled padding */
+    font-size: clamp(12px, 2.5vw, 18px);
+    /* Scaled font size */
     /* Comfortable font size */
     font-weight: bold;
     /* Bold text */
@@ -303,7 +312,7 @@ Button Styles
     /* Neon green for text */
     text-decoration: none;
     /* Remove underline */
-    font-size: 18px;
+    font-size: clamp(0.75rem, 1vw, 3rem);
     padding: 5px 10px;
     transition: color 0.3s ease;
 }
@@ -311,6 +320,12 @@ Button Styles
 /* Hover effect for back button */
 .backButton:hover {
     animation: dance 0.6s ease-in-out;
+}
+
+/* Back button div width */
+.back {
+    display: flex;
+    width: 33.333%;
 }
 
 /*================
@@ -333,7 +348,7 @@ Navigation Styles
     color: #F7F9FB;
     /* Icon color */
     margin-left: 15px;
-    font-size: 2vw;
+    font-size: clamp(1rem, 1.5vw, 3rem);
     transition: background-color 0.3s ease;
     cursor: pointer;
 }
@@ -396,8 +411,8 @@ main {
 #stopwatch {
     font-size: 2.5vw;
     box-shadow: 0 0px 0px #ffe66d;
-    border: 2px solid #ffe66d;
-    border-radius: 10px;
+    border: 0.2vw solid #ffe66d;
+    border-radius: 0.52vw;
 }
 
 /* Headings style */

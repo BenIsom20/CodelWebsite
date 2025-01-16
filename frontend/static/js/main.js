@@ -1,13 +1,14 @@
-// Fetches user-specific data from the backend and initializes the application state.
-// Handles scenarios where the user has completed their session, partially completed, or has no saved data.
+publicIp = "thecodel.com";
+
+// Function to retrieve user data from the backend and initialize the application state
 async function getUserData() {
     const token = localStorage.getItem("jwt_token"); // Retrieve JWT token
     const gridData = getIndexLocalStorageWithExpiry("gridState"); // Retrieve grid state
 
-    // Fetch user data from the backend
-    const response = await fetch("http://127.0.0.1:5000/get_user_data", {
-        method: "GET",
-        headers: { 'Authorization': `Bearer ${token}` },
+    // Send a GET request to the backend to fetch user data
+    const response = await fetch(`https://${publicIp}/get_user_data`, {
+        method: "GET",  // GET method is used to retrieve data from the server
+        headers: { 'Authorization': `Bearer ${token}` },  // Include the token for authorization
     });
 
     const result = await response.json(); // Parse JSON response
@@ -22,31 +23,28 @@ async function getUserData() {
         setIndexLocalStorageWithExpiry("stopwatchTime", time);
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
+
+        await loadCode();
+        await startStopwatch();
+        await loadGridState();
         
-        loadCode();
-        startStopwatch();
-        loadGridState();
     } else if (time && code && grid) {
         // Save data for ongoing work
-        if(!sessionStorage.getItem("alreadyLoaded")){
+        if (!sessionStorage.getItem("alreadyLoaded")) {
             setIndexLocalStorageWithExpiry("stopwatchTime", time);
         }
         sessionStorage.setItem("alreadyLoaded", "yes");
         setIndexLocalStorageWithExpiry("savedCode", code);
         setIndexLocalStorageWithExpiry("gridState", grid);
-        await delay(100);
-        loadCode();
-        startStopwatch();
-        loadGridState();
+
+        await loadCode();
+        await startStopwatch();
+        await loadGridState();
+        
     } else {
         // Initialize new session if no valid data exists
-        startStopwatch();
-        if (gridData) {
-            loadGridState();
-        } else {
-            initializeColumn();
-        }
-        await delay(100);
+        await startStopwatch();
+        await initializeColumn();
         await loadCode();
     }
 }
@@ -75,47 +73,37 @@ function clearExpiredLocalStorage() {
 window.onload = async function () {
     location.reload();
 
-    // Handle back navigation or cache restoration
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted) {
-            window.location.reload();
-        }
-    });
-
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
-    fetchTestExplanation(); // Fetch and display test explanation
+    await fetchTestExplanation(); // Fetch and display test explanation
+    await setExpiry();
 
     const token = localStorage.getItem("jwt_token");
     const gridData = getIndexLocalStorageWithExpiry("gridState");
 
     if (!token) {
         // Initialize state for unauthenticated users
-        startStopwatch();
+        await startStopwatch();
         if (gridData) {
-            loadGridState();
+            await loadGridState();
         } else {
-            initializeColumn();
+            await initializeColumn();
         }
-        await delay(100);
         await loadCode();
     } else {
+        
         // Retrieve and initialize user data
         await getUserData();
+        await populateForm();
     }
 
     // Handle post-login state restoration
-    await delay(500);
+
     if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
 };
-
-// Creates a delay for a specified number of milliseconds.
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // Reloads the logo image to prevent caching issues.
 function reloadGif() {
@@ -146,18 +134,30 @@ function resetState() {
 }
 document.getElementById("resetButton").addEventListener("click", resetState);
 
-// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
-async function setIndexLocalStorageWithExpiry(key, value) {
-    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight");
+async function setExpiry(){
+    const response = await fetch(`https://${publicIp}/get_chicago_midnight`);
     const info = await response.json();
 
     if (response.ok) {
         const date = info.chicago_midnight_utc;
         const expiryTime = new Date(date).getTime();
+        const value = new Date(date).getTime();
 
         const data = { value, expiry: expiryTime };
-        localStorage.setItem(key, JSON.stringify(data));
+        localStorage.setItem("expiry", JSON.stringify(data));
     }
+}
+
+// Stores a key-value pair in localStorage with an expiration date set to Chicago midnight.
+function setIndexLocalStorageWithExpiry(key, value) {
+        const expiration = getIndexLocalStorageWithExpiry("expiry");
+        if(expiration){
+            const data = { value, expiry: expiration };
+            localStorage.setItem(key, JSON.stringify(data));
+        } else{
+            // may set up logging later 
+        }
+        
 }
 
 // Retrieves a value from localStorage if it has not expired.
@@ -194,7 +194,7 @@ function smoothTransition(event) {
         document.body.classList.add('fade-out');
         setTimeout(() => {
             window.location.href = href;
-        }, 300); 
+        }, 300);
     }
     catch (error) {
         // empty might set up logging later 
