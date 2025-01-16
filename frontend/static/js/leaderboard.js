@@ -109,7 +109,11 @@ window.onload = async function () {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
+    
     await loadLeaderboard();
+    if(localStorage.getItem(jwt_key)){
+        await populateForm();
+    }
     document.body.classList.add('fade-in');
 
 }
