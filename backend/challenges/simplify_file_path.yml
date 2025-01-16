@@ -1,0 +1,32 @@
+challenge:
+  name: "Simplify Path"
+  date: "2025-01-01"
+  function:
+    name: "simplify_path"
+    parameters: ["path"]
+  prompt: |
+    given an absolute path for a Unix-style file system, simplify it to its canonical form. The path must start with a single slash '/'. Consecutive slashes should be treated as a single slash. 
+    A single period '.' represents the current directory and should be ignored, while a double period '..' moves up to the parent directory unless already at the root. 
+    Names such as '...' or '....' are treated as valid directory names. The simplified path should not end with a slash unless it is the root directory. 
+    Return the simplified canonical path. Good luck.
+
+  cases:
+    - prompt: "Simplify '/home/' (base case: trailing slash removed)"
+      given_data: "\"/home/\""
+      expected: "\"/home\""
+
+    - prompt: "Simplify '/home//foo/' (edge case: multiple consecutive slashes)"
+      given_data: "\"/home//foo/\""
+      expected: "\"/home/foo\""
+
+    - prompt: "Simplify '/home/user/Documents/../Pictures' (base case: parent directory '..' handled)"
+      given_data: "\"/home/user/Documents/../Pictures\""
+      expected: "\"/home/user/Pictures\""
+
+    - prompt: "Simplify '/../' (edge case: trying to move up from root)"
+      given_data: "\"/../\""
+      expected: "\"/\""
+
+    - prompt: "Simplify '/.../a/../b/c/../d/./' (edge case: valid directory names with '..')"
+      given_data: "\"/.../a/../b/c/../d/./\""
+      expected: "\"/.../b/d\""

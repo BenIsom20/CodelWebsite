@@ -75,7 +75,7 @@ function colorRow(stringList, numTests) {
 // Asynchronous function to initialize the grid and send code for execution
 async function initializeColumn() {
     // Send the code to the backend for execution
-    const response = await fetch("http://127.0.0.1:5000/Startup");
+    const response = await fetch(`https://${publicIp}/Startup`);
     const result = await response.json();
 
     // After receiving the result, use the numTests property to create rectangles in the grid
@@ -85,7 +85,7 @@ async function initializeColumn() {
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
             gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
-            const height = gridElement.offsetWidth/numTest - numTest*10;
+            const height = gridElement.offsetWidth / numTest - (numTest-1) * 10;
             gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
 
@@ -110,35 +110,52 @@ async function initializeColumn() {
     amountOfRow++;
 }
 
+async function getUsername() {
+    try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`https://${publicIp}/protected`, {
+            // Send a GET request to the protected endpoint with the token in the Authorization header
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const result = await response.json();
+        if (response.ok) {
+            const username = result.username;
+            return username;
+        }
+        else{
+            localStorage.clear();
+            
+            return null;
+        }
+
+
+    } catch (error) {
+        // may set up logging later
+    }
+}
+
 // Function to fetch from backend what the challenge prompt is
 async function fetchTestExplanation() {
     const questionElement = document.getElementById("question");
     const currentDate = new Date().toISOString().split('T')[0];
     const lastRunDate = Cookies.get('lastTypingEffectRunDate');
 
-    // Fetch question data from backend
-    const response = await fetch("http://127.0.0.1:5000/Startup");
+    // Fetch question data
+    const response = await fetch(`https://${publicIp}/Startup`);
     const data = await response.json();
     var txt = data.prompt; // Get the prompt from the fetched data
 
     // checks for logged in user to change prompt to have their name
     if (localStorage.getItem('jwt_token')) {
-        try {
-            const token = localStorage.getItem('jwt_token');
-            const response2 = await fetch("http://127.0.0.1:5000/protected", {
-                // Send a GET request to the protected endpoint with the token in the Authorization header
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const usernameDict = await response2.json();
-            const username = usernameDict.username;
-            if (response2.ok && username) {
-                txt = `Hello ${username}, ${txt}`;
-            }
-        } catch (error) {
-            // empty for right now may add logging in future
+        const name = await getUsername();
+        if (name) {
+            txt = `Hello ${name}, ${txt}`;
+        } else {
+            
+            txt = `Hello guest, ${txt}`;
         }
     } else {
         // If the user is not logged in, append a generic greeting to the question prompt
@@ -233,7 +250,7 @@ async function storeGridState(victory) {
 
     // Save the array to localStorage
     const jsongridState = JSON.stringify(gridState);
-    await setGridLocalStorageWithExpiry("gridState", jsongridState);
+    setGridLocalStorageWithExpiry("gridState", jsongridState);
 
     // checks if there was a victory to corresponding animations and what data to send to the backend
     if (victory) {
@@ -247,9 +264,8 @@ async function storeGridState(victory) {
 
 // Asynchronous function to load the grid state from localStorage and reinitialize the grid
 async function loadGridState() {
-
-    // Fetch the number of tests from the server
-    const response = await fetch("http://127.0.0.1:5000/Startup");
+    // Fetch the number of tests from the server (assumed to be related to the grid)
+    const response = await fetch(`https://${publicIp}/Startup`);
     const result = await response.json();
 
     // After receiving the result, use the numTests property to determine how many columns to create in the grid
@@ -260,14 +276,13 @@ async function loadGridState() {
         const gridElement = document.querySelector('.grid');
         if (gridElement) {
             gridElement.style.gridTemplateColumns = `repeat(${numTest}, minmax(auto,200px))`;  // Update grid layout for columns
-            const height = gridElement.offsetWidth/numTest - numTest*10;
+            const height = gridElement.offsetWidth / numTest - (numTest-1) * 10;
             gridElement.style.gridTemplateRows = `repeat(${numTest}, minmax(${height}, 100px))`;
         }
     }
 
     // Retrieve the saved grid state from localStorage
     const savedState = JSON.parse(getGridLocalStorageWithExpiry("gridState"));
-
     // Check if the saved state is valid and is an array
     if (savedState && Array.isArray(savedState)) {
         const grid = document.getElementById("grid-container");
@@ -332,27 +347,21 @@ async function loadGridState() {
 }
 
 // Function to set to the local storage with expiration date at midnight chicago time
-async function setGridLocalStorageWithExpiry(key, value) {
-    // Gets from backend what the time in chicago at midnight is to set as expiration date
-    const response = await fetch("http://127.0.0.1:5000/get_chicago_midnight")
-    const info = await response.json();
-    if (response.ok) {
-        const date = info.chicago_midnight_utc;
-        const objdate = new Date(date);
-        var expiryTime = objdate.getTime();
-
+function setGridLocalStorageWithExpiry(key, value) {
+    const expiration = getGridLocalStorageWithExpiry("expiry");
+    if(expiration){
+        const data = { value, expiry: expiration };
+        localStorage.setItem(key, JSON.stringify(data));
+    } else{
+        // may set up logging later
     }
-    const data = {
-        value: value,
-        expiry: expiryTime,
-    };
-    localStorage.setItem(key, JSON.stringify(data));
 }
 
 // Function to pull from local storage and check if expired or not and only return if not expired
 function getGridLocalStorageWithExpiry(key) {
     const itemStr = localStorage.getItem(key);
     if (!itemStr) {
+        
         return null; // No data found
     }
     const item = JSON.parse(itemStr);

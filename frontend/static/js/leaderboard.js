@@ -1,3 +1,5 @@
+publicIp = "thecodel.com"; // Setting publicIp for backend calls
+
 var username = ""; // Global var storing the username of currently logged in player
 let offset = 0; // Start offset
 const limit = 10; // Number of entries to fetch per request
@@ -8,7 +10,7 @@ async function getUsername() {
     if (!token) { return; } // Exit if user not logged in 
 
     // Send a GET request to the protected endpoint with the token in the Authorization header
-    const response = await fetch('http://localhost:5000/protected', {
+    const response = await fetch(`https://${publicIp}/protected`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -21,14 +23,14 @@ async function getUsername() {
         username = data.username; // Store the username
     }
 }
-getUsername(); // calls this right away 
+
 
 // Function to load leaderboard entries
 async function loadLeaderboard() {
     // Calls to the backend to get the info needed to populate the leaderboard
     const loadMoreButton = document.getElementById("load-more");
     loadMoreButton.classList.add("hidden");
-    const response = await fetch(`http://127.0.0.1:5000/getLeaderboard?offset=${offset}&limit=${limit}`);
+    const response = await fetch(`https://${publicIp}/getLeaderboard?offset=${offset}&limit=${limit}`);
 
     // Parse the response
     const data = await response.json();
@@ -100,13 +102,18 @@ async function loadLeaderboard() {
 }
 
 // Load initial leaderboard data on page load
-window.onload = function () {
+window.onload = async function () {
+    await getUsername(); // calls this right away 
     // Checks if user is returning from the stats page
     if (sessionStorage.getItem("cameFrom") === "true") {
         sessionStorage.setItem("cameFrom", "false");
         document.getElementById("stats").click();
     }
-    loadLeaderboard();
+    
+    await loadLeaderboard();
+    if(localStorage.getItem("jwt_token")){
+        await populateForm();
+    }
     document.body.classList.add('fade-in');
 
 }

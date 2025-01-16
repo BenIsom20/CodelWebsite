@@ -23,13 +23,21 @@ def generate_function_skeleton(function_name, parameters, cases):
 
 # Function to insert data into the database
 def insert_challenge_data(challenge_data):
-    # Database connection
+    
+    # Get ENVs for database configuration
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
+    # Create configuration dictionary for database connections
     conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
+    
     cursor = conn.cursor()
 
     # Insert challenge data
@@ -102,13 +110,21 @@ def insert_all():
 
 # Function to list available challenges in the database
 def list_challenges():
-    # Database connection
+    
+    # Get ENVs for database configuration
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
+    # Create configuration dictionary for database connections
     conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
+    
     cursor = conn.cursor()
 
     # Get a list of all challenge IDs and names
@@ -128,13 +144,21 @@ def list_challenges():
 
 # Function to list challenges that can be added (exist in YAML files but not in the database)
 def list_challenges_to_add():
-    # Database connection
+    
+    # Get ENVs for database configuration
+    db_host = os.getenv('MYSQL_HOST')
+    db_user = os.getenv('MYSQL_USER')
+    db_password = os.getenv('MYSQL_PASSWORD')
+    db_database = os.getenv('MYSQL_DATABASE')
+
+    # Create configuration dictionary for database connections
     conn = mysql.connector.connect(
-        host='db',
-        user='devuser',
-        password='devpass',
-        database='qsdb'
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
+    
     cursor = conn.cursor()
 
     # Fetch challenge names already in the database

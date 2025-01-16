@@ -1,0 +1,28 @@
+challenge:
+  name: "Valid Perfect Square"
+  date: "2025-01-01"
+  function:
+    name: "is_perfect_square"
+    parameters: ["num"]
+  prompt: |
+    given a positive integer num, return true if num is a perfect square or false otherwise.
+    A perfect square is an integer that is the square of an integer. In other words, it is the product of some integer with itself.
+    You must not use any built-in library function, such as sqrt. 
+    Good luck.
+
+  cases:
+    - prompt: "Check if 1 is a perfect square (edge case: smallest valid perfect square)"
+      given_data: "1"
+      expected: "true"
+
+    - prompt: "Check if 2147395600 is a perfect square (edge case: large perfect square)"
+      given_data: "2147395600"
+      expected: "true"
+
+    - prompt: "Check if 16 is a perfect square (edge case: normal perfect square)"
+      given_data: "16"
+      expected: "true"
+
+    - prompt: "Check if -4 is a perfect square (edge case: negative number, not valid for perfect square)"
+      given_data: "-4"
+      expected: "false"

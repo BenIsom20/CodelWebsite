@@ -1,11 +1,11 @@
 challenge:
   name: "Reverse a String"
-  date: "2025-01-08"
+  date: "2025-01-01"
   function:
     name: "reverse_string"
     parameters: ["s"]
   prompt: |
-    Write a Python function that takes a string as input and returns the string reversed.
+    write a Python function that takes a string as input and returns the string reversed. Good Luck.
 
   cases:
     - prompt: "Reverse a normal string"

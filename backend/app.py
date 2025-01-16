@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import subprocess
-from db.db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id, get_challenge_by_date, get_challenge_cases_by_date, get_function_skeleton_by_date
+from backend.db.db_helper import get_challenge_by_id, get_challenge_cases_by_id, get_function_skeleton_by_id, get_challenge_by_date, get_challenge_cases_by_date, get_function_skeleton_by_date
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import bcrypt
 import mysql.connector
 import json
 import io
+import os
 import logging
 import sys
 from flask_apscheduler import APScheduler
@@ -14,19 +15,24 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from better_profanity import profanity
 from collections.abc import Iterable
-import os
 
+# Get ENVs for database configuration
+db_host = os.getenv('MYSQL_HOST')
+db_user = os.getenv('MYSQL_USER')
+db_password = os.getenv('MYSQL_PASSWORD')
+db_database = os.getenv('MYSQL_DATABASE')
+jwt_secret_key = os.getenv('FWT_TOKEN')
 app = Flask(__name__, template_folder='/app/frontend/templates', static_folder='/app/frontend/static')
 # Enable CORS for all routes
 CORS(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', page_description="CODEL is a daily coding game. Every day, you'll face a new coding challenge designed to help you practice and improve your Python skills. Whether you're a beginner or an experienced coder, CODEL is a fun way to learn and grow.")
 
 @app.route('/how')
 def how():
-    return render_template('How.html')
+    return render_template('how.html')
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -35,15 +41,14 @@ def leaderboard():
 # Setup logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
-jwt_secret_key = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_SECRET_KEY"] = "change later"
+app.config["JWT_SECRET_KEY"] = jwt_secret_key
 jwt = JWTManager(app)
 
 db_config = {
-    'host': 'db', 
-    'user': 'devuser', 
-    'password': 'devpass',
-    'database': 'qsdb'
+    'host': db_host, 
+    'user': db_user, 
+    'password': db_password,
+    'database': db_database #database name
 }
 
 # Global variable for storing the current challenge
@@ -402,10 +407,10 @@ def protected():
 # Helper function to get a database connection
 def get_db_connection():
     return mysql.connector.connect(
-        host="db",  # Docker service name for the database
-        user="devuser",
-        password="devpass",
-        database="qsdb"
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_database
     )
 
 # Route to update the user's state after a victory
@@ -743,5 +748,5 @@ def addOneToAllUsers():
             connection.close()
 
 #ALL PATHS MUST BE ABOVE THIS CODE!
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+# if __name__ == "__main__":
+#     app.run(debug=True, host="0.0.0.0", port=5000)
