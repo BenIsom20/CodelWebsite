@@ -193,7 +193,6 @@ function smoothTransition(event) {
         setTimeout(() => {
             window.location.href = href;
         }, 300);
-        document.body.classList.remove('fade-out'); // Add fade-in effect
     }
     catch (error) {
         // empty might set up logging later 
