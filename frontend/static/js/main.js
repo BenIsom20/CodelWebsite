@@ -72,7 +72,6 @@ function clearExpiredLocalStorage() {
 // Includes handling localStorage expiration, restoring states, and fetching user data.
 window.onload = async function () {
     location.reload();
-
     document.body.classList.add('fade-in'); // Add fade-in effect
     clearExpiredLocalStorage(); // Remove expired localStorage data
     await fetchTestExplanation(); // Fetch and display test explanation
