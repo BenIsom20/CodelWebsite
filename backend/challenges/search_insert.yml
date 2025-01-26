@@ -1,6 +1,6 @@
 challenge:
   name: "Search Insert Position"
-  date: "2025-01-01"
+  date: "2025-02-08"
   function:
     name: "searchInsert"
     parameters: ["nums", "target"]

@@ -1,6 +1,6 @@
 challenge:
   name: "The Two Duplicates"
-  date: "2025-01-01"
+  date: "2025-01-28"
   function:
     name: "findDuplicates"
     parameters: ["nums"]

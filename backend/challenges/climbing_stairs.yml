@@ -1,6 +1,6 @@
 challenge:
   name: "Climbing Stairs"
-  date: "2025-01-01"
+  date: "2025-01-27"
   function:
     name: "climbStairs"
     parameters: ["n"]

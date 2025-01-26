@@ -1,6 +1,6 @@
 challenge:
   name: "Word Search"
-  date: "2025-01-01"
+  date: "2025-02-15"
   function:
     name: "exist"
     parameters: ["board", "word"]

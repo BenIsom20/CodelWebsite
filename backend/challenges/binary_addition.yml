@@ -1,6 +1,6 @@
 challenge:
   name: "Add Binary"
-  date: "2025-01-01"
+  date: "2025-01-26"
   function:
     name: "add_binary"
     parameters: ["a", "b"]

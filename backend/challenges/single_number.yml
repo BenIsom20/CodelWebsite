@@ -1,6 +1,6 @@
 challenge:
   name: "Single Number"
-  date: "2025-01-01"
+  date: "2025-02-10"
   function:
     name: "singleNumber"
     parameters: ["nums"]

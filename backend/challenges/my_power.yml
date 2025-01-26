@@ -1,6 +1,6 @@
 challenge:
   name: "Pow(x, n)"
-  date: "2025-01-01"
+  date: "2025-02-02"
   function:
     name: "myPow"
     parameters: ["x", "n"]

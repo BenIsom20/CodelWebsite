@@ -1,6 +1,6 @@
 challenge:
   name: "Jump Game"
-  date: "2025-01-01"
+  date: "2025-01-30"
   function:
     name: "canJump"
     parameters: ["nums"]

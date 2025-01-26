@@ -1,6 +1,6 @@
 challenge:
   name: "Triangle"
-  date: "2025-01-01"
+  date: "2025-02-11"
   function:
     name: "minimumTotal"
     parameters: ["triangle"]

@@ -1,6 +1,6 @@
 challenge:
   name: "Length of Last Word"
-  date: "2025-01-01"
+  date: "2025-01-31"
   function:
     name: "length_of_last_word"
     parameters: ["s"]

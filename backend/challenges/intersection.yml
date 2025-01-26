@@ -1,6 +1,6 @@
 challenge:
   name: "Intersection of Two Arrays II"
-  date: "2025-01-01"
+  date: "2025-01-29"
   function:
     name: "intersect"
     parameters: ["nums1", "nums2"]
