@@ -55,9 +55,7 @@ This project was developed to showcase our full-stack development skills, includ
 - **Back-End**: Python (Flask API)
 - **Database**: MySQL
 - **Code Editor*
-
-https://github.com/user-attachments/assets/eca58edf-4e9f-44d0-ad8a-300434b70aef
-
+  
 *: CodeMirror
 - **Deployment**: Docker
 
